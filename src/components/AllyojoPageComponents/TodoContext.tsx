@@ -22,7 +22,6 @@ const defaultTodo: Todo = {
   title: '',
   description: '',
   timer: new Date(),
-  active: false,
 };
 
 export const TodoContext = ({children, initialTodo}: Props) => {

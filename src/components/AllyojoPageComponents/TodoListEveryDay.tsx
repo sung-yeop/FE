@@ -1,33 +1,40 @@
-import {Animated, ScrollView, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
-import DelayedMissionItem from './DelayedMissionItem';
-import ListHeader from './ListHeader';
 import {useListHeaderAnimation} from '../../hooks/useListHeaderAnimation';
+import ListHeader from './ListHeader';
+import TodoItem from './Modal_CU_Todo/TodoItem';
 
-const DelayedMissionList = () => {
-  const {findAlarmDelayFromAll} = useHandleAlldAlarm();
+const TodoListEveryDay = () => {
+  const {findAlarmRepeatAllDay} = useHandleAlldAlarm();
   const {isExpanded, toggleExpand, maxHeight} = useListHeaderAnimation();
 
   return (
     <ScrollView style={styles.container}>
       <ListHeader
-        title={'미션을 선택해주세요'}
+        title={'매일'}
         isExpanded={isExpanded}
         toggleExpand={toggleExpand}>
         <Animated.View style={[styles.contentContainer, {maxHeight}]}>
-          {findAlarmDelayFromAll &&
-            findAlarmDelayFromAll.map(alarm => (
-              <DelayedMissionItem key={alarm.alarmid} delayedAlarm={alarm} />
+          {findAlarmRepeatAllDay &&
+            findAlarmRepeatAllDay.map(alarm => (
+              <TodoItem key={alarm.alarmid} alarm={alarm} />
             ))}
         </Animated.View>
       </ListHeader>
     </ScrollView>
-
   );
 };
 
-export default DelayedMissionList;
+export default TodoListEveryDay;
 
 const styles = StyleSheet.create({
   container: {

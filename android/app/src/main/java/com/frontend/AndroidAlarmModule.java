@@ -76,13 +76,13 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void updateAlarm(String alarmId, double newTimestamp, boolean active, double repeatInterval, int delayTimes, boolean isVibrate, boolean repeatTrigger, int soundVolume, String soundUri) {
+    public void updateAlarm(String alarmId, double newTimestamp, boolean active, double alarmInterval, int delayTimes, boolean isVibrate, boolean repeatTrigger, int soundVolume, String soundUri) {
         cancelAlarm(alarmId);
 
         if(active){
             long newAlarmTime;
             if (repeatTrigger) {
-                long repeatIntervalMillis = (long) (repeatInterval * 60 * 1000 * delayTimes); // 분을 밀리초로 변환
+                long repeatIntervalMillis = (long) (alarmInterval * 60 * 1000 * delayTimes); // 분을 밀리초로 변환
                 newAlarmTime = (long) newTimestamp + repeatIntervalMillis;
             } else {
                 newAlarmTime = (long) newTimestamp;

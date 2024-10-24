@@ -30,20 +30,18 @@ const AlarmScreenAction = () => {
         <View style={styles.takePictureContainer}>
           <Text style={styles.takePictureText}>사진찍기</Text>
         </View>
-        <TouchableOpacity
-          style={styles.takeLaterContainer}
-          onPress={onClickDelayMission}>
-          <Text style={styles.takeLaterText}>나중에 인증하기</Text>
-          <Text
-            style={
-              styles.takeLaterDisText
-            }>{`(${current.setting.interval}분 안에 인증)`}</Text>
-        </TouchableOpacity>
-        {current.delayTimes > 1 && (
-          <View style={styles.exitCurrnetAlarmContainer}>
-            <Text style={styles.exitCurrentAlarmDisText}>
-              인증이 어려운 상황인가요?
-            </Text>
+        <View>
+          {current.setting.alarmInterval !== '반복 없음' ? (
+            <TouchableOpacity
+              style={styles.takeLaterContainer}
+              onPress={onClickDelayMission}>
+              <Text style={styles.takeLaterText}>나중에 인증하기</Text>
+              <Text
+                style={
+                  styles.takeLaterDisText
+                }>{`(${current.setting.alarmInterval}분 안에 인증)`}</Text>
+            </TouchableOpacity>
+          ) : (
             <TouchableOpacity
               style={styles.exitCurrentContentContainer}
               onPress={onClickExitMission}>
@@ -51,6 +49,25 @@ const AlarmScreenAction = () => {
               <Text style={styles.takeLaterDisText}>
                 (오늘까지 미션을 진행해주세요)
               </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        {current.delayTimes > 1 && (
+          <View style={styles.exitCurrnetAlarmContainer}>
+            {current.setting.alarmInterval !== '반복 없음' && (
+              <Text style={styles.exitCurrentAlarmDisText}>
+                인증이 어려운 상황인가요?
+              </Text>
+            )}
+            <TouchableOpacity
+              style={styles.exitCurrentContentContainer}
+              onPress={onClickExitMission}>
+              <Text style={styles.exitCurrentContentTitleText}>알람 종료</Text>
+              {current.delayTimes && (
+                <Text style={styles.takeLaterDisText}>
+                  (오늘까지 미션을 진행해주세요)
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         )}

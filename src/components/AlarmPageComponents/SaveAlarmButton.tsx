@@ -14,7 +14,7 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
   const onClickSaveButton = () => {
     if (
       current.mission.mode === 'Strict' &&
-      current.setting.interval === '반복 없음'
+      current.setting.alarmInterval === '반복 없음'
     ) {
       Alert.alert(
         '주의',
@@ -40,7 +40,9 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
     }
 
     if (id) {
-      alarmManager.updateAlarm({alarm: current});
+      alarmManager.updateAlarm({
+        alarm: {...current, active: true, delayTimes: 0},
+      });
     } else {
       const updatedAlarm = {...current, active: true};
       alarmManager.saveAlarm(updatedAlarm);

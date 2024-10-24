@@ -14,12 +14,12 @@ type Props = {
   isVisibleSettingIntervalModal: boolean;
   onCloseModal: () => void;
   currentInterval: SettingTimeInterval;
-  setInterval: React.Dispatch<React.SetStateAction<SettingTimeInterval>>;
+  setAlarmInterval: React.Dispatch<React.SetStateAction<SettingTimeInterval>>;
   updateSettings: (
     newSettings: Partial<{
       isVibration: boolean;
       volume: number;
-      interval: SettingTimeInterval;
+      alarmInterval: SettingTimeInterval;
     }>,
   ) => void;
 };
@@ -27,13 +27,13 @@ type Props = {
 const Modal_CU_Setting_Interval = ({
   isVisibleSettingIntervalModal,
   onCloseModal,
-  setInterval,
+  setAlarmInterval,
   currentInterval,
   updateSettings,
 }: Props) => {
   const intervals: SettingTimeInterval[] = ['반복 없음', 1, 10, 15, 30];
   const onClickSaveButton = () => {
-    updateSettings({interval: currentInterval});
+    updateSettings({alarmInterval: currentInterval});
     onCloseModal();
   };
 
@@ -56,7 +56,7 @@ const Modal_CU_Setting_Interval = ({
                         <CheckBox
                           disabled={false}
                           value={currentInterval === interval}
-                          onValueChange={() => setInterval(interval)}
+                          onValueChange={() => setAlarmInterval(interval)}
                           animationDuration={0.1}
                           boxType={'circle'}
                         />

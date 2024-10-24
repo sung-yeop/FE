@@ -53,7 +53,7 @@ const AlarmItem = ({alarm, onPress}: Props) => {
       <TouchableOpacity onPress={onPress} style={styles.mainContent}>
         <View>
           <Text style={styles.repeatText}>
-            {ViewCurrentSelectedRepeatDays(alarm.repeat)}
+            {ViewCurrentSelectedRepeatDays(alarm.alarmDays)}
           </Text>
         </View>
         <View style={styles.infoContainer}>
@@ -68,8 +68,8 @@ const AlarmItem = ({alarm, onPress}: Props) => {
                 alarm: {...alarm, active: !alarm.active},
               });
             }}
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={alarm.active ? '#f5dd4b' : '#f4f3f4'}
+            trackColor={{false: '#767577', true: '#ced4da'}}
+            thumbColor={alarm.active ? '#4bd964' : '#f4f3f4'}
           />
         </View>
       </TouchableOpacity>

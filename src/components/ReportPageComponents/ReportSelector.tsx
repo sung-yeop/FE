@@ -15,20 +15,20 @@ const ReportSelector = () => {
         ]}>
         <View style={styles.selectPeriodContainer}>
           <TouchableOpacity onPress={() => updateCurrentDuration('Today')}>
-            <Text>오늘</Text>
+            <Text style={styles.text}>오늘</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => updateCurrentDuration('Week')}>
-            <Text>이번주</Text>
+            <Text style={styles.text}>이번주</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => updateCurrentDuration('Month')}>
-            <Text>이번달</Text>
+            <Text style={styles.text}>이번달</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.CalenderContainer}>
-          <Text>날짜 선택</Text>
+          <Text style={styles.text}>날짜 선택</Text>
           <TouchableOpacity
             onPress={() => setisVisibleCalendar(!isVisibleCalendar)}>
-            <Text>달력 사진</Text>
+            <Text style={styles.text}>달력 사진</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -55,5 +55,8 @@ const styles = StyleSheet.create({
   selectPeriodContainer: {
     flexDirection: 'row',
     gap: 4,
+  },
+  text: {
+    color: 'black',
   },
 });

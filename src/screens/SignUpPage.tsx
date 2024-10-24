@@ -1,14 +1,5 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import {RootStackParamList} from '../../App';
-import {useNavigation} from '@react-navigation/native';
+import {View, Text, StyleSheet} from 'react-native';
 import RenderStep from '../components/SignUpPageComponents/RenderStep';
 import {SignUpInfo, Step} from '../types';
 import SignUpHeader from '../components/SignUpPageComponents/SignUpHeader';
@@ -42,6 +33,18 @@ const SignUpPage = () => {
   useEffect(() => {
     setClickFlag(false);
   }, [step]);
+
+  useEffect(() => {
+    setFormData({
+      email: '', // 사용할 아이디
+      password: '', // 사용할 패스워드
+      validPassword: '', // 패스워드 재확인
+      notificationNumber: '', // 인증번호
+      nickName: '', // 사용할 닉네임
+      phoneNumber: '',
+      guardianPhoneNumber: undefined, // 보호자 연락처 (optional)
+    });
+  }, []);
 
   return (
     <View style={styles.container}>

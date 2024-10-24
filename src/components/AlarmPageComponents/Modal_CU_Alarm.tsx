@@ -1,12 +1,8 @@
 import {Modal, StyleSheet, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Alarm} from '../../types';
 import Modal_CU_Header from './Modal_CU_Header';
-import TimePicker from '../TimePicker';
-import Modal_CU_CreateMission from './Modal_CU_CreateMission';
-import Modal_CU_Setting from './Modal_CU_Setting';
-import RepeatPicker from './Modal_CU_RepeatPicker';
 import AlarmContext from './AlarmContext';
 import SaveAlarmButton from './SaveAlarmButton';
 import Modal_CU_Content from './Modal_CU_Content';
@@ -30,7 +26,7 @@ const Modal_CU_Alarm = ({closeModal, isVisibleModal, alarm}: Props) => {
             <Modal_CU_Header closeModal={closeModal} alarm={alarm} />
             <ScrollView>
               <Modal_CU_Content />
-              <SaveAlarmButton id={alarm?.id} closeModal={closeModal} />
+              <SaveAlarmButton id={alarm?.alarmid} closeModal={closeModal} />
             </ScrollView>
           </AlarmContext>
         </SafeAreaView>

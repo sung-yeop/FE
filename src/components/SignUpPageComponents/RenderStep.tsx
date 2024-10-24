@@ -204,7 +204,7 @@ const RenderStep = ({
     case 2:
       return (
         <View>
-          <Text style={styles.title}>회원님의 휴대폰 번호를 입력해주세요</Text>
+          <Text style={styles.title}>휴대폰 번호를 입력해주세요</Text>
           <TextInput
             style={styles.inputOtherInfoText}
             value={phoneNumber}
@@ -231,7 +231,7 @@ const RenderStep = ({
       return (
         <View>
           <Text style={styles.title}>
-            보호자가 있다면 보호자의 휴대폰 번호를 입력해주세요
+            보호자가 있다면 {`\n`}보호자의 휴대폰 번호를 입력해주세요
           </Text>
           <TextInput
             style={styles.inputOtherInfoText}
@@ -241,7 +241,7 @@ const RenderStep = ({
             keyboardType="phone-pad"
           />
           <TouchableOpacity>
-            <Text>건너뛰기</Text>
+            <Text style={styles.jumpText}>건너뛰기</Text>
           </TouchableOpacity>
         </View>
       );
@@ -261,7 +261,7 @@ const RenderStep = ({
     case 6:
       return (
         <View>
-          <Text style={styles.title}>앞으로 사용할 닉네임을 입력해주세요!</Text>
+          <Text style={styles.title}>사용할 닉네임을 입력해주세요!</Text>
           <TextInput
             style={styles.inputOtherInfoText}
             value={nickName}
@@ -351,5 +351,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: 'white',
+  },
+  jumpText: {
+    fontWeight: 'bold',
+    marginLeft: 6,
+    paddingVertical: 10,
   },
 });

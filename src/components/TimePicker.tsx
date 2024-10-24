@@ -66,7 +66,6 @@ const TimePicker = ({current, updateAlarm, updateTodo}: Props) => {
     </View>
   );
 };
-
 export default TimePicker;
 
 const styles = StyleSheet.create({

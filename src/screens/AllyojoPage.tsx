@@ -1,29 +1,31 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import DelayedMissionList from '../components/AllyojoPageComponents/DelayedMissionList';
 import PageHeader from '../components/PageHeader';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import AddTodoButton from '../components/AllyojoPageComponents/AddTodoButton';
+import TodoListEveryDay from '../components/AllyojoPageComponents/TodoListEveryDay';
+import TodoList from '../components/AllyojoPageComponents/TodoList';
 
 const AllyojoPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <PageHeader text={'알려줘'} />
-      <DelayedMissionList />
-      <ScrollView style={styles.todoContainer}></ScrollView>
+      <ScrollView>
+        <DelayedMissionList />
+        <TodoListEveryDay />
+        <TodoList />
+      </ScrollView>
       <AddTodoButton />
     </SafeAreaView>
   );
 };
-
-export default AllyojoPage;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 15,
   },
-  todoContainer: {
-    flex: 1,
-  },
 });
+
+export default AllyojoPage;

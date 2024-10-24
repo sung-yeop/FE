@@ -27,12 +27,28 @@ const Modal_CU_SaveButton = ({
     onCloseModal();
   };
   return (
-    <TouchableOpacity onPress={onClickSaveButton}>
-      <Text>저장하기</Text>
+    <TouchableOpacity
+      style={styles.buttonContainer}
+      onPress={onClickSaveButton}>
+      <Text style={styles.buttonText}>저장하기</Text>
     </TouchableOpacity>
   );
 };
 
 export default Modal_CU_SaveButton;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  buttonContainer: {
+    padding: 16,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: 'black',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+});

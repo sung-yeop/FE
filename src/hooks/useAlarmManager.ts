@@ -25,7 +25,7 @@ export const useAlarmManager = () => {
   const saveAlarm = async (alarm: Alarm) => {
     try {
       await AndroidAlarmModule.setAlarm(
-        alarm.id,
+        alarm.alarmid,
         alarm.timer.getTime(),
         alarm.setting.isVibration,
         alarm.setting.volume,
@@ -51,22 +51,24 @@ export const useAlarmManager = () => {
     alarm: Alarm;
     repeatTrigger?: boolean;
   }) => {
-    const interval = isNaN(Number(alarm.setting.interval))
+    const alarmInterval = isNaN(Number(alarm.setting.alarmInterval))
       ? 0
-      : Number(alarm.setting.interval);
+      : Number(alarm.setting.alarmInterval);
     try {
       await AndroidAlarmModule.updateAlarm(
-        alarm.id,
+        alarm.alarmid,
         alarm.timer.getTime(),
         alarm.active,
-        interval,
+        alarmInterval,
         alarm.delayTimes,
         alarm.setting.isVibration,
         repeatTrigger ? repeatTrigger : false,
         alarm.setting.volume,
         'null',
       );
-      const updatedAlarms = alarms.map(a => (a.id === alarm.id ? alarm : a));
+      const updatedAlarms = alarms.map(a =>
+        a.alarmid === alarm.alarmid ? alarm : a,
+      );
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),
@@ -81,7 +83,7 @@ export const useAlarmManager = () => {
 
   const deleteAlarm = async (alarmId: string) => {
     try {
-      const updatedAlarms = alarms.filter(alarm => alarm.id !== alarmId);
+      const updatedAlarms = alarms.filter(alarm => alarm.alarmid !== alarmId);
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),

@@ -13,6 +13,20 @@ export interface User {
   name: string;
 }
 
+export type DayKey =
+  | 'once'
+  | 'mon'
+  | 'tue'
+  | 'wed'
+  | 'thu'
+  | 'fri'
+  | 'sat'
+  | 'sun';
+
+export type RepeatState = {
+  [key in DayKey]: boolean;
+};
+
 export interface LoginResponse {
   token: string;
   user: User;
@@ -25,11 +39,11 @@ export type Step = {
 export type StepKey = 'step1' | 'step2' | 'step3' | 'step4' | 'step5' | 'step6';
 
 export interface Alarm {
-  id: string;
+  alarmid: string;
   title?: string;
   timer: Date;
   active: boolean;
-  repeat: RepeatState;
+  alarmDays: number;
   delay: boolean;
   delayTimes: number;
   mission: {
@@ -39,7 +53,7 @@ export interface Alarm {
   setting: {
     isVibration: boolean;
     volume: number;
-    interval: SettingTimeInterval;
+    alarmInterval: SettingTimeInterval;
   };
 }
 
@@ -55,19 +69,6 @@ export type MissionCareType =
   | 'Eat food'
   | undefined;
 
-export type DayKey =
-  | 'once'
-  | 'mon'
-  | 'tue'
-  | 'wed'
-  | 'thu'
-  | 'fri'
-  | 'sat'
-  | 'sun';
-
-export type RepeatState = {
-  [key in DayKey]: boolean;
-};
 export type ReportCustomDuration = {
   startDay: Date;
   endDay: Date;
@@ -85,10 +86,7 @@ export type Report = {
 export interface Todo {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   timer: Date;
   day?: string; // day 혹은 repeat 중 하나는 무조건 존재해야 알려줘 페이지에 등록됨
-  repeat?: Omit<RepeatState, 'once'>;
-  mission?: MissionCareType;
-  active: boolean;
 }

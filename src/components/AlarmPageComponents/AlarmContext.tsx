@@ -1,5 +1,5 @@
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
-import {Alarm, MissionCareType, MissionMode, RepeatState} from '../../types';
+import {Alarm, MissionCareType, MissionMode} from '../../types';
 import uuid from 'react-native-uuid';
 
 type Props = {
@@ -22,34 +22,23 @@ export const AlarmContextManage = createContext<AlarmContextType | undefined>(
   undefined,
 );
 
-const defaultRepeat: RepeatState = {
-  once: true,
-  mon: false,
-  thu: false,
-  wed: false,
-  tue: false,
-  fri: false,
-  sat: false,
-  sun: false,
-};
-
 const defaultMission = {
   mode: 'Free' as MissionMode,
   id: undefined,
 };
 
-const defaultAlarm: Alarm = {
-  id: uuid.v4().toString(),
-  timer: new Date(),
-  active: false,
-  repeat: defaultRepeat,
-  mission: defaultMission,
-  delay: false,
-  delayTimes: 0,
-  setting: {isVibration: false, volume: 50, interval: '반복 없음'},
-};
-
 const AlarmContext = ({children, initial}: Props) => {
+  const defaultAlarm: Alarm = {
+    alarmid: uuid.v4().toString(),
+    timer: new Date(),
+    active: false,
+    alarmDays: 0,
+    mission: defaultMission,
+    delay: false,
+    delayTimes: 0,
+    setting: {isVibration: false, volume: 50, alarmInterval: '반복 없음'},
+  };
+
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);
 
   const updateAlarm = (updates: Partial<Alarm>) => {

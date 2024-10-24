@@ -1,10 +1,8 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
-import TodoModalHeader from './TodoModalHeader';
 import CustomCalendar from '../../CustomCalendar';
 import TimePicker from '../../TimePicker';
 import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
-import {Todo} from '../../../types';
 import Modal_CU_SaveButton from './Modal_CU_SaveButton';
 import {useTodoManager} from '../../../hooks/useTodoManager';
 
@@ -28,7 +26,7 @@ const Modal_CU_Todo_Content = ({onCloseModal}: Props) => {
         <TextInput
           placeholder="제목을 입력해주세요"
           value={currentTodo.title || ''}
-          onChangeText={text => updateTodo({title: text, active: true})}
+          onChangeText={text => updateTodo({title: text})}
         />
         <TextInput
           placeholder="추가 설명을 입력해주세요"

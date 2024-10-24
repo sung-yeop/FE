@@ -1,33 +1,32 @@
-import {Animated, ScrollView, StyleSheet} from 'react-native';
+import {Animated, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
-import DelayedMissionItem from './DelayedMissionItem';
-import ListHeader from './ListHeader';
 import {useListHeaderAnimation} from '../../hooks/useListHeaderAnimation';
+import ListHeader from './ListHeader';
+import TodoItem from './Modal_CU_Todo/TodoItem';
 
-const DelayedMissionList = () => {
-  const {findAlarmDelayFromAll} = useHandleAlldAlarm();
+const TodoList = () => {
+  const {findAlarmRepeatDay} = useHandleAlldAlarm();
   const {isExpanded, toggleExpand, maxHeight} = useListHeaderAnimation();
 
   return (
     <ScrollView style={styles.container}>
       <ListHeader
-        title={'미션을 선택해주세요'}
+        title={'주'}
         isExpanded={isExpanded}
         toggleExpand={toggleExpand}>
         <Animated.View style={[styles.contentContainer, {maxHeight}]}>
-          {findAlarmDelayFromAll &&
-            findAlarmDelayFromAll.map(alarm => (
-              <DelayedMissionItem key={alarm.alarmid} delayedAlarm={alarm} />
+          {findAlarmRepeatDay &&
+            findAlarmRepeatDay.map(alarm => (
+              <TodoItem key={alarm.alarmid} alarm={alarm} />
             ))}
         </Animated.View>
       </ListHeader>
     </ScrollView>
-
   );
 };
 
-export default DelayedMissionList;
+export default TodoList;
 
 const styles = StyleSheet.create({
   container: {

@@ -22,7 +22,7 @@ const AlarmList = () => {
         if (alarm && alarm.timer && alarm.timer instanceof Date) {
           return (
             <AlarmItem
-              key={alarm.id}
+              key={alarm.alarmid}
               onPress={() => onClickItem(alarm)}
               alarm={alarm}
             />

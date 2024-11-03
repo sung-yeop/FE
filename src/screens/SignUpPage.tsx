@@ -8,13 +8,14 @@ import SignUpButton from '../components/SignUpPageComponents/SignUpButton';
 const SignUpPage = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<SignUpInfo>({
-    email: '', // 사용할 아이디
+    username: '', // 사용할 아이디
     password: '', // 사용할 패스워드
     validPassword: '', // 패스워드 재확인
     notificationNumber: '', // 인증번호
-    nickName: '', // 사용할 닉네임
+    name: '', // 사용할 닉네임
     phoneNumber: '',
     guardianPhoneNumber: undefined, // 보호자 연락처 (optional)
+    isGuardian: false,
   });
   const [isValidNextPage, setIsValidNextPage] = useState<Step>({
     step1: false,
@@ -36,13 +37,14 @@ const SignUpPage = () => {
 
   useEffect(() => {
     setFormData({
-      email: '', // 사용할 아이디
+      username: '', // 사용할 아이디
       password: '', // 사용할 패스워드
       validPassword: '', // 패스워드 재확인
       notificationNumber: '', // 인증번호
-      nickName: '', // 사용할 닉네임
+      name: '', // 사용할 닉네임
       phoneNumber: '',
       guardianPhoneNumber: undefined, // 보호자 연락처 (optional)
+      isGuardian: false,
     });
   }, []);
 

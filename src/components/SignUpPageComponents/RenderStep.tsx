@@ -22,13 +22,14 @@ const RenderStep = ({
   updateFormData,
 }: Props) => {
   const {
-    email,
+    username,
     password,
     validPassword,
     notificationNumber,
-    nickName,
+    name,
     phoneNumber,
     guardianPhoneNumber,
+    isGuardian,
   } = {...formData};
 
   const [isValidPassWord, setIsValidPassWord] = useState<boolean>(false);
@@ -137,7 +138,7 @@ const RenderStep = ({
   //////////////////////////////////////
   // 여섯번째 페이지
   useEffect(() => {
-    if (nickName) {
+    if (name) {
       setIsValidNextPage(prevStep => {
         return {
           ...prevStep,
@@ -145,8 +146,13 @@ const RenderStep = ({
         };
       });
     }
-    // 백엔드로 회원가입 데이터 보내기
-  }, [nickName]);
+    // TODO : 백엔드로 데이터 저장하기
+    // username
+    // name
+    // phonenumber
+    // isGuardian
+    // guardianPhoneNumber
+  }, [name]);
   ///
 
   switch (step) {
@@ -161,8 +167,8 @@ const RenderStep = ({
               <Text style={styles.inputTitleText}>아이디</Text>
               <TextInput
                 style={styles.inputText}
-                value={email}
-                onChangeText={text => updateFormData('email', text)}
+                value={username}
+                onChangeText={text => updateFormData('username', text)}
                 keyboardType="email-address"
               />
             </View>
@@ -264,8 +270,8 @@ const RenderStep = ({
           <Text style={styles.title}>사용할 닉네임을 입력해주세요!</Text>
           <TextInput
             style={styles.inputOtherInfoText}
-            value={nickName}
-            onChangeText={text => updateFormData('nickName', text)}
+            value={name}
+            onChangeText={text => updateFormData('name', text)}
             placeholder="닉네임"
           />
         </View>

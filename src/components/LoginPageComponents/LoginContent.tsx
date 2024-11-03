@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {sendSignInData} from '../../api/Api';
 
 const LoginContent = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // 여기에 로그인 로직을 구현합니다
+    sendSignInData({username, password});
     console.log('Login attempt with:', username, password);
   };
 

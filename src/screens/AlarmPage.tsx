@@ -33,9 +33,9 @@ const AlarmPage = () => {
       <ScrollView style={styles.content}>
         <AlarmList />
       </ScrollView>
-      {/* <TouchableOpacity onPress={navigateToLogin}>
+      <TouchableOpacity onPress={navigateToLogin}>
         <Text>Welcome 페이지로 이동</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       <AddAlarmButton />
     </SafeAreaView>
   );

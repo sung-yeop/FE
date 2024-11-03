@@ -1,13 +1,15 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
-import {Step, StepKey} from '../../types';
+import {SignUpInfo, Step, StepKey} from '../../types';
 import {StepToStepKey} from '../../util/SignUpStepUtils';
+import {sendSignUpData} from '../../api/Api';
 
 type Props = {
   step: number;
   isValidNextPage: Step;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   setClickFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: SignUpInfo;
 };
 
 const SignUpButton = ({
@@ -15,6 +17,7 @@ const SignUpButton = ({
   isValidNextPage,
   setStep,
   setClickFlag,
+  formData,
 }: Props) => {
   const key = StepToStepKey(step) as StepKey;
 
@@ -25,6 +28,10 @@ const SignUpButton = ({
       setClickFlag(true);
     }
   };
+
+  // const singUpComplete = () => {
+  //   sendSignUpData(formData);
+  // };
 
   return (
     <View style={styles.buttonContainer}>
@@ -49,7 +56,7 @@ const SignUpButton = ({
           <Text style={styles.buttonText}>인증 하기</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.button} onPress={nextStep}>
+        <TouchableOpacity style={styles.button} onPress={() => {}}>
           <Text style={styles.buttonText}>회원 가입 완료</Text>
         </TouchableOpacity>
       )}

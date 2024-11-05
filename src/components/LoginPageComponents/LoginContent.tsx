@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {sendSignInData} from '../../api/Api';
+import {sendSignInData} from '../../api/SignAPI';
 
 const LoginContent = () => {
   const [username, setUsername] = useState('');

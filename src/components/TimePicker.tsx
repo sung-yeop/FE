@@ -14,7 +14,6 @@ const TimePicker = ({current, updateAlarm, updateTodo}: Props) => {
   const [show, setShow] = useState(false);
   const {ampm, viewTime} = TimeFormatting(current.timer);
 
-  console.log('current : ', current);
   const onChangeInternal = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || current.timer;
     setShow(Platform.OS === 'ios');

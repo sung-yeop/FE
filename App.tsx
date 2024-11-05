@@ -14,6 +14,7 @@ import WelcomePage from './src/screens/WelcomePage';
 import SignInPage from './src/screens/SignInPage';
 import SignUpPage from './src/screens/SignUpPage';
 import FindPasswordPage from './src/screens/FindPasswordPage';
+import TestPage from './src/screens/TestPage';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Welcome: undefined;
   FindPassWord: undefined;
+  TestPage: undefined;
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -56,6 +58,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="SignIn" component={SignInPage} />
           <Stack.Screen name="SignUp" component={SignUpPage} />
           <Stack.Screen name="FindPassWord" component={FindPasswordPage} />
+          <Stack.Screen name="TestPage" component={TestPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

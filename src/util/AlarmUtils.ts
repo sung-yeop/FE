@@ -22,3 +22,23 @@ export const ChangeRepeatStateToDayTitle = (selectDays: string[]) => {
     })
     .filter(day => day !== undefined);
 };
+
+export const TimeFormattingForSendingAPI = (time: Date) => {
+  return time.toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+};
+
+export const TimeFormattingResponseFromAPI = (time: String) => {
+  const [hours, minutes, seconds] = time.split(':');
+  const date = new Date();
+
+  date.setHours(Number(hours));
+  date.setMinutes(Number(minutes));
+  date.setSeconds(Number(seconds));
+
+  return date;
+};

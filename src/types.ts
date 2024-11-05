@@ -41,7 +41,6 @@ export type StepKey = 'step1' | 'step2' | 'step3' | 'step4' | 'step5' | 'step6';
 
 export interface Alarm {
   alarmid: string;
-  title?: string;
   timer: Date;
   active: boolean;
   alarmDays: number;
@@ -91,3 +90,9 @@ export interface Todo {
   timer: Date;
   day?: string; // day 혹은 repeat 중 하나는 무조건 존재해야 알려줘 페이지에 등록됨
 }
+
+export type ReportAPI = {
+  mission: MissionCareType;
+  startDate: string;
+  endDate: string;
+};

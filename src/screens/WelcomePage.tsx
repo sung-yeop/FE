@@ -4,8 +4,6 @@ import WelcomContent from '../components/WelcomePageComponents/WelcomContent';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
-import {sendSignUpData} from '../api/Api';
-import {TestSignUpData} from '../data/TestMockData';
 
 type AlarmScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -13,30 +11,8 @@ type AlarmScreenNavigationProp = NativeStackNavigationProp<
   'SignUp'
 >;
 
-// export interface SignUpInfo {
-//   username: string;
-//   password: string;
-//   validPassword: string;
-//   notificationNumber: string;
-//   name: string;
-//   phoneNumber: string;
-//   guardianPhoneNumber: string | undefined;
-//   isGuardian: boolean;
-// }
-
 const WelcomePage = () => {
   const navigator = useNavigation<AlarmScreenNavigationProp>();
-
-  const testApi1 = () => {
-    sendSignUpData({
-      username: TestSignUpData.username,
-      password: TestSignUpData.password,
-      name: TestSignUpData.name,
-      phoneNumber: TestSignUpData.phonenumber,
-      isGuardian: TestSignUpData.isGuardian,
-      guardianPhoneNumber: TestSignUpData.guardianPhoneNumber,
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -53,8 +29,8 @@ const WelcomePage = () => {
           <Text style={styles.singUpText}>회원가입</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={testApi1}>
-        <Text>테스트 회원가입 - 보호자</Text>
+      <TouchableOpacity onPress={() => navigator.navigate('TestPage')}>
+        <Text>Go to Test Page</Text>
       </TouchableOpacity>
     </View>
   );

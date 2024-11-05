@@ -14,7 +14,6 @@ import AlarmList from '../components/AlarmPageComponents/AlarmList';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import CustomCalendar from '../components/CustomCalendar';
 
 type AlarmScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -35,6 +34,9 @@ const AlarmPage = () => {
       </ScrollView>
       <TouchableOpacity onPress={navigateToLogin}>
         <Text>Welcome 페이지로 이동</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('TestPage')}>
+        <Text>Go to Test Page</Text>
       </TouchableOpacity>
       <AddAlarmButton />
     </SafeAreaView>

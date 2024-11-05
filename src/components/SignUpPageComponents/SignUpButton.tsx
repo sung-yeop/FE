@@ -2,14 +2,13 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {SignUpInfo, Step, StepKey} from '../../types';
 import {StepToStepKey} from '../../util/SignUpStepUtils';
-import {sendSignUpData} from '../../api/Api';
+import {sendSignUpData} from '../../api/SignAPI';
 
 type Props = {
   step: number;
   isValidNextPage: Step;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   setClickFlag: React.Dispatch<React.SetStateAction<boolean>>;
-  formData: SignUpInfo;
 };
 
 const SignUpButton = ({
@@ -17,7 +16,6 @@ const SignUpButton = ({
   isValidNextPage,
   setStep,
   setClickFlag,
-  formData,
 }: Props) => {
   const key = StepToStepKey(step) as StepKey;
 

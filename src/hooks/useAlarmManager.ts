@@ -3,8 +3,6 @@ import {allAlarmsSelector, STORAGE_ALARM_KEY} from '../atoms';
 import {Alarm} from '../types';
 import {useRecoilState} from 'recoil';
 import AndroidAlarmModule from '../util/AndroidAlarmManager';
-import {useEffect} from 'react';
-import {newAlarmSend} from '../api/Api';
 
 export const useAlarmManager = () => {
   const [alarms, setAlarms] = useRecoilState(allAlarmsSelector);
@@ -39,7 +37,7 @@ export const useAlarmManager = () => {
       );
       setAlarms(updatedAlarms);
       console.log('Alarm saved successfully:', alarm);
-      newAlarmSend(alarm);
+      // newAlarmSend(alarm);
     } catch (err) {
       console.error('SAVE ALARM ERROR : ', err);
     }

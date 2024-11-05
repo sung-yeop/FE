@@ -23,7 +23,6 @@ const DelayedMissionList = () => {
         </Animated.View>
       </ListHeader>
     </ScrollView>
-
   );
 };
 

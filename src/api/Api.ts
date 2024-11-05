@@ -14,10 +14,10 @@ export const sendSignUpData = async ({
   password: string;
   phoneNumber: string;
   isGuardian: boolean;
-  guardianPhoneNumber: number | undefined;
+  guardianPhoneNumber: number;
 }) => {
   try {
-    const response = await fetch('YOUR_API_ENDPOINT/user/join', {
+    const response = await fetch('http://10.0.2.2:8080/user/join', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,6 +37,8 @@ export const sendSignUpData = async ({
     }
 
     const data = await response.json();
+
+    console.log(data);
     return data;
   } catch (error) {
     console.error('회원가입 에러:', error);
@@ -52,8 +54,8 @@ export const sendSignInData = async ({
   password: string;
 }) => {
   try {
-    const response = await fetch('YOUR_API_ENDPOINT/login', {
-      method: 'GET',
+    const response = await fetch('http://10.0.2.2:8080/login', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -63,17 +65,23 @@ export const sendSignInData = async ({
       }),
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+
     if (!response.ok) {
       throw new Error('로그인에 실패했습니다.');
     }
 
-    const data = await response.json();
+    const token = response.headers.get('Authorization');
 
-    if (data.token) {
-      AsyncStorage.setItem('token', data.token);
-      console.log();
-      return data.token;
+    if (token) {
+      const actualToken = token.replace('Bearer ', '');
+      await AsyncStorage.setItem('token', actualToken);
+      return actualToken;
     }
+
+    const token2 = await AsyncStorage.getItem('token');
+    console.log(token2);
 
     throw new Error('토큰이 없습니다.');
   } catch (error) {
@@ -85,8 +93,9 @@ export const sendSignInData = async ({
 export const newAlarmSend = async (alarm: Alarm) => {
   try {
     const token = await AsyncStorage.getItem('token');
+    console.log('알람 : ', token);
 
-    const response = await fetch('YOUR_API_ENDPOINT/alarm/add', {
+    const response = await fetch('http://10.0.2.2:8080/alarm/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +103,7 @@ export const newAlarmSend = async (alarm: Alarm) => {
       },
       body: JSON.stringify({
         alarmId: alarm.alarmid,
-        userId: token,
+        username: 'qwerqwer',
         title: '임시 타이틀 - 이거 필요 없는듯',
         timer: alarm.timer,
         active: alarm.active,

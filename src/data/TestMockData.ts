@@ -3,6 +3,6 @@ export const TestSignUpData = {
   password: 'qwer1234',
   name: 'abcdefg',
   phonenumber: '01033019459',
-  guardianPhoneNumber: undefined,
+  guardianPhoneNumber: '01012341234',
   isGuardian: false,
 };

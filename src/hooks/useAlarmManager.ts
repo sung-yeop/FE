@@ -11,7 +11,7 @@ export const useAlarmManager = () => {
 
   const loadAlarms = async () => {
     try {
-      AsyncStorage.clear();
+      // AsyncStorage.clear();
       const savedAlarms = await AsyncStorage.getItem(STORAGE_ALARM_KEY);
       if (savedAlarms) {
         setAlarms(JSON.parse(savedAlarms) as Alarm[]);

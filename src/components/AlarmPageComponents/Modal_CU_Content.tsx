@@ -5,12 +5,14 @@ import Modal_CU_CreateMission from './Modal_CU_CreateMission';
 import Modal_CU_Setting from './Modal_CU_Setting';
 import Modal_CU_RepeatPicker from './Modal_CU_RepeatPicker';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
+import CustomTimePicker from '../../module/CustomTimePicker';
 
 const Modal_CU_Content = () => {
   const {current, updateAlarm} = useCurrentAlarm();
   return (
     <View>
-      <TimePicker current={current} updateAlarm={updateAlarm} />
+      {/* <TimePicker current={current} updateAlarm={updateAlarm} /> */}
+      <CustomTimePicker target={current} updateFun={updateAlarm} />
       <Modal_CU_RepeatPicker />
       <Modal_CU_CreateMission />
       <Modal_CU_Setting />

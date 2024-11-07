@@ -1,4 +1,5 @@
 export const TimeFormatting = (date: Date) => {
+  console.log('시간 : ', date.getHours());
   const hour = date.getHours();
   const viewHour = hour >= 12 ? hour - 12 : hour;
   const minute = date.getMinutes();

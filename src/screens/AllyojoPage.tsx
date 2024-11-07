@@ -6,12 +6,13 @@ import PageHeader from '../components/PageHeader';
 import AddTodoButton from '../components/AllyojoPageComponents/AddTodoButton';
 import TodoListEveryDay from '../components/AllyojoPageComponents/TodoListEveryDay';
 import TodoList from '../components/AllyojoPageComponents/TodoList';
+import {AlarmImg} from '../../asset/images';
 
 const AllyojoPage = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <PageHeader text={'알려줘'} />
-      <ScrollView>
+      <PageHeader text={'알려줘'} img={AlarmImg} />
+      <ScrollView style={styles.contentContainer}>
         <DelayedMissionList />
         <TodoListEveryDay />
         <TodoList />
@@ -24,6 +25,8 @@ const AllyojoPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  contentContainer: {
     marginHorizontal: 15,
   },
 });

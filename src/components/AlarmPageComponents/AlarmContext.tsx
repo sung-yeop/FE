@@ -29,8 +29,8 @@ const defaultMission = {
 
 const AlarmContext = ({children, initial}: Props) => {
   const defaultAlarm: Alarm = {
-    // alarmid: uuid.v4().toString(),
-    alarmid: '1',
+    alarmid: uuid.v4().toString(),
+    // alarmid: '1',
     timer: new Date(),
     active: false,
     alarmDays: 0,

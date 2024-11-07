@@ -5,6 +5,7 @@ import TimePicker from '../../TimePicker';
 import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
 import Modal_CU_SaveButton from './Modal_CU_SaveButton';
 import {useTodoManager} from '../../../hooks/useTodoManager';
+import CustomTimePicker from '../../../module/CustomTimePicker';
 
 type Props = {
   onCloseModal: () => void;
@@ -21,7 +22,8 @@ const Modal_CU_Todo_Content = ({onCloseModal}: Props) => {
   return (
     <View style={styles.container}>
       <CustomCalendar isPeriod={false} />
-      <TimePicker current={currentTodo} updateTodo={updateTodo} />
+      {/* <TimePicker current={currentTodo} updateTodo={updateTodo} /> */}
+      <CustomTimePicker target={currentTodo} updateFun={updateTodo} />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="제목을 입력해주세요"

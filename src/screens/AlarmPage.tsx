@@ -1,11 +1,4 @@
-import {
-  ScrollView,
-  SectionList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader';
@@ -14,6 +7,7 @@ import AlarmList from '../components/AlarmPageComponents/AlarmList';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {AlarmImg} from '../../asset/images';
 
 type AlarmScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,7 +22,7 @@ const AlarmPage = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <PageHeader text="알람 관리" />
+      <PageHeader text="알람 관리" img={AlarmImg} />
       <ScrollView style={styles.content}>
         <AlarmList />
       </ScrollView>
@@ -37,6 +31,9 @@ const AlarmPage = () => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TestPage')}>
         <Text>Go to Test Page</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ModuleTestPage')}>
+        <Text>Go to Module Test Page</Text>
       </TouchableOpacity>
       <AddAlarmButton />
     </SafeAreaView>
@@ -48,9 +45,9 @@ export default AlarmPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 15,
   },
   content: {
     flex: 1,
+    marginHorizontal: 15,
   },
 });

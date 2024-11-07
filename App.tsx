@@ -3,18 +3,18 @@ import {
   NavigationContainer,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React from 'react';
 import BottomTab from './src/components/BottomTab';
 import {RecoilRoot} from 'recoil';
 import Initializer from './src/components/Initializer';
 import {DeviceEventEmitter} from 'react-native';
 import AlarmScreen from './src/components/AlarmScreen/AlarmScreen';
-import LoginPage from './src/screens/SignInPage';
 import WelcomePage from './src/screens/WelcomePage';
 import SignInPage from './src/screens/SignInPage';
 import SignUpPage from './src/screens/SignUpPage';
 import FindPasswordPage from './src/screens/FindPasswordPage';
 import TestPage from './src/screens/TestPage';
+import ModuleTestPage from './src/screens/ModuleTestPage';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -25,6 +25,7 @@ export type RootStackParamList = {
   Welcome: undefined;
   FindPassWord: undefined;
   TestPage: undefined;
+  ModuleTestPage: undefined;
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -59,6 +60,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="SignUp" component={SignUpPage} />
           <Stack.Screen name="FindPassWord" component={FindPasswordPage} />
           <Stack.Screen name="TestPage" component={TestPage} />
+          <Stack.Screen name="ModuleTestPage" component={ModuleTestPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

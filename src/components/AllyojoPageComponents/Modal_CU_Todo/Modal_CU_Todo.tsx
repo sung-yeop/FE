@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Modal,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -33,12 +34,14 @@ const Modal_CU_Todo = ({isVisible, onCloseModal, todo}: Props) => {
       animationType="slide"
       transparent={false}>
       <SafeAreaProvider>
-        <TodoContext initialTodo={todo || undefined}>
-          <View style={styles.modalContainer}>
-            <TodoModalHeader onCloseModal={onCloseModal} />
-            <Modal_CU_Todo_Content onCloseModal={onCloseModal} />
-          </View>
-        </TodoContext>
+        <ScrollView>
+          <TodoContext initialTodo={todo || undefined}>
+            <View style={styles.modalContainer}>
+              <TodoModalHeader onCloseModal={onCloseModal} />
+              <Modal_CU_Todo_Content onCloseModal={onCloseModal} />
+            </View>
+          </TodoContext>
+        </ScrollView>
       </SafeAreaProvider>
     </Modal>
   );

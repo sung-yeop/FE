@@ -3,6 +3,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import CustomTimePicker from '../module/CustomTimePicker';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import CustomCamera from '../module/CustomCamera';
 
 const ModuleTestPage = () => {
   const navigation = useNavigation();
@@ -14,7 +15,7 @@ const ModuleTestPage = () => {
         }}>
         <Text style={styles.goBack}>뒤로가기</Text>
       </TouchableOpacity>
-      {/* <CustomTimePicker /> */}
+      <CustomCamera />
     </SafeAreaView>
   );
 };

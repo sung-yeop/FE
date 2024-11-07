@@ -3,6 +3,7 @@ import {allAlarmsSelector, STORAGE_ALARM_KEY} from '../atoms';
 import {Alarm} from '../types';
 import {useRecoilState} from 'recoil';
 import AndroidAlarmModule from '../util/AndroidAlarmManager';
+import {Platform} from 'react-native';
 
 export const useAlarmManager = () => {
   const [alarms, setAlarms] = useRecoilState(allAlarmsSelector);
@@ -23,13 +24,15 @@ export const useAlarmManager = () => {
 
   const saveAlarm = async (alarm: Alarm) => {
     try {
-      await AndroidAlarmModule.setAlarm(
-        alarm.alarmid,
-        alarm.timer.getTime(),
-        alarm.setting.isVibration,
-        alarm.setting.volume,
-        'null',
-      );
+      if (Platform.OS === 'android') {
+        await AndroidAlarmModule.setAlarm(
+          alarm.alarmid,
+          alarm.timer.getTime(),
+          alarm.setting.isVibration,
+          alarm.setting.volume,
+          'null',
+        );
+      }
       const updatedAlarms = [...alarms, alarm];
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
@@ -54,17 +57,19 @@ export const useAlarmManager = () => {
       ? 0
       : Number(alarm.setting.alarmInterval);
     try {
-      await AndroidAlarmModule.updateAlarm(
-        alarm.alarmid,
-        alarm.timer.getTime(),
-        alarm.active,
-        alarmInterval,
-        alarm.delayTimes,
-        alarm.setting.isVibration,
-        repeatTrigger ? repeatTrigger : false,
-        alarm.setting.volume,
-        'null',
-      );
+      if (Platform.OS === 'android') {
+        await AndroidAlarmModule.updateAlarm(
+          alarm.alarmid,
+          alarm.timer.getTime(),
+          alarm.active,
+          alarmInterval,
+          alarm.delayTimes,
+          alarm.setting.isVibration,
+          repeatTrigger ? repeatTrigger : false,
+          alarm.setting.volume,
+          'null',
+        );
+      }
       const updatedAlarms = alarms.map(a =>
         a.alarmid === alarm.alarmid ? alarm : a,
       );

@@ -1,7 +1,6 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import CustomCalendar from '../../CustomCalendar';
-import TimePicker from '../../TimePicker';
 import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
 import Modal_CU_SaveButton from './Modal_CU_SaveButton';
 import {useTodoManager} from '../../../hooks/useTodoManager';

@@ -3,7 +3,7 @@ import {
   NavigationContainer,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import BottomTab from './src/components/BottomTab';
 import {RecoilRoot} from 'recoil';
 import Initializer from './src/components/Initializer';
@@ -15,6 +15,8 @@ import SignUpPage from './src/screens/SignUpPage';
 import FindPasswordPage from './src/screens/FindPasswordPage';
 import TestPage from './src/screens/TestPage';
 import ModuleTestPage from './src/screens/ModuleTestPage';
+import {checkCameraPermission} from './src/module/RequestPermission';
+import PhotoConfirmPage from './src/screens/PhotoConfirmPage';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -26,6 +28,7 @@ export type RootStackParamList = {
   FindPassWord: undefined;
   TestPage: undefined;
   ModuleTestPage: undefined;
+  PhotoConfirmPage: undefined;
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -44,8 +47,11 @@ function App(): React.JSX.Element {
         }
       },
     );
-
     return () => subscription.remove();
+  }, []);
+
+  useEffect(() => {
+    checkCameraPermission();
   }, []);
 
   return (
@@ -61,6 +67,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="FindPassWord" component={FindPasswordPage} />
           <Stack.Screen name="TestPage" component={TestPage} />
           <Stack.Screen name="ModuleTestPage" component={ModuleTestPage} />
+          <Stack.Screen name="PhotoConfirmPage" component={PhotoConfirmPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

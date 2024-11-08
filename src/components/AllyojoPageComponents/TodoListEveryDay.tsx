@@ -6,30 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import Entypo from 'react-native-vector-icons/Entypo';
+import React from 'react';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
-import {useListHeaderAnimation} from '../../hooks/useListHeaderAnimation';
 import ListHeader from './ListHeader';
 import TodoItem from './Modal_CU_Todo/TodoItem';
 
 const TodoListEveryDay = () => {
   const {findAlarmRepeatAllDay} = useHandleAlldAlarm();
-  const {isExpanded, toggleExpand, maxHeight} = useListHeaderAnimation();
 
   return (
     <ScrollView style={styles.container}>
-      <ListHeader
-        title={'매일'}
-        isExpanded={isExpanded}
-        toggleExpand={toggleExpand}>
-        <Animated.View style={[styles.contentContainer, {maxHeight}]}>
-          {findAlarmRepeatAllDay &&
-            findAlarmRepeatAllDay.map(alarm => (
-              <TodoItem key={alarm.alarmid} alarm={alarm} />
-            ))}
-        </Animated.View>
-      </ListHeader>
+      <ListHeader powerTitle={'매일'} title="해야하는 미션이예요!" />
+      {findAlarmRepeatAllDay &&
+        findAlarmRepeatAllDay.map(alarm => (
+          <TodoItem key={alarm.alarmid} alarm={alarm} />
+        ))}
     </ScrollView>
   );
 };

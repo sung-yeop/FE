@@ -65,6 +65,7 @@ export type SettingTimeInterval = '반복 없음' | 1 | 10 | 15 | 30;
 
 export type MissionCareType =
   | 'Manage blood sugar'
+  | 'Manage blood pressure'
   | 'Eat Medician'
   | 'Eat food'
   | undefined;

@@ -22,7 +22,6 @@ type Props = {
 };
 
 const AlarmItem = ({alarm, onPress}: Props) => {
-  const [expanded, setExpanded] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const alarmManager = useAlarmManager();
   const {ampm, viewTime} = TimeFormatting(alarm.timer);
@@ -31,30 +30,23 @@ const AlarmItem = ({alarm, onPress}: Props) => {
   if (!mission) {
     return null;
   }
-
-  useEffect(() => {
-    if (expanded) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      fadeAnim.setValue(0);
-    }
-  }, [expanded, fadeAnim]);
-
-  const toggleExpand = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpanded(!expanded);
-  };
   return (
     <View style={styles.alarmContainer}>
       <TouchableOpacity onPress={onPress} style={styles.mainContent}>
-        <View>
+        <View style={styles.strictModeContainer}>
           <Text style={styles.repeatText}>
             {ViewCurrentSelectedRepeatDays(alarm.alarmDays)}
           </Text>
+          <Text style={styles.strictModeText}>
+            엄격모드: {alarm.mission.mode === 'Strict' ? 'ON' : 'OFF'}
+          </Text>
+        </View>
+        <View style={styles.missionInfoContainer}>
+          <Image source={mission.img} style={styles.missionImage} />
+          <View style={styles.missionTextContainer}>
+            <Text style={styles.missionTitle}>{mission.title}</Text>
+            <Text style={styles.missionDescription}>{mission.description}</Text>
+          </View>
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.timeContainer}>
@@ -73,29 +65,6 @@ const AlarmItem = ({alarm, onPress}: Props) => {
           />
         </View>
       </TouchableOpacity>
-      {expanded && (
-        <Animated.View style={[styles.expandedContent, {opacity: fadeAnim}]}>
-          <View style={styles.strictModeContainer}>
-            <Text style={styles.strictModeText}>
-              엄격모드: {alarm.mission.mode === 'Strict' ? 'ON' : 'OFF'}
-            </Text>
-          </View>
-          <View style={styles.missionInfoContainer}>
-            <Image source={mission.img} style={styles.missionImage} />
-            <View style={styles.missionTextContainer}>
-              <Text style={styles.missionTitle}>{mission.title}</Text>
-              <Text style={styles.missionDescription}>
-                {mission.description}
-              </Text>
-            </View>
-          </View>
-        </Animated.View>
-      )}
-      <TouchableOpacity style={styles.foldButton} onPress={toggleExpand}>
-        <Text style={styles.foldButtonText}>
-          {expanded ? '접기' : '펼치기'}
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -104,7 +73,6 @@ export default AlarmItem;
 
 const styles = StyleSheet.create({
   alarmContainer: {
-    marginVertical: 10,
     borderRadius: 15,
     backgroundColor: 'white',
     shadowColor: '#000',
@@ -145,15 +113,16 @@ const styles = StyleSheet.create({
   missionInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    gap: 8,
   },
   missionImage: {
     width: 30,
     height: 30,
     marginRight: 15,
   },
-  missionTextContainer: {
-    flex: 1,
-  },
+  missionTextContainer: {},
   missionTitle: {
     fontSize: 16,
     fontWeight: '600',
@@ -165,8 +134,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   strictModeContainer: {
-    alignItems: 'flex-end',
     marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   strictModeText: {
     fontSize: 14,

@@ -1,27 +1,28 @@
-import {Animated, ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import React from 'react';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
 import DelayedMissionItem from './DelayedMissionItem';
 import ListHeader from './ListHeader';
-import {useListHeaderAnimation} from '../../hooks/useListHeaderAnimation';
 
 const DelayedMissionList = () => {
   const {findAlarmDelayFromAll} = useHandleAlldAlarm();
-  const {isExpanded, toggleExpand, maxHeight} = useListHeaderAnimation();
 
   return (
     <ScrollView style={styles.container}>
       <ListHeader
-        title={'미션을 선택해주세요'}
-        isExpanded={isExpanded}
-        toggleExpand={toggleExpand}>
-        <Animated.View style={[styles.contentContainer, {maxHeight}]}>
-          {findAlarmDelayFromAll &&
-            findAlarmDelayFromAll.map(alarm => (
-              <DelayedMissionItem key={alarm.alarmid} delayedAlarm={alarm} />
-            ))}
-        </Animated.View>
-      </ListHeader>
+        title={
+          findAlarmDelayFromAll.length !== 0
+            ? '아래 미션을 완료해주세요!'
+            : '오늘은 미룬 알람이 없어요!'
+        }></ListHeader>
+      <ScrollView
+        horizontal={true}
+        style={styles.content}
+        contentContainerStyle={styles.contentContainer}>
+        {findAlarmDelayFromAll.map(alarm => (
+          <DelayedMissionItem key={alarm.alarmid} delayedAlarm={alarm} />
+        ))}
+      </ScrollView>
     </ScrollView>
   );
 };
@@ -47,6 +48,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   contentContainer: {
-    overflow: 'hidden',
+    gap: 10,
+    flexDirection: 'row',
+  },
+  content: {
+    gap: 10,
   },
 });

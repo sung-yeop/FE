@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Alarm} from '../../types';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';
-import {ViewCurrentSelectedRepeatDays} from '../AlarmPageComponents/Modal_CU_RepeatPicker';
 
 type Props = {
   delayedAlarm: Alarm;
@@ -19,7 +18,7 @@ const DelayedMissionItem = ({delayedAlarm}: Props) => {
   const mission = GetCareMissionDataWithId(delayedAlarm.mission.id);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <View style={styles.leftContainer}>
         <Image source={mission?.img} style={styles.missionImage} />
       </View>
@@ -34,11 +33,8 @@ const DelayedMissionItem = ({delayedAlarm}: Props) => {
           <Text style={styles.titleText}>{mission?.title}</Text>
           <Text style={styles.descriptionText}>{mission?.description}</Text>
         </View>
-        <TouchableOpacity style={styles.missionProcessContainer}>
-          <Text style={styles.missionProcessText}>{`미션\n진행`}</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -55,10 +51,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    paddingHorizontal: 12,
+    gap: 4,
   },
   leftContainer: {
     justifyContent: 'center',
-    padding: 16,
   },
   rightContainer: {
     flex: 1,
@@ -67,7 +64,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     paddingVertical: 16,
-    paddingHorizontal: 4,
+    paddingHorizontal: 10,
   },
   missionImage: {
     width: 60,

@@ -7,21 +7,14 @@ import TodoItem from './Modal_CU_Todo/TodoItem';
 
 const TodoList = () => {
   const {findAlarmRepeatDay} = useHandleAlldAlarm();
-  const {isExpanded, toggleExpand, maxHeight} = useListHeaderAnimation();
 
   return (
     <ScrollView style={styles.container}>
-      <ListHeader
-        title={'주'}
-        isExpanded={isExpanded}
-        toggleExpand={toggleExpand}>
-        <Animated.View style={[styles.contentContainer, {maxHeight}]}>
-          {findAlarmRepeatDay &&
-            findAlarmRepeatDay.map(alarm => (
-              <TodoItem key={alarm.alarmid} alarm={alarm} />
-            ))}
-        </Animated.View>
-      </ListHeader>
+      <ListHeader powerTitle={'매주'} title={'설정된 미션이예요!'} />
+      {findAlarmRepeatDay &&
+        findAlarmRepeatDay.map(alarm => (
+          <TodoItem key={alarm.alarmid} alarm={alarm} />
+        ))}
     </ScrollView>
   );
 };

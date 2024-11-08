@@ -43,6 +43,6 @@ export default AlarmList;
 
 const styles = StyleSheet.create({
   AlarmListContainer: {
-    gap: 10,
+    gap: 12,
   },
 });

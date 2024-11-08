@@ -4,7 +4,13 @@ import {EatFoodImg, ManageBloodSugar, EatMedicianImg} from '../../asset/images';
 export const CareMissionData = [
   {
     id: 'Manage blood sugar' as MissionCareType,
-    title: '혈당 / 혈압 관리하기',
+    title: '혈당 관리하기',
+    img: ManageBloodSugar,
+    description: '기기의 사진을 찍어주세요',
+  },
+  {
+    id: 'Manage blood pressure' as MissionCareType,
+    title: '혈압 관리하기',
     img: ManageBloodSugar,
     description: '기기의 사진을 찍어주세요',
   },

@@ -4,26 +4,32 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../App';
 
 type Props = {
   // Alert된 알람을 넘겨받아서 처리해야함
 };
 
-type AlarmScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type RootStackParamList = {
+  PhotoConfirmPage: {
+    imageUri: string;
+    type?: string;
+  };
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const CustomCamera = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const camera = useRef<Camera>(null);
   const devices = useCameraDevices();
   const device = devices.find(d => d.position === 'back');
-  const navigation = useNavigation<AlarmScreenNavigationProp>();
+  const navigation = useNavigation<NavigationProp>();
 
   const handleTakePhoto = useCallback(async () => {
     try {
       if (camera.current) {
         const photo = await camera.current.takePhoto();
-        setImageUri(`file://${photo.path}`);
+        setImageUri(`${photo.path}`);
       }
     } catch (error) {
       console.error('카메라 에러:', error);
@@ -40,8 +46,10 @@ const CustomCamera = () => {
 
   useEffect(() => {
     if (!imageUri) return;
-    navigation.navigate('PhotoConfirmPage');
-  }, [imageUri]);
+    navigation.navigate('PhotoConfirmPage', {
+      imageUri: imageUri,
+    });
+  }, [imageUri, navigation]);
 
   return (
     <View style={styles.container}>

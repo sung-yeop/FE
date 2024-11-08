@@ -6,24 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {ReactNode, useRef, useState} from 'react';
-import Entypo from 'react-native-vector-icons/Entypo';
+import React from 'react';
 
 type Props = {
   title: string;
-  children: ReactNode;
-  toggleExpand: () => void;
-  isExpanded: boolean;
+  powerTitle?: string;
 };
 
-const ListHeader = ({title, children, toggleExpand, isExpanded}: Props) => {
+const ListHeader = ({powerTitle, title}: Props) => {
   return (
     <ScrollView style={styles.container}>
-      <TouchableOpacity onPress={toggleExpand} style={styles.headerContainer}>
-        <Text style={styles.headerText}>{title}</Text>
-        <Entypo name={isExpanded ? 'chevron-up' : 'chevron-down'} size={24} />
+      <TouchableOpacity style={styles.headerContainer}>
+        <View style={styles.textContainer}>
+          {powerTitle && (
+            <Text style={styles.headerPowerText}>{powerTitle}</Text>
+          )}
+          <Text style={styles.headerText}>{title}</Text>
+        </View>
       </TouchableOpacity>
-      {children}
     </ScrollView>
   );
 };
@@ -36,16 +36,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   headerContainer: {
-    paddingVertical: 15,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+  },
+  textContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'baseline',
   },
   headerText: {
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
+  },
+  headerPowerText: {
+    fontSize: 20,
+    color: '#C93939',
+    fontWeight: 'bold',
+    marginRight: 4,
   },
 });

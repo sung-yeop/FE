@@ -28,7 +28,10 @@ export type RootStackParamList = {
   FindPassWord: undefined;
   TestPage: undefined;
   ModuleTestPage: undefined;
-  PhotoConfirmPage: undefined;
+  PhotoConfirmPage: {
+    imageUri: string;
+    type?: string;
+  };
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();

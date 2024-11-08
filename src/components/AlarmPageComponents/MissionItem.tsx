@@ -1,11 +1,4 @@
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';

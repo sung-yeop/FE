@@ -19,6 +19,7 @@ export default {
     isVibrate: boolean,
     soundVolume: number,
     soundUri: string,
+    alarmDays: number,
   ) => {
     const hasPermission = await requestAlarmPermission();
     if (hasPermission) {
@@ -29,6 +30,7 @@ export default {
           isVibrate,
           soundVolume,
           soundUri,
+          alarmDays,
         );
         console.log('Alarm set successfully');
       } catch (error) {
@@ -49,6 +51,7 @@ export default {
     repeatTrigger: boolean,
     soundVolume: number,
     soundUri: string,
+    alarmDays: number,
   ) => {
     const hasPermission = await requestAlarmPermission();
     if (hasPermission) {
@@ -63,6 +66,7 @@ export default {
           repeatTrigger,
           soundVolume,
           soundUri,
+          alarmDays,
         );
         console.log('Alarm update successfully');
       } catch (error) {

@@ -8,10 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {Alarm} from '../../types';
 import {ViewCurrentSelectedRepeatDays} from './Modal_CU_RepeatPicker';
-import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
 import {TimeFormatting} from '../../util/TimeFormatting';

@@ -31,6 +31,7 @@ export const useAlarmManager = () => {
           alarm.setting.isVibration,
           alarm.setting.volume,
           'null',
+          alarm.alarmDays,
         );
       }
       const updatedAlarms = [...alarms, alarm];
@@ -68,6 +69,7 @@ export const useAlarmManager = () => {
           repeatTrigger ? repeatTrigger : false,
           alarm.setting.volume,
           'null',
+          alarm.alarmDays,
         );
       }
       const updatedAlarms = alarms.map(a =>

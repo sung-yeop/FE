@@ -7,12 +7,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SignUpInfo, Step} from '../../types';
+import CheckBox from '@react-native-community/checkbox';
 
 type Props = {
   step: number;
   setIsValidNextPage: React.Dispatch<React.SetStateAction<Step>>;
   formData: SignUpInfo;
-  updateFormData: (key: string, value: string) => void;
+  updateFormData: (key: string, value: string | boolean) => void;
 };
 
 const RenderStep = ({
@@ -28,7 +29,6 @@ const RenderStep = ({
     notificationNumber,
     name,
     phoneNumber,
-    guardianPhoneNumber,
     isGuardian,
   } = {...formData};
 
@@ -68,9 +68,7 @@ const RenderStep = ({
   ////////////////////////////////////////
   // 두번째 페이지
   useEffect(() => {
-    console.log(phoneNumber.length);
     if (phoneNumber.length === 11) {
-      console.log('ENTER');
       setIsValidPhoneNumberLength(true);
     } else {
       setIsValidPhoneNumberLength(false);
@@ -83,6 +81,7 @@ const RenderStep = ({
         return {
           ...prevStep,
           step2: true,
+          step4: true, // 이거는 사용자 입력이 자유롭기 때문에 항상 넘어갈 수 있도록 해버린다.
         };
       });
     } else {
@@ -107,42 +106,12 @@ const RenderStep = ({
     });
   }, [notificationNumber]);
   ////////////////////////////////////////
-  /// 네번째 페이지
-  useEffect(() => {
-    if (guardianPhoneNumber?.length === 11) {
-      setIsValidNextPage(prevStep => {
-        return {
-          ...prevStep,
-          step4: true,
-        };
-      });
-    } else {
-      setIsValidNextPage(prevStep => {
-        return {
-          ...prevStep,
-          step4: false,
-        };
-      });
-    }
-  }, [guardianPhoneNumber]);
-  /////////////////////////////////////////
-  // 다섯번째 페이지
-  useEffect(() => {
-    setIsValidNextPage(prevStep => {
-      return {
-        ...prevStep,
-        step5: true,
-      };
-    });
-  }, [notificationNumber]);
-  //////////////////////////////////////
-  // 여섯번째 페이지
   useEffect(() => {
     if (name) {
       setIsValidNextPage(prevStep => {
         return {
           ...prevStep,
-          step6: true,
+          step5: true,
         };
       });
     }
@@ -235,36 +204,11 @@ const RenderStep = ({
       );
     case 4:
       return (
-        <View>
-          <Text style={styles.title}>
-            보호자가 있다면 {`\n`}보호자의 휴대폰 번호를 입력해주세요
-          </Text>
-          <TextInput
-            style={styles.inputOtherInfoText}
-            value={guardianPhoneNumber}
-            onChangeText={text => updateFormData('guardianPhoneNumber', text)}
-            placeholder="보호자 연락처"
-            keyboardType="phone-pad"
-          />
-          <TouchableOpacity>
-            <Text style={styles.jumpText}>건너뛰기</Text>
-          </TouchableOpacity>
+        <View style={styles.guardianCheckContainer}>
+          <Text style={styles.guardianText}>보호자 회원인가요?</Text>
         </View>
       );
     case 5:
-      return (
-        <View>
-          <Text style={styles.title}>인증번호를 입력해주세요</Text>
-          <TextInput
-            style={styles.inputOtherInfoText}
-            value={notificationNumber}
-            onChangeText={text => updateFormData('notificationNumber', text)}
-            placeholder="인증번호"
-            keyboardType="phone-pad"
-          />
-        </View>
-      );
-    case 6:
       return (
         <View>
           <Text style={styles.title}>사용할 닉네임을 입력해주세요!</Text>
@@ -362,5 +306,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 6,
     paddingVertical: 10,
+  },
+  guardianCheckContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 32,
+    flex: 1,
+  },
+  guardianText: {
+    color: 'black',
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 32,
   },
 });

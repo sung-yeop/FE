@@ -3,7 +3,6 @@ import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import {useNavigation} from '@react-navigation/native';
-import {StepKey} from '../../types';
 
 type Props = {
   step: number;
@@ -18,15 +17,15 @@ type AlarmScreenNavigationProp = NativeStackNavigationProp<
 const SignUpHeader = ({step, setStep}: Props) => {
   const navigator = useNavigation<AlarmScreenNavigationProp>();
 
-  const prevStep = () => {
-    setStep(prevStep => prevStep - 1);
+  const moveInitialStep = () => {
+    setStep(1);
   };
 
   return (
     <View style={styles.prevButtonContainer}>
       {step > 1 ? (
-        <TouchableOpacity style={styles.prevButton} onPress={prevStep}>
-          <Text style={styles.prevButtonText}>{'<'}</Text>
+        <TouchableOpacity style={styles.prevButton} onPress={moveInitialStep}>
+          <Text style={styles.prevButtonText}>{'처음으로'}</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -56,12 +55,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   prevButtonText: {
-    color: 'black',
-    fontSize: 28,
+    color: 'gray',
+    fontSize: 22,
+    fontFamily: 'Pretendard-Bold',
+    borderBottomWidth: 0.5,
   },
   initialPrevText: {
     color: 'black',
     borderBottomWidth: 1,
-    fontSize: 16,
+    fontSize: 18,
+    fontFamily: 'Pretendard-Bold',
   },
 });

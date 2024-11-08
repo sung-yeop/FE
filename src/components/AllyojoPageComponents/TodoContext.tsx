@@ -18,7 +18,10 @@ type Props = {
 };
 
 const defaultTodo: Todo = {
-  id: uuid.v4() as string,
+  id: uuid
+    .v4()
+    .toString()
+    .replace(/[^\d]+/g, ''),
   title: '',
   description: '',
   timer: new Date(),
@@ -28,6 +31,8 @@ export const TodoContext = ({children, initialTodo}: Props) => {
   const [currentTodo, setCurrentTodo] = useState<Todo>(
     initialTodo || defaultTodo,
   );
+
+  console.log(defaultTodo.id);
 
   const updateTodo = (updates: Partial<Todo>) => {
     setCurrentTodo(prev => ({...prev, ...updates}));

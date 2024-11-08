@@ -2,13 +2,13 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {SignUpInfo, Step, StepKey} from '../../types';
 import {StepToStepKey} from '../../util/SignUpStepUtils';
-import {sendSignUpData} from '../../api/SignAPI';
 
 type Props = {
   step: number;
   isValidNextPage: Step;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   setClickFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSignUpButton: () => void;
 };
 
 const SignUpButton = ({
@@ -16,6 +16,7 @@ const SignUpButton = ({
   isValidNextPage,
   setStep,
   setClickFlag,
+  handleSignUpButton,
 }: Props) => {
   const key = StepToStepKey(step) as StepKey;
 
@@ -26,10 +27,6 @@ const SignUpButton = ({
       setClickFlag(true);
     }
   };
-
-  // const singUpComplete = () => {
-  //   sendSignUpData(formData);
-  // };
 
   return (
     <View style={styles.buttonContainer}>
@@ -46,15 +43,16 @@ const SignUpButton = ({
           <Text style={styles.buttonText}>인증 하기</Text>
         </TouchableOpacity>
       ) : step === 4 ? (
-        <TouchableOpacity style={styles.button} onPress={nextStep}>
-          <Text style={styles.buttonText}>인증 번호 요청</Text>
-        </TouchableOpacity>
-      ) : step === 5 ? (
-        <TouchableOpacity style={styles.button} onPress={nextStep}>
-          <Text style={styles.buttonText}>인증 하기</Text>
-        </TouchableOpacity>
+        <View style={styles.guardianContainer}>
+          <TouchableOpacity style={styles.yesGuardianButton} onPress={nextStep}>
+            <Text style={styles.yesGuardianButtonText}>네</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.noGuardianButton} onPress={nextStep}>
+            <Text style={styles.noGuardianButtonText}>아니요</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity style={styles.button} onPress={handleSignUpButton}>
           <Text style={styles.buttonText}>회원 가입 완료</Text>
         </TouchableOpacity>
       )}
@@ -86,5 +84,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     paddingVertical: 15,
+  },
+  yesGuardianButton: {
+    backgroundColor: 'black',
+    flex: 0.5,
+    borderRadius: 12,
+    justifyContent: 'center',
+  },
+  yesGuardianButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 15,
+  },
+  noGuardianButtonText: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 15,
+  },
+  noGuardianButton: {
+    backgroundColor: 'white',
+    flex: 0.5,
+    borderRadius: 12,
+    borderWidth: 0.5,
+  },
+  guardianContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    gap: 8,
   },
 });

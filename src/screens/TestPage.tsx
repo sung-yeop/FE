@@ -1,30 +1,35 @@
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {newAlarmSend} from '../api/AlarmAPI';
+import {sendSignUpData} from '../api/SignAPI';
+import {validationSend} from '../api/ValidationAPI';
+import {getMissionFromReport, reportSend} from '../api/ReportAPI';
+import {TestMockData} from '../data/TestMockData';
 
 const TestPage = () => {
   const handleCreateAlarmTest = async () => {
-    // const response = await newAlarmSend(TestMockData.alarmWithMission);
-    // console.log(response);
+    const response = await newAlarmSend(TestMockData.alarmWithMission);
+    console.log(response);
   };
   const handleSignUpTest = async () => {
-    // const response = await sendSignUpData(TestMockData.signUpInfo);
-    // console.log(response);
+    const response = await sendSignUpData(TestMockData.signUpInfo);
+    console.log(response);
   };
 
   const handleSignInTest = async () => {
-    // const response = await validationSend(TestMockData.alarmWithMission);
-    // console.log(response);
+    const response = await validationSend(TestMockData.alarmWithMission);
+    console.log(response);
   };
 
   const handleReportTest = () => {
-    // const response = reportSend(TestMockData.reportSend);
-    // console.log({...response});
+    const response = reportSend(TestMockData.reportSend);
+    console.log({...response});
   };
 
   const handleMissionGetTest = () => {
-    // const response = getMissionFromReport();
-    // console.log(response);
+    const response = getMissionFromReport();
+    console.log(response);
   };
 
   return (

@@ -4,6 +4,11 @@ import RenderStep from '../components/SignUpPageComponents/RenderStep';
 import {SignUpInfo, Step} from '../types';
 import SignUpHeader from '../components/SignUpPageComponents/SignUpHeader';
 import SignUpButton from '../components/SignUpPageComponents/SignUpButton';
+import {
+  sendSignInDataWithGuardian,
+  sendSignUpWithGuardian,
+  sendSignUpWithUser,
+} from '../api/SignAPI';
 
 const SignUpPage = () => {
   const [step, setStep] = useState(1);
@@ -14,7 +19,6 @@ const SignUpPage = () => {
     notificationNumber: '', // 인증번호
     name: '', // 사용할 닉네임
     phoneNumber: '',
-    guardianPhoneNumber: undefined, // 보호자 연락처 (optional)
     isGuardian: false,
   });
   const [isValidNextPage, setIsValidNextPage] = useState<Step>({
@@ -23,30 +27,56 @@ const SignUpPage = () => {
     step3: false,
     step4: false,
     step5: false,
-    step6: false,
   });
   const [clickFlag, setClickFlag] = useState<boolean>(false);
 
-  const updateFormData = (key: string, value: string) => {
+  const updateFormData = (key: string, value: string | boolean) => {
     setFormData(prevData => ({...prevData, [key]: value}));
   };
 
   useEffect(() => {
     setClickFlag(false);
+    if (step === 1) {
+      setFormData({
+        username: '', // 사용할 아이디
+        password: '', // 사용할 패스워드
+        validPassword: '', // 패스워드 재확인
+        notificationNumber: '', // 인증번호
+        name: '', // 사용할 닉네임
+        phoneNumber: '',
+        isGuardian: false,
+      });
+      setIsValidNextPage({
+        step1: false,
+        step2: false,
+        step3: false,
+        step4: false,
+        step5: false,
+      });
+    }
   }, [step]);
 
   useEffect(() => {
-    setFormData({
-      username: '', // 사용할 아이디
-      password: '', // 사용할 패스워드
-      validPassword: '', // 패스워드 재확인
-      notificationNumber: '', // 인증번호
-      name: '', // 사용할 닉네임
-      phoneNumber: '',
-      guardianPhoneNumber: undefined, // 보호자 연락처 (optional)
-      isGuardian: false,
+    console.log(formData);
+  }, [formData]);
+
+  const handleSignUpButton = () => {
+    if (formData.isGuardian) {
+      sendSignUpWithGuardian({
+        username: formData.username,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        name: formData.name,
+      });
+      return;
+    }
+    sendSignUpWithUser({
+      username: formData.username,
+      password: formData.password,
+      phoneNumber: formData.phoneNumber,
+      name: formData.name,
     });
-  }, []);
+  };
 
   return (
     <View style={styles.container}>
@@ -69,6 +99,7 @@ const SignUpPage = () => {
         isValidNextPage={isValidNextPage}
         setStep={setStep}
         setClickFlag={setClickFlag}
+        handleSignUpButton={handleSignUpButton}
       />
     </View>
   );

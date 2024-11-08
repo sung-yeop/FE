@@ -29,7 +29,10 @@ const defaultMission = {
 
 const AlarmContext = ({children, initial}: Props) => {
   const defaultAlarm: Alarm = {
-    alarmid: uuid.v4().toString(),
+    alarmid: uuid
+      .v4()
+      .toString()
+      .replace(/[^\d]+/g, ''),
     // alarmid: '1',
     timer: new Date(),
     active: false,
@@ -41,6 +44,8 @@ const AlarmContext = ({children, initial}: Props) => {
   };
 
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);
+
+  console.log(defaultAlarm.alarmid);
 
   const updateAlarm = (updates: Partial<Alarm>) => {
     setCurrentAlarm(prev => ({...prev, ...updates}));

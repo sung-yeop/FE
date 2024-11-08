@@ -5,7 +5,6 @@ export interface SignUpInfo {
   notificationNumber: string;
   name: string;
   phoneNumber: string;
-  guardianPhoneNumber: string | undefined;
   isGuardian: boolean;
 }
 
@@ -37,7 +36,7 @@ export type Step = {
   [key in StepKey]: boolean;
 };
 
-export type StepKey = 'step1' | 'step2' | 'step3' | 'step4' | 'step5' | 'step6';
+export type StepKey = 'step1' | 'step2' | 'step3' | 'step4' | 'step5';
 
 export interface Alarm {
   alarmid: string;

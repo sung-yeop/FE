@@ -1,4 +1,10 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm.ts';
 import CheckBox from '@react-native-community/checkbox';
@@ -45,7 +51,11 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonContainer}>
-        <View
+        <TouchableOpacity
+          onPress={() => {
+            toggleSpecialButton(31);
+            setToggleButton('WeekDays');
+          }}
           style={
             toggleButton === 'WeekDays'
               ? styles.activeContainer
@@ -56,15 +66,15 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
               toggleButton === 'WeekDays'
                 ? styles.activeButtonText
                 : styles.ButtonInviText
-            }
-            onPress={() => {
-              toggleSpecialButton(31);
-              setToggleButton('WeekDays');
-            }}>
+            }>
             평일
           </Text>
-        </View>
-        <View
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            toggleSpecialButton(96);
+            setToggleButton('HoliyDay');
+          }}
           style={
             toggleButton === 'HoliyDay'
               ? styles.activeContainer
@@ -75,15 +85,15 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
               toggleButton === 'HoliyDay'
                 ? styles.activeButtonText
                 : styles.ButtonInviText
-            }
-            onPress={() => {
-              toggleSpecialButton(96);
-              setToggleButton('HoliyDay');
-            }}>
+            }>
             주말
           </Text>
-        </View>
-        <View
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            toggleSpecialButton(127);
+            setToggleButton('EveryDay');
+          }}
           style={
             toggleButton === 'EveryDay'
               ? styles.activeContainer
@@ -94,14 +104,10 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
               toggleButton === 'EveryDay'
                 ? styles.activeButtonText
                 : styles.ButtonInviText
-            }
-            onPress={() => {
-              toggleSpecialButton(127);
-              setToggleButton('EveryDay');
-            }}>
+            }>
             매일
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       {days.map(([key, label]) => (
         <View key={key} style={styles.checkboxContainer}>

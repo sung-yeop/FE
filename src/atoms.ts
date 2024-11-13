@@ -1,6 +1,7 @@
 import {atom, DefaultValue, selector} from 'recoil';
 import {Alarm, Report, ReportDuration, Todo, User} from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Parser} from './util/Parser';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
@@ -10,12 +11,11 @@ export const allAlarmsState = atom<Alarm[]>({
   default: [],
   effects: [
     ({setSelf, onSet}) => {
-      // Load initial value from AsyncStorage
       const loadInitialValue = async () => {
         try {
           const savedValue = await AsyncStorage.getItem(STORAGE_ALARM_KEY);
           if (savedValue != null) {
-            setSelf(JSON.parse(savedValue));
+            setSelf(Parser.parseForm(savedValue) as Alarm[]);
           }
         } catch (error) {
           console.error('Error loading alarms:', error);
@@ -39,20 +39,6 @@ export const allAlarmsSelector = selector({
   set: ({set}, newValue: DefaultValue | Alarm[] | []) =>
     set(allAlarmsState, newValue),
 });
-
-// 어플을 시작할 때 백엔드 서버와 로컬 스토리지의 데이터 동기화를 진행
-export const loadAlarms = async () => {
-  try {
-    await AsyncStorage.clear();
-    const savedAlarms = await AsyncStorage.getItem(STORAGE_ALARM_KEY);
-    if (savedAlarms !== null) {
-      return JSON.parse(savedAlarms) as Alarm[];
-    }
-  } catch (error) {
-    console.error('Error loading alarms:', error);
-  }
-  return [] as Alarm[];
-};
 
 export const currentReportState = atom<Report>({
   key: 'currentReportState',
@@ -78,9 +64,10 @@ export const allTodoState = atom<Todo[]>({
     ({setSelf, onSet}) => {
       const loadInitialValue = async () => {
         try {
+          AsyncStorage.clear();
           const savedValue = await AsyncStorage.getItem(STORAGE_TODO_KEY);
           if (savedValue != null) {
-            setSelf(JSON.parse(savedValue));
+            setSelf(Parser.parseForm(savedValue) as Todo[]);
           }
         } catch (error) {
           console.error('Error loading alarms:', error);

@@ -81,14 +81,12 @@ export type Report = {
   duration: ReportDuration;
 };
 
-// ** Todo와 Alarm의 타입에서 timer라는 속성은 동일하게 가지고 있어야한다.
-// TimePicker 컴포넌트에서 value에 참조하는값이 .timer이므로 동일해야함
 export interface Todo {
   id: string;
   title: string;
   description?: string;
   timer: Date;
-  day?: string; // day 혹은 repeat 중 하나는 무조건 존재해야 알려줘 페이지에 등록됨
+  day: string;
 }
 
 export type ReportAPI = {

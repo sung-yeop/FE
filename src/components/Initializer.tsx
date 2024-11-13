@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 const Initializer = () => {
-  const alarmManager = useAlarmManager();
+  // const alarmManager = useAlarmManager();
   const navigation = useNavigation<NavigationProp>();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Initializer = () => {
           navigation.navigate('SignIn');
           return;
         }
-        alarmManager.loadAlarms();
+        // alarmManager.loadAlarms();
       } catch (error) {
         console.error('Error checking login status:', error);
         navigation.navigate('SignIn');

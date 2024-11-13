@@ -3,10 +3,11 @@ import {
   Dimensions,
   StyleSheet,
   Text,
+  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {theme} from '../../style/Theme';
 
 type Props = {
@@ -40,6 +41,10 @@ const HeaderSelector = ({handleComp, select}: Props) => {
     } else return 2;
   };
 
+  useEffect(() => {
+    handleTabPress(select);
+  }, []);
+
   const handleTabPress = (selectTab: Tab['key']) => {
     Animated.spring(indicatorRef, {
       toValue: parseKeyToIdx(selectTab) * TAB_WIDTH + TAB_PADDING + 15, // 패딩값 고려
@@ -54,6 +59,7 @@ const HeaderSelector = ({handleComp, select}: Props) => {
       <View style={styles.selectTabContainer}>
         {tabs.map(tab => (
           <TouchableOpacity
+            activeOpacity={1}
             style={styles.selectTab}
             key={tab.key}
             onPress={() => {

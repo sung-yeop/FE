@@ -1,19 +1,17 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Todo} from '../../../types';
 import {theme} from '../../../style/Theme';
+import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
+import {useTodoManager} from '../../../hooks/useTodoManager';
 
 type Props = {
-  currentTodo: Todo;
-  onSaveCurrentTodo: () => void;
+  id?: string;
   onCloseModal: () => void;
 };
 
-const Modal_CU_SaveButton = ({
-  currentTodo,
-  onSaveCurrentTodo,
-  onCloseModal,
-}: Props) => {
+const Modal_CU_SaveButton = ({id, onCloseModal}: Props) => {
+  const {currentTodo, setCurrentTodo} = useCurrentTodo();
+  const todoManager = useTodoManager();
   const onClickSaveButton = () => {
     if (!currentTodo.title) {
       Alert.alert('주의', '앞으로 어떤 할일인지 제목을 입력해주세요', [
@@ -24,7 +22,13 @@ const Modal_CU_SaveButton = ({
       ]);
       return null;
     }
-    onSaveCurrentTodo();
+    if (id) {
+      todoManager.updateTodo(currentTodo);
+    } else {
+      todoManager.saveTodo(currentTodo);
+      setCurrentTodo(currentTodo);
+    }
+
     onCloseModal();
   };
   return (

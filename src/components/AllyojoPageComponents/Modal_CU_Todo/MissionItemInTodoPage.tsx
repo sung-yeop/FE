@@ -8,7 +8,7 @@ type Props = {
   alarm: Alarm;
 };
 
-const TodoItem = ({alarm}: Props) => {
+const MissionItemInTodoPage = ({alarm}: Props) => {
   const hour = alarm?.timer.getHours();
   const viewHour = hour >= 12 ? hour - 12 : hour;
   const minute = alarm?.timer.getMinutes();
@@ -51,7 +51,7 @@ const TodoItem = ({alarm}: Props) => {
   );
 };
 
-export default TodoItem;
+export default MissionItemInTodoPage;
 
 const styles = StyleSheet.create({
   container: {

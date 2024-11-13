@@ -31,8 +31,8 @@ const AlarmPage = () => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TestPage')}>
         <Text>Go to Test Page</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ModuleTestPage')}>
+      </TouchableOpacity>*/}
+      {/* <TouchableOpacity onPress={() => navigation.navigate('ModuleTestPage')}>
         <Text>Go to Module Test Page</Text>
       </TouchableOpacity> */}
       <AddAlarmButton />
@@ -45,6 +45,7 @@ export default AlarmPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   content: {
     flex: 1,

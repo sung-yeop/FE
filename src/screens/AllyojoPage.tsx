@@ -9,6 +9,7 @@ import {useState} from 'react';
 import {AlarmImg} from '../../asset/images';
 import HeaderSelector from '../components/AllyojoPageComponents/HeaderSelector';
 import AllyojoHeader from '../components/AllyojoPageComponents/AllyojoHeader';
+import TodoList from '../components/AllyojoPageComponents/TodoList';
 
 const AllyojoPage = () => {
   const [pageNav, setPageNav] = useState<'Todo' | 'Mission' | 'Delay'>('Todo');
@@ -23,9 +24,7 @@ const AllyojoPage = () => {
         style={styles.contentContainer}
         contentContainerStyle={styles.scrollViewContent}>
         {pageNav === 'Todo' ? (
-          <View style={styles.defaultContainer}>
-            <Text>미션</Text>
-          </View>
+          <TodoList />
         ) : pageNav === 'Mission' ? (
           <View>
             <MissionListEveryDay />

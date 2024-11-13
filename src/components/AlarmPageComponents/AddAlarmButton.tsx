@@ -57,21 +57,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white', // 흰색 배경 추가
     borderRadius: 30,
     borderWidth: 1,
-    borderColor: '#E8E8E8', // 연한 회색 테두리
+    borderColor: '#BBB', // 연한 회색 테두리
     width: 56,
     height: 56,
     justifyContent: 'center',
+    elevation: 2,
     alignItems: 'center',
-    // iOS 그림자
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    // 내부 여백
-    padding: 12,
+    shadowOpacity: 0.2,
+    shadowRadius: 2.62,
   },
   buttonImgStyle: {
     width: '100%',

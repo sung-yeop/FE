@@ -9,12 +9,12 @@ const ModuleTestPage = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}>
         <Text style={styles.goBack}>뒤로가기</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <CustomCamera />
     </SafeAreaView>
   );

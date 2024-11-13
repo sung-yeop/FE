@@ -8,7 +8,6 @@ export const useTodoManager = () => {
 
   const loadTodos = async () => {
     try {
-      AsyncStorage.clear();
       const savedAlarms = await AsyncStorage.getItem(STORAGE_TODO_KEY);
       if (savedAlarms) {
         setAllTodo(JSON.parse(savedAlarms) as Todo[]);

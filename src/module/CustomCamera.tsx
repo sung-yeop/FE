@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState, useRef, useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
@@ -39,7 +46,8 @@ const CustomCamera = () => {
   if (!device) {
     return (
       <View style={styles.loading}>
-        <Text>카메라를 불러오는 중...</Text>
+        <ActivityIndicator size="large" color="#fff" />
+        <Text style={styles.loadingText}>카메라를 불러오는 중...</Text>
       </View>
     );
   }
@@ -55,10 +63,14 @@ const CustomCamera = () => {
     <View style={styles.container}>
       <View style={styles.cameraContainer}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => {}} style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#000" />
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>미션에 맞는 사진을 찍어주세요!</Text>
+          <Text style={styles.headerText}>
+            미션에 맞는 사진을 촬영해주세요!
+          </Text>
         </View>
 
         <Camera
@@ -86,83 +98,78 @@ export default CustomCamera;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000', // 어두운 배경으로 변경
   },
   cameraContainer: {
     flex: 1,
   },
   header: {
-    height: 60,
+    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // 반투명 배경
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
   },
   backButton: {
-    padding: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontSize: 18,
     fontWeight: '600',
-    marginLeft: 20,
+    marginLeft: 16,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 4,
   },
   cameraPreview: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  guideText: {
-    fontSize: 16,
-    color: '#666',
+    backgroundColor: '#000',
   },
   controls: {
-    height: 100,
+    height: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    paddingBottom: 20, // 안전 영역 고려
+    paddingTop: 10,
   },
   captureButton: {
     width: 70,
     height: 70,
-    borderRadius: 35,
-    backgroundColor: '#fff',
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 4,
-    borderColor: '#000',
+    borderColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   captureButtonInner: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    backgroundColor: '#000',
-  },
-  previewContainer: {
-    flex: 1,
-  },
-  preview: {
-    flex: 1,
-  },
-  retakeButton: {
-    position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
-    backgroundColor: '#000',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: '#fff',
   },
   loading: {
     flex: 1,
+    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loadingText: {
+    // 새로 추가
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

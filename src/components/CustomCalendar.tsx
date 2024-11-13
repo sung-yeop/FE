@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {MarkedDates} from 'react-native-calendars/src/types';
 import {useCurrentTodo} from '../hooks/useCurrentTodo';
+import {TodoUtil} from '../util/TodoUtils';
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -51,7 +52,7 @@ type Props = {
 // isPeriod가 false면 Todo모달에서 호출되었음을 의미 -> useCurrentTodo 훅을 이용해서 날짜 데이터 저장 가능
 const CustomCalendar = ({isPeriod}: Props) => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>({
-    recentPick: '',
+    recentPick: !isPeriod ? TodoUtil.parseDayFromDate(new Date()) : '',
     lastPick: '',
   });
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -118,10 +119,6 @@ const CustomCalendar = ({isPeriod}: Props) => {
     if (updateTodo) {
       updateTodo({day: selectedPeriod.recentPick});
     }
-  }, [selectedPeriod]);
-
-  useEffect(() => {
-    console.log(selectedPeriod);
   }, [selectedPeriod]);
 
   return (

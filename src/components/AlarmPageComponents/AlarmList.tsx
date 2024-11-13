@@ -18,18 +18,24 @@ const AlarmList = () => {
 
   return (
     <View style={styles.AlarmListContainer}>
-      {alarms.map((alarm: Alarm) => {
-        if (alarm && alarm.timer && alarm.timer instanceof Date) {
-          return (
+      {alarms.map(
+        (alarm: Alarm) =>
+          alarm.timer instanceof Date && (
             <AlarmItem
               key={alarm.alarmid}
               onPress={() => onClickItem(alarm)}
               alarm={alarm}
             />
-          );
-        }
-        return null;
-      })}
+          ),
+        // {
+        // if (alarm && alarm.timer && alarm.timer instanceof Date) {
+        //   return (
+
+        //   );
+        // }
+        // return null;
+        // }
+      )}
       <Modal_CU_Alarm
         isVisibleModal={isVisibleModal}
         closeModal={() => setIsVisibleModal(false)}

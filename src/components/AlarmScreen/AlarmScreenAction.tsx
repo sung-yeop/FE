@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
 import {Alarm} from '../../types';
+import {theme} from '../../style/Theme';
 
 const AlarmScreenAction = () => {
   const navigate = useNavigation();
@@ -28,7 +29,7 @@ const AlarmScreenAction = () => {
     <View style={styles.contentContainer}>
       <View style={styles.selectContainer}>
         <View style={styles.takePictureContainer}>
-          <Text style={styles.takePictureText}>사진찍기</Text>
+          <Text style={theme.buttonTextStyle}>사진찍기</Text>
         </View>
         <View>
           {current.setting.alarmInterval !== '반복 없음' ? (
@@ -45,8 +46,8 @@ const AlarmScreenAction = () => {
             <TouchableOpacity
               style={styles.exitCurrentContentContainer}
               onPress={onClickExitMission}>
-              <Text style={styles.exitCurrentContentTitleText}>알람 종료</Text>
-              <Text style={styles.takeLaterDisText}>
+              <Text style={theme.buttonTextStyle}>알람 종료</Text>
+              <Text style={[styles.takeLaterDisText, {color: 'white'}]}>
                 (오늘까지 미션을 진행해주세요)
               </Text>
             </TouchableOpacity>
@@ -62,7 +63,7 @@ const AlarmScreenAction = () => {
             <TouchableOpacity
               style={styles.exitCurrentContentContainer}
               onPress={onClickExitMission}>
-              <Text style={styles.exitCurrentContentTitleText}>알람 종료</Text>
+              <Text style={theme.buttonTextStyle}>알람 종료</Text>
               {current.delayTimes && (
                 <Text style={styles.takeLaterDisText}>
                   (오늘까지 미션을 진행해주세요)
@@ -77,68 +78,114 @@ const AlarmScreenAction = () => {
 };
 
 export default AlarmScreenAction;
-
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'flex-end',
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)', // 배경에 약간의 오버레이
   },
   selectContainer: {
     justifyContent: 'center',
-    paddingVertical: 30,
-    gap: 10,
+    paddingVertical: 24,
+    paddingBottom: 40, // 하단 여백 증가
+    gap: 16,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
   },
   takePictureContainer: {
-    padding: 15,
-    backgroundColor: 'black',
-    marginHorizontal: 40,
-    borderRadius: 10,
+    padding: 16,
+    backgroundColor: '#2cc295',
+    marginHorizontal: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   takePictureText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 18,
+    letterSpacing: -0.5,
   },
   takeLaterContainer: {
-    padding: 15,
-    backgroundColor: '#C93939',
-    marginHorizontal: 40,
-    borderRadius: 10,
+    padding: 16,
+    backgroundColor: 'white',
+    marginHorizontal: 20,
+    borderRadius: 12,
+    marginTop: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   takeLaterText: {
     textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black',
+    fontFamily: 'Pretendard-Bold',
     fontSize: 18,
+    letterSpacing: -0.5,
   },
   exitCurrnetAlarmContainer: {
     justifyContent: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.08)',
+    marginTop: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   exitCurrentAlarmDisText: {
     textAlign: 'center',
-    paddingVertical: 5,
+    paddingVertical: 8,
+    color: '#666',
+    fontSize: 15,
   },
   exitCurrentContentContainer: {
-    padding: 15,
-    textAlign: 'center',
-    backgroundColor: '#668ADF',
-    marginHorizontal: 40,
-    borderRadius: 10,
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+    padding: 16,
+    backgroundColor: '#4a6ee0', // 더 부드러운 블루
+    marginHorizontal: 20,
+    borderRadius: 12,
   },
   exitCurrentContentTitleText: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    letterSpacing: -0.5,
   },
   takeLaterDisText: {
     fontSize: 14,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
+    opacity: 0.9,
+    marginTop: 4,
   },
 });

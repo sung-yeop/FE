@@ -1,6 +1,7 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, {createContext, useState, useContext, useEffect} from 'react';
 import {Todo} from '../../types';
 import uuid from 'react-native-uuid';
+import {TodoUtil} from '../../util/TodoUtils';
 
 interface TodoContextType {
   currentTodo: Todo;
@@ -14,25 +15,22 @@ export const TodoContextManager = createContext<TodoContextType | undefined>(
 
 type Props = {
   children: React.ReactNode;
-  initialTodo: Todo | undefined;
+  todo: Todo | undefined;
 };
 
-const defaultTodo: Todo = {
-  id: uuid
-    .v4()
-    .toString()
-    .replace(/[^\d]+/g, ''),
-  title: '',
-  description: '',
-  timer: new Date(),
-};
+export const TodoContext = ({children, todo}: Props) => {
+  const defaultTodo: Todo = {
+    id: uuid
+      .v4()
+      .toString()
+      .replace(/[^\d]+/g, ''),
+    title: '',
+    description: '',
+    timer: new Date(),
+    day: TodoUtil.parseDayFromDate(new Date()),
+  };
 
-export const TodoContext = ({children, initialTodo}: Props) => {
-  const [currentTodo, setCurrentTodo] = useState<Todo>(
-    initialTodo || defaultTodo,
-  );
-
-  console.log(defaultTodo.id);
+  const [currentTodo, setCurrentTodo] = useState<Todo>(todo || defaultTodo);
 
   const updateTodo = (updates: Partial<Todo>) => {
     setCurrentTodo(prev => ({...prev, ...updates}));

@@ -10,7 +10,6 @@ export const useAlarmManager = () => {
 
   const loadAlarms = async () => {
     try {
-      AsyncStorage.clear();
       const savedAlarms = await AsyncStorage.getItem(STORAGE_ALARM_KEY);
       if (savedAlarms) {
         setAlarms(JSON.parse(savedAlarms) as Alarm[]);
@@ -40,7 +39,7 @@ export const useAlarmManager = () => {
         JSON.stringify(updatedAlarms),
       );
       setAlarms(updatedAlarms);
-      console.log('Alarm saved successfully:', alarm);
+      console.log('Alarm saved successfully:', updatedAlarms);
       // newAlarmSend(alarm);
     } catch (err) {
       console.error('SAVE ALARM ERROR : ', err);

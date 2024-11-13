@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useCallback} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
@@ -42,7 +42,7 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
 
     if (id) {
       alarmManager.updateAlarm({
-        alarm: {...current, active: true, delayTimes: 0},
+        alarm: {...current, active: true},
       });
     } else {
       const updatedAlarm = {...current, active: true};
@@ -52,11 +52,11 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
     closeModal();
   };
   return (
-    <View style={theme.buttonContainerStyle}>
-      <Text style={theme.buttonTextStyle} onPress={onClickSaveButton}>
-        저장하기
-      </Text>
-    </View>
+    <TouchableOpacity
+      style={theme.buttonContainerStyle}
+      onPress={onClickSaveButton}>
+      <Text style={theme.buttonTextStyle}>저장하기</Text>
+    </TouchableOpacity>
   );
 };
 

@@ -2,7 +2,8 @@ import {Animated, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
 import ListHeader from './ListHeader';
-import TodoItem from './Modal_CU_Todo/TodoItem';
+import TodoItem from './Modal_CU_Todo/MissionItemInTodoPage';
+import MissionItemInTodoPage from './Modal_CU_Todo/MissionItemInTodoPage';
 
 const MissionList = () => {
   const {findAlarmRepeatDay} = useHandleAlldAlarm();
@@ -12,7 +13,7 @@ const MissionList = () => {
       <ListHeader powerTitle={'매주'} title={'설정된 미션이예요!'} />
       {findAlarmRepeatDay &&
         findAlarmRepeatDay.map(alarm => (
-          <TodoItem key={alarm.alarmid} alarm={alarm} />
+          <MissionItemInTodoPage key={alarm.alarmid} alarm={alarm} />
         ))}
     </ScrollView>
   );

@@ -37,11 +37,6 @@ const Modal_CU_Todo_Content = ({onCloseModal}: Props) => {
           onChangeText={text => updateTodo({description: text})}
         />
       </View>
-      <Modal_CU_SaveButton
-        currentTodo={currentTodo}
-        onSaveCurrentTodo={saveCurrentTodo}
-        onCloseModal={onCloseModal}
-      />
     </View>
   );
 };

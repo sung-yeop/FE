@@ -9,6 +9,7 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {SettingTimeInterval} from '../../types';
 import CheckBox from '@react-native-community/checkbox';
+import {theme} from '../../style/Theme';
 
 type Props = {
   isVisibleSettingIntervalModal: boolean;
@@ -48,7 +49,9 @@ const Modal_CU_Setting_Interval = ({
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
               <View style={styles.modalContainer}>
-                <Text style={styles.HeaderContainer}>반복 간격 선택</Text>
+                <View style={styles.HeaderContainer}>
+                  <Text style={theme.typography.h2}>반복 간격 선택</Text>
+                </View>
                 <View style={styles.ContentContainer}>
                   {intervals.map(interval => {
                     return (
@@ -69,8 +72,10 @@ const Modal_CU_Setting_Interval = ({
                     );
                   })}
                 </View>
-                <View style={styles.ButtonContainer}>
-                  <Text style={styles.ButtonText} onPress={onClickSaveButton}>
+                <View style={theme.buttonContainerStyle}>
+                  <Text
+                    style={theme.buttonTextStyle}
+                    onPress={onClickSaveButton}>
                     저장하기
                   </Text>
                 </View>
@@ -102,10 +107,9 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
   },
   HeaderContainer: {
-    fontSize: 18,
-    textAlign: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingVertical: 10,
-    fontWeight: 'bold',
   },
   ContentContainer: {
     flexDirection: 'column',
@@ -120,16 +124,5 @@ const styles = StyleSheet.create({
   ContentText: {
     fontSize: 16,
     fontWeight: 'semibold',
-  },
-  ButtonContainer: {
-    backgroundColor: 'black',
-    borderRadius: 10,
-    padding: 15,
-  },
-  ButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
 });

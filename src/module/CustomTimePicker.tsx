@@ -37,7 +37,6 @@ const CustomTimePicker = ({target, updateFun}: Props) => {
   // 초기 스크롤 위치 설정
   useEffect(() => {
     const setInitialPositions = () => {
-      // AM/PM 초기 위치
       if (ampmScrollRef.current) {
         const ampmIndex = ampm === 'pm' ? 1 : 0;
         ampmScrollRef.current.scrollTo({
@@ -47,23 +46,19 @@ const CustomTimePicker = ({target, updateFun}: Props) => {
         setSelectedAmPmIndex(ampmIndex);
       }
 
-      // 시간 초기 위치
       hourScrollRef.current?.scrollTo({
         y: (hour - 1) * ITEM_HEIGHT,
         animated: false,
       });
 
-      // 분 초기 위치
       minuteScrollRef.current?.scrollTo({
         y: minute * ITEM_HEIGHT,
         animated: false,
       });
     };
-    // 약간의 딜레이 후 초기 위치 설정
     setTimeout(setInitialPositions, 100);
   }, []);
 
-  // 시간 변경 시 상태 업데이트
   useEffect(() => {
     const newHour = ampm === 'pm' ? (hour % 12) + 12 : hour % 12;
     const newDate = new Date(target?.timer || new Date());
@@ -73,7 +68,6 @@ const CustomTimePicker = ({target, updateFun}: Props) => {
     console.log('설정된 시간 : ', newDate.getHours());
   }, [ampm, hour, minute]);
 
-  // 스크롤 핸들러
   const handleScroll = (
     event: any,
     type: 'hour' | 'minute' | 'ampm',

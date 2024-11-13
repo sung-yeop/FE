@@ -22,11 +22,11 @@ const AlarmPage = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <PageHeader text="알람 관리" img={AlarmImg} />
+      <PageHeader text="오늘의 알림" img={AlarmImg} />
       <ScrollView style={styles.content}>
         <AlarmList />
       </ScrollView>
-      <TouchableOpacity onPress={navigateToLogin}>
+      {/* <TouchableOpacity onPress={navigateToLogin}>
         <Text>Welcome 페이지로 이동</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TestPage')}>
@@ -34,7 +34,7 @@ const AlarmPage = () => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('ModuleTestPage')}>
         <Text>Go to Module Test Page</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <AddAlarmButton />
     </SafeAreaView>
   );
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginHorizontal: 15,
+    marginHorizontal: 16,
+    paddingTop: 12,
   },
 });

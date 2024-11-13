@@ -1,25 +1,31 @@
-import {Animated, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
-import {useListHeaderAnimation} from '../../hooks/useListHeaderAnimation';
 import ListHeader from './ListHeader';
 import TodoItem from './Modal_CU_Todo/TodoItem';
 
-const TodoList = () => {
-  const {findAlarmRepeatDay} = useHandleAlldAlarm();
+const MissionListEveryDay = () => {
+  const {findAlarmRepeatAllDay} = useHandleAlldAlarm();
 
   return (
     <ScrollView style={styles.container}>
-      <ListHeader powerTitle={'매주'} title={'설정된 미션이예요!'} />
-      {findAlarmRepeatDay &&
-        findAlarmRepeatDay.map(alarm => (
+      <ListHeader powerTitle={'매일'} title="해야하는 미션이예요!" />
+      {findAlarmRepeatAllDay &&
+        findAlarmRepeatAllDay.map(alarm => (
           <TodoItem key={alarm.alarmid} alarm={alarm} />
         ))}
     </ScrollView>
   );
 };
 
-export default TodoList;
+export default MissionListEveryDay;
 
 const styles = StyleSheet.create({
   container: {

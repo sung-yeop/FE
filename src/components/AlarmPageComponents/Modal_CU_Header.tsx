@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Alarm} from '../../types';
 import Ionic from 'react-native-vector-icons/Ionicons';
+import {theme} from '../../style/Theme';
 
 type Props = {
   closeModal: () => void;
@@ -15,7 +16,7 @@ const Modal_CU_Header = ({alarm, closeModal}: Props) => {
         <Ionic name={'close'} size={28} color={'black'} />
       </TouchableOpacity>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>
+        <Text style={theme.typography.h2}>
           {alarm ? '알람 수정' : '알람 생성'}
         </Text>
       </View>
@@ -29,8 +30,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
   },
   closeIconContainer: {
     justifyContent: 'center',
@@ -43,10 +42,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: -28,
     paddingVertical: 15,
-  },
-  titleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
   },
 });

@@ -10,6 +10,7 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Modal_Mission_CreateCareContent from './Modal_Mission_CreateCareContent';
+import {theme} from '../../style/Theme';
 
 type Props = {
   onCloseModal: () => void;
@@ -31,13 +32,13 @@ const Modal_Mission_CreateMission = ({onCloseModal, isVisible}: Props) => {
             <TouchableWithoutFeedback onPress={e => e.stopPropagation}>
               <View style={styles.Container}>
                 <View style={styles.HeaderContainer}>
-                  <Text style={styles.HeaderText}>미션 추가하기</Text>
+                  <Text style={theme.typography.h1}>미션을 선택해주세요!</Text>
                 </View>
                 <Modal_Mission_CreateCareContent />
                 <TouchableOpacity
-                  style={styles.ButtonContainer}
+                  style={theme.buttonContainerStyle}
                   onPress={onCloseModal}>
-                  <Text style={styles.ButtonText}>저장하기</Text>
+                  <Text style={theme.buttonTextStyle}>저장하기</Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -62,27 +63,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
   HeaderContainer: {
     paddingHorizontal: 10,
     paddingVertical: 20,
     marginVertical: 10,
-  },
-  HeaderText: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  ButtonContainer: {
-    backgroundColor: 'black',
-    padding: 20,
-    marginVertical: 15,
-    borderRadius: 10,
-  },
-  ButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 });

@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Modal_CU_Todo_Header from './TodoModalHeader';
 import TodoModalHeader from './TodoModalHeader';
 import CustomCalendar from '../../CustomCalendar';
@@ -33,7 +33,7 @@ const Modal_CU_Todo = ({isVisible, onCloseModal, todo}: Props) => {
       onRequestClose={onCloseModal}
       animationType="slide"
       transparent={false}>
-      <SafeAreaProvider>
+      <SafeAreaView>
         <ScrollView>
           <TodoContext initialTodo={todo || undefined}>
             <View style={styles.modalContainer}>
@@ -42,7 +42,7 @@ const Modal_CU_Todo = ({isVisible, onCloseModal, todo}: Props) => {
             </View>
           </TodoContext>
         </ScrollView>
-      </SafeAreaProvider>
+      </SafeAreaView>
     </Modal>
   );
 };

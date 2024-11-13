@@ -1,7 +1,6 @@
 import {
   Animated,
   Image,
-  LayoutAnimation,
   StyleSheet,
   Switch,
   Text,
@@ -21,7 +20,6 @@ type Props = {
 };
 
 const AlarmItem = ({alarm, onPress}: Props) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const alarmManager = useAlarmManager();
   const {ampm, viewTime} = TimeFormatting(alarm.timer);
   const mission = GetCareMissionDataWithId(alarm.mission.id);
@@ -40,13 +38,6 @@ const AlarmItem = ({alarm, onPress}: Props) => {
             엄격모드: {alarm.mission.mode === 'Strict' ? 'ON' : 'OFF'}
           </Text>
         </View>
-        <View style={styles.missionInfoContainer}>
-          <Image source={mission.img} style={styles.missionImage} />
-          <View style={styles.missionTextContainer}>
-            <Text style={styles.missionTitle}>{mission.title}</Text>
-            <Text style={styles.missionDescription}>{mission.description}</Text>
-          </View>
-        </View>
         <View style={styles.infoContainer}>
           <View style={styles.timeContainer}>
             <Text style={styles.ampmText}>{ampm}</Text>
@@ -59,9 +50,16 @@ const AlarmItem = ({alarm, onPress}: Props) => {
                 alarm: {...alarm, active: !alarm.active},
               });
             }}
-            trackColor={{false: '#767577', true: '#ced4da'}}
-            thumbColor={alarm.active ? '#4bd964' : '#f4f3f4'}
+            trackColor={{false: '#767577', true: '#e6e9ed'}}
+            thumbColor={alarm.active ? '#2cc295' : '#f4f3f4'}
           />
+        </View>
+        <View style={styles.missionInfoContainer}>
+          <Image source={mission.img} style={styles.missionImage} />
+          <View style={styles.missionTextContainer}>
+            <Text style={styles.missionTitle}>{mission.title}</Text>
+            <Text style={styles.missionDescription}>{mission.description}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     </View>
@@ -72,89 +70,84 @@ export default AlarmItem;
 
 const styles = StyleSheet.create({
   alarmContainer: {
-    borderRadius: 15,
+    borderRadius: 20,
     backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    overflow: 'hidden',
+    borderWidth: 0.4,
+    borderColor: 'gray',
+  },
+  mainContent: {
+    padding: 20,
+  },
+  strictModeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
   },
   repeatText: {
     fontSize: 14,
     color: '#666',
+    fontWeight: '500',
   },
-  mainContent: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    padding: 15,
+  strictModeText: {
+    fontSize: 14,
+    color: '#007AFF',
+    fontWeight: '600',
   },
+  // 시간 표시
   timeContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
+    alignItems: 'baseline',
+    marginBottom: 16,
   },
   ampmText: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#666',
-    marginRight: 5,
+    marginRight: 6,
+    fontWeight: '500',
+    lineHeight: 26,
   },
   timeText: {
-    fontSize: 32,
+    fontSize: 38,
     fontWeight: 'bold',
     color: '#333',
+    letterSpacing: -2,
+    includeFontPadding: true,
   },
-  expandedContent: {
-    overflow: 'hidden',
-    padding: 15,
-  },
+  // 미션 정보
   missionInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    gap: 8,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
   },
   missionImage: {
-    width: 30,
-    height: 30,
-    marginRight: 15,
+    width: 32,
+    height: 32,
+    marginRight: 12,
   },
-  missionTextContainer: {},
+  missionTextContainer: {
+    flex: 1,
+  },
   missionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
+    marginBottom: 4,
   },
   missionDescription: {
     fontSize: 14,
     color: '#666',
-    marginTop: 5,
   },
-  strictModeContainer: {
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  strictModeText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#007AFF',
-  },
-  foldButton: {
-    backgroundColor: '#668ADF',
-    padding: 10,
-    alignItems: 'center',
-  },
-  foldButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+  // 하단 스위치
   infoContainer: {
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
   },
 });

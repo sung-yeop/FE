@@ -21,17 +21,13 @@ const LoginContent = () => {
   const handleLogin = () => {
     if (isGurdian) {
       sendSignInDataWithGuardian({username, password});
+      return;
     }
     sendSignInDataWithUser({username, password});
   };
 
   return (
     <View style={styles.container}>
-      {/* <Image
-        source={require('../assets/login-image.png')}
-        style={styles.image}
-      /> */}
-
       <View style={styles.inputContent}>
         <Text style={styles.inputTitleText}>아이디</Text>
         <TextInput

@@ -4,6 +4,7 @@ import {useCurrentAlarm} from '../../hooks/useCurrentAlarm.ts';
 import Slider from '@react-native-community/slider';
 import {SettingTimeInterval} from '../../types';
 import Modal_CU_Setting_Interval from './Modal_CU_Setting_Interval';
+import {theme} from '../../style/Theme.ts';
 
 const Modal_CU_Setting = () => {
   const {current, updateAlarm} = useCurrentAlarm();
@@ -33,9 +34,9 @@ const Modal_CU_Setting = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>알람 설정</Text>
+      <Text style={theme.typography.h3}>알람 설정</Text>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>진동 사용</Text>
+        <Text style={styles.settingLabel}>진동</Text>
         <Switch
           value={current.setting.isVibration || isVibration}
           onValueChange={value => {

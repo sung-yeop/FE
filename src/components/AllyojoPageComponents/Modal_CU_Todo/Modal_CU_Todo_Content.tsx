@@ -25,11 +25,13 @@ const Modal_CU_Todo_Content = ({onCloseModal}: Props) => {
       <CustomTimePicker target={currentTodo} updateFun={updateTodo} />
       <View style={styles.inputContainer}>
         <TextInput
+          style={{paddingVertical: 16, paddingHorizontal: 12}}
           placeholder="제목을 입력해주세요"
           value={currentTodo.title || ''}
           onChangeText={text => updateTodo({title: text})}
         />
         <TextInput
+          style={{paddingVertical: 16, paddingHorizontal: 12}}
           placeholder="추가 설명을 입력해주세요"
           value={currentTodo.description || ''}
           onChangeText={text => updateTodo({description: text})}

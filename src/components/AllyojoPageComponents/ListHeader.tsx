@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
+import {theme} from '../../style/Theme';
 
 type Props = {
   title: string;
@@ -21,7 +22,7 @@ const ListHeader = ({powerTitle, title}: Props) => {
           {powerTitle && (
             <Text style={styles.headerPowerText}>{powerTitle}</Text>
           )}
-          <Text style={styles.headerText}>{title}</Text>
+          <Text style={theme.typography.h2}>{title}</Text>
         </View>
       </TouchableOpacity>
     </ScrollView>

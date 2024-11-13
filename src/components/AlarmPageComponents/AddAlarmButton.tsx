@@ -1,14 +1,16 @@
-import {Dimensions, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Modal_CU_Alarm from './Modal_CU_Alarm';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const {width, height} = Dimensions.get('window');
+import {AlarmButtonImg} from '../../../asset/images';
+
+const {height} = Dimensions.get('window');
 
 const AddAlarmButton = () => {
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
   return (
     <SafeAreaView>
       <TouchableOpacity
@@ -18,7 +20,11 @@ const AddAlarmButton = () => {
         })}
         onPress={() => setIsVisibleModal(true)}>
         <View style={styles.buttonStyle}>
-          <Entypo name={'plus'} size={30} color={'white'} />
+          <Image
+            source={AlarmButtonImg}
+            style={styles.buttonStyle}
+            resizeMode="contain"
+          />
         </View>
       </TouchableOpacity>
       <Modal_CU_Alarm
@@ -35,28 +41,41 @@ export default AddAlarmButton;
 
 const styles = StyleSheet.create({
   AndroidButtonContainer: {
-    flex: 1,
     position: 'absolute',
-    bottom: height * 0.01,
-    right: width * 0.01,
+    bottom: height * 0.015,
+    alignSelf: 'center',
     zIndex: 10,
+    elevation: 5,
   },
   IOSButtonContainer: {
-    flex: 1,
     position: 'absolute',
-    bottom: height * 0.01,
-    right: width * 0.01,
+    bottom: height * 0.015,
+    alignSelf: 'center',
     zIndex: 10,
   },
   buttonStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'white', // 흰색 배경 추가
     borderRadius: 30,
-    width: 60,
-    height: 60,
+    borderWidth: 1,
+    borderColor: '#E8E8E8', // 연한 회색 테두리
+    width: 56,
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    // iOS 그림자
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    // 내부 여백
+    padding: 12,
+  },
+  buttonImgStyle: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
 });

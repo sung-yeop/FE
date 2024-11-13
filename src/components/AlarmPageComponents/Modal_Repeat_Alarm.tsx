@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import RepeatDatePicker from './RepeatDatePicker';
+import {theme} from '../../style/Theme';
 
 type Props = {
   isVisibleModal: boolean;
@@ -32,7 +33,7 @@ const Modal_Repeat_Alarm = ({onCloseModal, isVisibleModal}: Props) => {
             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
               <View style={styles.modalContainer}>
                 <View style={styles.modalTitleContainer}>
-                  <Text style={styles.modalTitle}>반복 요일 선택</Text>
+                  <Text style={theme.typography.h2}>반복 요일 선택</Text>
                 </View>
                 <View style={styles.modalContentContainer}>
                   <RepeatDatePicker onClose={onCloseModal} />

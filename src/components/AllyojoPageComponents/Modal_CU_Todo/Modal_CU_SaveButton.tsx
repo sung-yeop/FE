@@ -1,6 +1,7 @@
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Todo} from '../../../types';
+import {theme} from '../../../style/Theme';
 
 type Props = {
   currentTodo: Todo;
@@ -28,27 +29,11 @@ const Modal_CU_SaveButton = ({
   };
   return (
     <TouchableOpacity
-      style={styles.buttonContainer}
+      style={theme.buttonContainerStyle}
       onPress={onClickSaveButton}>
-      <Text style={styles.buttonText}>저장하기</Text>
+      <Text style={theme.buttonTextStyle}>저장하기</Text>
     </TouchableOpacity>
   );
 };
 
 export default Modal_CU_SaveButton;
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    padding: 16,
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'black',
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-});

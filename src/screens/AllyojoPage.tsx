@@ -1,34 +1,61 @@
-import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import DelayedMissionList from '../components/AllyojoPageComponents/DelayedMissionList';
 import PageHeader from '../components/PageHeader';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import AddTodoButton from '../components/AllyojoPageComponents/AddTodoButton';
-import TodoListEveryDay from '../components/AllyojoPageComponents/TodoListEveryDay';
-import TodoList from '../components/AllyojoPageComponents/TodoList';
+import MissionListEveryDay from '../components/AllyojoPageComponents/MissionListEveryDay';
+import MissionList from '../components/AllyojoPageComponents/MissionList';
+import DelayedMissionList from '../components/AllyojoPageComponents/DelayedMissionList';
+import {useState} from 'react';
 import {AlarmImg} from '../../asset/images';
+import HeaderSelector from '../components/AllyojoPageComponents/HeaderSelector';
+import AllyojoHeader from '../components/AllyojoPageComponents/AllyojoHeader';
 
 const AllyojoPage = () => {
+  const [pageNav, setPageNav] = useState<'Todo' | 'Mission' | 'Delay'>('Todo');
+  const handleComp = (pageNav: 'Todo' | 'Mission' | 'Delay') => {
+    setPageNav(pageNav);
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <PageHeader text={'알려줘'} img={AlarmImg} />
-      <ScrollView style={styles.contentContainer}>
-        <DelayedMissionList />
-        <TodoListEveryDay />
-        <TodoList />
+      <AllyojoHeader />
+      <HeaderSelector handleComp={handleComp} select={pageNav} />
+      <ScrollView
+        style={styles.contentContainer}
+        contentContainerStyle={styles.scrollViewContent}>
+        {pageNav === 'Todo' ? (
+          <View style={styles.defaultContainer}>
+            <Text>미션</Text>
+          </View>
+        ) : pageNav === 'Mission' ? (
+          <View>
+            <MissionListEveryDay />
+            <MissionList />
+          </View>
+        ) : (
+          <DelayedMissionList />
+        )}
       </ScrollView>
-      <AddTodoButton />
+      {pageNav === 'Todo' && <AddTodoButton />}
     </SafeAreaView>
   );
 };
 
+export default AllyojoPage;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   contentContainer: {
-    marginHorizontal: 15,
+    flex: 1,
+    marginHorizontal: 16,
+    paddingTop: 12,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  defaultContainer: {
+    flex: 1,
   },
 });
-
-export default AllyojoPage;

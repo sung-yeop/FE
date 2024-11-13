@@ -28,10 +28,11 @@ export default ReportPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 15,
   },
   content: {
     flex: 1,
+    marginHorizontal: 16,
+    paddingTop: 12,
   },
   ViewContent: {
     flex: 1,

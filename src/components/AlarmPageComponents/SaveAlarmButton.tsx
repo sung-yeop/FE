@@ -2,6 +2,7 @@ import {Alert, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
+import {theme} from '../../style/Theme';
 
 type Props = {
   id?: string;
@@ -51,8 +52,8 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
     closeModal();
   };
   return (
-    <View style={styles.ButtonContainer}>
-      <Text style={styles.ButtonText} onPress={onClickSaveButton}>
+    <View style={theme.buttonContainerStyle}>
+      <Text style={theme.buttonTextStyle} onPress={onClickSaveButton}>
         저장하기
       </Text>
     </View>
@@ -60,18 +61,3 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
 };
 
 export default SaveAlarmButton;
-
-const styles = StyleSheet.create({
-  ButtonContainer: {
-    marginTop: 15,
-    paddingVertical: 15,
-    backgroundColor: 'black',
-    borderRadius: 10,
-  },
-  ButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});

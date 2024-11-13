@@ -102,17 +102,6 @@ export const useAlarmManager = () => {
     }
   };
 
-  // 이거때매 개고생
-  // const alarmManager = useMemo(
-  //   () => ({
-  //     loadAlarms,
-  //     saveAlarm,
-  //     updateAlarm,
-  //     deleteAlarm,
-  //   }),
-  //   [alarms], // alarms가 변경될 때만 새 객체 생성
-  // )
-
   const alarmManager = {
     loadAlarms,
     saveAlarm,

@@ -50,17 +50,14 @@ function App(): React.JSX.Element {
         }
       },
     );
-    return () => subscription.remove();
-  }, []);
-
-  useEffect(() => {
     checkCameraPermission();
+    return () => subscription.remove();
   }, []);
 
   return (
     <RecoilRoot>
-      <Initializer />
       <NavigationContainer ref={navigationRef}>
+        <Initializer />
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Bottom" component={BottomTab} />
           <Stack.Screen name="AlarmScreen" component={AlarmScreen} />

@@ -1,7 +1,8 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm.ts';
 import CheckBox from '@react-native-community/checkbox';
+import {theme} from '../../style/Theme.ts';
 
 const days = [
   [0, '반복 없음'],
@@ -17,6 +18,9 @@ const days = [
 const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
   const [selectedDays, setSelectedDays] = useState<number>(0);
   const {updateAlarm} = useCurrentAlarm();
+  const [toggleButton, setToggleButton] = useState<
+    'WeekDays' | 'EveryDay' | 'HoliyDay'
+  >();
 
   const toggleCheckBox = (key: number) => {
     setSelectedDays(prev => {
@@ -41,24 +45,60 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonContainer}>
-        <View style={styles.ButtonInviContainer}>
+        <View
+          style={
+            toggleButton === 'WeekDays'
+              ? styles.activeContainer
+              : styles.ButtonInviContainer
+          }>
           <Text
-            style={styles.ButtonInviText}
-            onPress={() => toggleSpecialButton(31)}>
+            style={
+              toggleButton === 'WeekDays'
+                ? styles.activeButtonText
+                : styles.ButtonInviText
+            }
+            onPress={() => {
+              toggleSpecialButton(31);
+              setToggleButton('WeekDays');
+            }}>
             평일
           </Text>
         </View>
-        <View style={styles.ButtonInviContainer}>
+        <View
+          style={
+            toggleButton === 'HoliyDay'
+              ? styles.activeContainer
+              : styles.ButtonInviContainer
+          }>
           <Text
-            style={styles.ButtonInviText}
-            onPress={() => toggleSpecialButton(96)}>
+            style={
+              toggleButton === 'HoliyDay'
+                ? styles.activeButtonText
+                : styles.ButtonInviText
+            }
+            onPress={() => {
+              toggleSpecialButton(96);
+              setToggleButton('HoliyDay');
+            }}>
             주말
           </Text>
         </View>
-        <View style={styles.ButtonInviContainer}>
+        <View
+          style={
+            toggleButton === 'EveryDay'
+              ? styles.activeContainer
+              : styles.ButtonInviContainer
+          }>
           <Text
-            style={styles.ButtonInviText}
-            onPress={() => toggleSpecialButton(127)}>
+            style={
+              toggleButton === 'EveryDay'
+                ? styles.activeButtonText
+                : styles.ButtonInviText
+            }
+            onPress={() => {
+              toggleSpecialButton(127);
+              setToggleButton('EveryDay');
+            }}>
             매일
           </Text>
         </View>
@@ -78,8 +118,8 @@ const RepeatDatePicker = ({onClose}: {onClose: () => void}) => {
           <Text style={styles.label}>{label}</Text>
         </View>
       ))}
-      <View style={styles.SaveButtonContainer}>
-        <Text style={styles.SaveButtonText} onPress={onClickSaveButton}>
+      <View style={theme.buttonContainerStyle}>
+        <Text style={theme.buttonTextStyle} onPress={onClickSaveButton}>
           추가하기
         </Text>
       </View>
@@ -111,31 +151,31 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 5,
-    paddingVertical: 10,
+    gap: 12,
+    paddingVertical: 8,
   },
   ButtonInviContainer: {
-    backgroundColor: 'black',
-    borderRadius: 5,
-    marginVertical: 10,
+    borderRadius: 12,
+    marginVertical: 12,
+    borderWidth: 0.5,
+  },
+  activeContainer: {
+    backgroundColor: theme.colors.primary.main,
+    borderRadius: 12,
+    marginVertical: 12,
+  },
+  activeButtonText: {
+    fontSize: 14,
+    fontFamily: theme.typography.body1.fontFamily,
+    color: 'white',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   ButtonInviText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  SaveButtonContainer: {
-    backgroundColor: 'black',
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  SaveButtonText: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 18,
-    padding: 15,
+    fontSize: 14,
+    fontFamily: theme.typography.body1.fontFamily,
+    color: 'black',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
 });

@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Modal_Mission_CreateMission from './Modal_Mission_CreateMission';
 import AddMissionButton from '../AddMissionButton';
 import MissionItem from './MissionItem';
+import {theme} from '../../style/Theme';
 
 const Modal_CU_CreateMission = () => {
   const {current, updateMission} = useCurrentAlarm();
@@ -22,9 +23,9 @@ const Modal_CU_CreateMission = () => {
   return (
     <View style={styles.Container}>
       <View style={styles.HeaderContainer}>
-        <Text style={styles.HeaderTitle}>미션 추가</Text>
+        <Text style={theme.typography.h3}>미션 추가</Text>
         <View style={styles.HeaderModeSelectContariner}>
-          <Text style={styles.HeaderModeText}>엄격 모드</Text>
+          <Text style={theme.typography.body1}>엄격 모드</Text>
           <Switch
             value={current.mission?.mode === 'Strict' ? true : false}
             onChange={onChangeModeSwitch}

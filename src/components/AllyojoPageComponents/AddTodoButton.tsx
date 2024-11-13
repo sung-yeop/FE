@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Modal_CU_Todo from './Modal_CU_Todo/Modal_CU_Todo';
+import {theme} from '../../style/Theme';
 
 const {width, height} = Dimensions.get('window');
 
@@ -33,21 +34,20 @@ export default AddTodoButton;
 
 const styles = StyleSheet.create({
   AndroidButtonContainer: {
-    flex: 1,
     position: 'absolute',
-    bottom: height * 0.01,
-    right: width * 0.01,
+    bottom: height * 0.015,
+    alignSelf: 'center',
     zIndex: 10,
+    elevation: 5,
   },
   IOSButtonContainer: {
-    flex: 1,
     position: 'absolute',
-    bottom: height * 0.01,
-    right: width * 0.01,
+    bottom: height * 0.015,
+    alignSelf: 'center',
     zIndex: 10,
   },
   buttonStyle: {
-    backgroundColor: 'black',
+    backgroundColor: theme.colors.primary.main,
     borderRadius: 30,
     width: 60,
     height: 60,

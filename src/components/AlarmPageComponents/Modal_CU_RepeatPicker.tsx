@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Modal_Repeat_Alarm from './Modal_Repeat_Alarm.tsx';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm.ts';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {theme} from '../../style/Theme.ts';
 
 interface LabelItem {
   [key: number]: string;
@@ -44,7 +45,7 @@ const Modal_CU_RepeatPicker = () => {
 
   return (
     <View style={styles.repeatContainer}>
-      <Text style={styles.title}>반복 설정</Text>
+      <Text style={theme.typography.h3}>반복 설정</Text>
       <TouchableOpacity
         onPress={() => {
           setIsVisibleModal(true);

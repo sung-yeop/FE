@@ -1,5 +1,3 @@
-
-
 package com.frontend;
 
 import android.app.AlarmManager;
@@ -30,39 +28,6 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
     public String getName() {
         return "AndroidAlarmModule";
     }
-
-    // React에서는 시간을 double에 맞춰서 전달해줘야한다.
-    // @ReactMethod
-    // public void setAlarm(String alarmId, double timestamp, boolean isVibrate, int soundVolume, String soundUri, double alarmDays) {
-    //      // 현재 시각 가져오기
-    //     long currentTime = System.currentTimeMillis();
-    //     long alarmTime = (long) timestamp;
-
-    //     // 설정하려는 알람 시각이 현재 시각보다 이전이면 24시간(하루)을 더함
-    //     if (alarmTime <= currentTime) {
-    //         alarmTime += 24 * 60 * 60 * 1000; // 24시간을 밀리초로 변환
-    //     }
-
-    //     Intent intent = new Intent(context, AlarmReceiver.class);
-    //     intent.putExtra("alarmId", alarmId);
-    //     intent.putExtra("isVibrate", isVibrate);
-    //     intent.putExtra("soundVolume", soundVolume);
-    //     intent.putExtra("soundUri", soundUri);
-    //     Log.d("AndroidAlarmModule", "Time : " + (long) alarmTime);
-
-    //     PendingIntent pendingIntent = PendingIntent.getBroadcast(
-    //         context, 
-    //         alarmId.hashCode(), 
-    //         intent, 
-    //         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-    //     );
-
-    //     alarmManager.setExactAndAllowWhileIdle(
-    //         AlarmManager.RTC_WAKEUP,
-    //         (long) alarmTime,
-    //         pendingIntent
-    //     );
-    // }
 
     @ReactMethod
     public void setAlarm(String alarmId, double timestamp, boolean isVibrate, int soundVolume, String soundUri, Integer alarmDays) {
@@ -106,7 +71,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
 
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
-                        targetCalendar.getTimeInMillis(),
+                        (long) targetCalendar.getTimeInMillis(),
                         pendingIntent
                     );
 
@@ -134,7 +99,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
 
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
-                alarmTime,
+                (long) alarmTime,
                 pendingIntent
             );
         }
@@ -160,7 +125,6 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
                 pendingIntent.cancel();
                 Log.d("AndroidAlarmModule", "알람삭제");    
             }
-            
         }
 
         // 단일 알람도 취소
@@ -178,29 +142,6 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
             pendingIntent.cancel();
         }
     }
-
-    // @ReactMethod
-    // public void cancelAlarm(String alarmId) {
-    //     Log.d("AndroidAlarmModule", "Attempting to cancel alarm with ID: " + alarmId);
-        
-    //     Intent intent = new Intent(context, AlarmReceiver.class);
-    //     intent.putExtra("alarmId", alarmId);
-    //     PendingIntent pendingIntent = PendingIntent.getBroadcast(
-    //         context,
-    //         alarmId.hashCode(),
-    //         intent,
-    //         PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
-    //     );
-
-    //     if (pendingIntent != null) {
-    //         Log.d("AndroidAlarmModule", "PendingIntent found, cancelling alarm");
-    //         alarmManager.cancel(pendingIntent);
-    //         pendingIntent.cancel();
-    //         Log.d("AndroidAlarmModule", "Alarm cancelled successfully");
-    //     } else {
-    //         Log.d("AndroidAlarmModule", "No PendingIntent found for alarmId: " + alarmId);
-    //     }   
-    // }
 
     @ReactMethod
     public void updateAlarm(String alarmId, double newTimestamp, boolean active, double alarmInterval, int delayTimes, boolean isVibrate, boolean repeatTrigger, int soundVolume, String soundUri, Integer alarmDays) {

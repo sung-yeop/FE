@@ -2,21 +2,10 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import CustomCalendar from '../../CustomCalendar';
 import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
-import Modal_CU_SaveButton from './Modal_CU_SaveButton';
-import {useTodoManager} from '../../../hooks/useTodoManager';
 import CustomTimePicker from '../../../module/CustomTimePicker';
 
-type Props = {
-  onCloseModal: () => void;
-};
-
-const Modal_CU_Todo_Content = ({onCloseModal}: Props) => {
+const Modal_CU_Todo_Content = () => {
   const {currentTodo, updateTodo} = useCurrentTodo();
-  const {saveTodo} = useTodoManager();
-
-  const saveCurrentTodo = () => {
-    saveTodo(currentTodo);
-  };
 
   return (
     <View style={styles.container}>

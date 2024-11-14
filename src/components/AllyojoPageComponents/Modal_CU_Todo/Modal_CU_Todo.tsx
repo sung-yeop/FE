@@ -26,7 +26,7 @@ const Modal_CU_Todo = ({isVisible, onCloseModal, todo}: Props) => {
             <TodoContext todo={todo || undefined}>
               <View style={styles.modalContainer}>
                 <TodoModalHeader onCloseModal={onCloseModal} />
-                <Modal_CU_Todo_Content onCloseModal={onCloseModal} />
+                <Modal_CU_Todo_Content />
                 <Modal_CU_SaveButton
                   id={todo?.id}
                   onCloseModal={onCloseModal}

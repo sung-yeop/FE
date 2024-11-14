@@ -52,8 +52,8 @@ export default function BottomTab(): ReactNode {
           }),
         },
       })}>
-      <Tab.Screen name="알람" component={AlarmPage} />
       <Tab.Screen name="알려줘" component={AllyojoPage} />
+      <Tab.Screen name="알람" component={AlarmPage} />
       <Tab.Screen name="리포트" component={ReportPage} />
       <Tab.Screen name="내정보" component={ProfilePage} />
     </Tab.Navigator>

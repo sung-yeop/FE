@@ -4,14 +4,17 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ConfirmButton from '../components/PhotoConfirmPageComponents/ConfirmButton';
 import {theme} from '../style/Theme';
+import {Alarm} from '../types';
 
 type PhotoConfirmParams = {
   imageUri: string;
+  username: string;
+  alarmId: string;
   type?: string;
 };
 
 const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
-  const {imageUri, type} = route.params;
+  const {imageUri, username, alarmId, type} = route.params;
   const navigation = useNavigation();
 
   return (

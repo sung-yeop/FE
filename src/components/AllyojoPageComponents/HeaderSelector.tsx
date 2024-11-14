@@ -27,7 +27,7 @@ const tabs: Tab[] = [
 ];
 
 const {width} = Dimensions.get('window');
-const TAB_PADDING = 20; // 탭의 좌우 패딩값 정의
+const TAB_PADDING = 10; // 탭의 좌우 패딩값 정의
 const TAB_WIDTH = (width - TAB_PADDING * 2) / 3; // 실제 탭 하나의 너비
 
 const HeaderSelector = ({handleComp, select}: Props) => {
@@ -92,8 +92,7 @@ export default HeaderSelector;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    paddingVertical: 10,
-    backgroundColor: 'white',
+    marginTop: 10,
   },
   selectTabContainer: {
     flexDirection: 'row',

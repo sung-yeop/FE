@@ -3,34 +3,24 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
 } from 'react-native';
 import React, {useState, useRef, useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
 
-type Props = {
-  // Alert된 알람을 넘겨받아서 처리해야함
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'CustomCameraPage'>;
 
-type RootStackParamList = {
-  PhotoConfirmPage: {
-    imageUri: string;
-    type?: string;
-  };
-};
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
-const CustomCamera = () => {
+const CustomCameraPage = ({route, navigation}: Props) => {
+  const {alarmId, username} = route.params;
   const [imageUri, setImageUri] = useState<string | null>(null);
   const camera = useRef<Camera>(null);
   const devices = useCameraDevices();
   const device = devices.find(d => d.position === 'back');
-  const navigation = useNavigation<NavigationProp>();
+  const [isActive, setIsActive] = useState(true);
 
   const handleTakePhoto = useCallback(async () => {
     try {
@@ -54,9 +44,20 @@ const CustomCamera = () => {
 
   useEffect(() => {
     if (!imageUri) return;
+
     navigation.navigate('PhotoConfirmPage', {
       imageUri: imageUri,
+      alarmId: alarmId,
+      username: username,
     });
+
+    // const unsubscribe = navigation.addListener('blur', () => {
+    //   setIsActive(false);
+    // });
+
+    // return () => {
+    //   unsubscribe();
+    // };
   }, [imageUri, navigation]);
 
   return (
@@ -64,7 +65,10 @@ const CustomCamera = () => {
       <View style={styles.cameraContainer}>
         <View style={styles.header}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              navigation.goBack();
+              setIsActive(false);
+            }}
             style={styles.backButton}>
             <Icon name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
@@ -77,7 +81,7 @@ const CustomCamera = () => {
           ref={camera}
           style={styles.cameraPreview}
           device={device}
-          isActive={true}
+          isActive={isActive}
           photo={true}
         />
 
@@ -93,7 +97,7 @@ const CustomCamera = () => {
   );
 };
 
-export default CustomCamera;
+export default CustomCameraPage;
 
 const styles = StyleSheet.create({
   container: {

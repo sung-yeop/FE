@@ -1,6 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
 import AlarmContext from '../AlarmPageComponents/AlarmContext';
 import AlarmScreenMissionItem from './AlarmScreenMissionItem';
@@ -24,7 +27,7 @@ const AlarmScreen = ({route}: AlarmScreenProps) => {
   return (
     <AlarmContext initial={current}>
       <AlarmScreenMissionItem missionId={current?.mission.id} />
-      <AlarmScreenAction />
+      <AlarmScreenAction alarmId={alarmId} />
     </AlarmContext>
   );
 };

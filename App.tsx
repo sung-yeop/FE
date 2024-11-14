@@ -17,6 +17,7 @@ import TestPage from './src/screens/TestPage';
 import ModuleTestPage from './src/screens/ModuleTestPage';
 import {checkCameraPermission} from './src/module/RequestPermission';
 import PhotoConfirmPage from './src/screens/PhotoConfirmPage';
+import CustomCameraPage from './src/screens/CustomCameraPage';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -30,7 +31,13 @@ export type RootStackParamList = {
   ModuleTestPage: undefined;
   PhotoConfirmPage: {
     imageUri: string;
+    alarmId: string;
+    username: string;
     type?: string;
+  };
+  CustomCameraPage: {
+    alarmId: string;
+    username: string;
   };
 };
 
@@ -58,7 +65,9 @@ function App(): React.JSX.Element {
     <RecoilRoot>
       <NavigationContainer ref={navigationRef}>
         <Initializer />
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator
+          initialRouteName="SignIn"
+          screenOptions={{headerShown: false}}>
           <Stack.Screen name="Bottom" component={BottomTab} />
           <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
           <Stack.Screen name="Welcome" component={WelcomePage} />
@@ -68,6 +77,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="TestPage" component={TestPage} />
           <Stack.Screen name="ModuleTestPage" component={ModuleTestPage} />
           <Stack.Screen name="PhotoConfirmPage" component={PhotoConfirmPage} />
+          <Stack.Screen name="CustomCameraPage" component={CustomCameraPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

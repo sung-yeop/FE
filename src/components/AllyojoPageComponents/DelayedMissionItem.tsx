@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Alarm} from '../../types';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';
+import CustomCamera from '../../screens/CustomCameraPage';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   delayedAlarm: Alarm;
 };
+
+type RootStackParamList = {
+  CustomCameraPage: {
+    alarmId: string;
+    username: string;
+  };
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const DelayedMissionItem = ({delayedAlarm}: Props) => {
   const hour = delayedAlarm?.timer.getHours();
@@ -16,25 +28,45 @@ const DelayedMissionItem = ({delayedAlarm}: Props) => {
     minute,
   ).padStart(2, '0')}`;
   const mission = GetCareMissionDataWithId(delayedAlarm.mission.id);
+  const navigation = useNavigation<NavigationProp>();
 
   return (
-    <TouchableOpacity style={styles.container}>
-      <View style={styles.leftContainer}>
-        <Image source={mission?.img} style={styles.missionImage} />
-      </View>
-      <View style={styles.rightContainer}>
-        <View style={styles.infoContainer}>
-          <View style={styles.timeContainer}>
-            <View style={styles.timeContent}>
-              <Text style={styles.ampmText}>{ampm}</Text>
-              <Text style={styles.timeText}>{viewTime}</Text>
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <View>
+          <View style={styles.headerContainer}>
+            <View style={styles.timeOutContainer}>
+              <View style={styles.timeContainer}>
+                <Text style={styles.ampmText}>{ampm}</Text>
+                <Text style={styles.timeText}>{viewTime}</Text>
+              </View>
             </View>
           </View>
-          <Text style={styles.titleText}>{mission?.title}</Text>
-          <Text style={styles.descriptionText}>{mission?.description}</Text>
+          <View style={styles.missionContainer}>
+            <Image
+              source={mission?.img}
+              resizeMode="contain"
+              style={styles.missionImg}
+            />
+            <View>
+              <Text style={styles.missionText}>{mission?.title}</Text>
+              <Text style={styles.missionDescipt}>{mission?.description}</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.rightContainer}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('CustomCameraPage', {
+                alarmId: delayedAlarm.alarmid,
+                username: 'asf',
+              })
+            }>
+            <Text style={styles.takePictureText}>인증 하기</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -42,81 +74,84 @@ export default DelayedMissionItem;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    paddingHorizontal: 22,
+    paddingVertical: 14,
     marginVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    paddingHorizontal: 12,
-    gap: 4,
   },
-  leftContainer: {
-    justifyContent: 'center',
-  },
-  rightContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
+  headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  infoContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 10,
-  },
-  missionImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+  timeOutContainer: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 24,
+    paddingVertical: 4,
+    backgroundColor: '#929292',
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 20,
   },
   timeContainer: {
     flexDirection: 'row',
+    gap: 6,
     alignItems: 'baseline',
-    marginBottom: 4,
-    justifyContent: 'space-between',
   },
   ampmText: {
-    fontSize: 14,
-    color: '#666',
-    marginRight: 4,
+    fontFamily: 'Pretendard-Bold',
+    color: 'white',
+    fontSize: 18,
   },
   timeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  titleText: {
+    letterSpacing: -1,
+    fontFamily: 'Pretendard-Bold',
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    color: 'white',
   },
-  descriptionText: {
+  delayText: {
+    fontFamily: 'Pretendard-Bold',
     fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
+    color: '#ff6b6b', // 지연 상태를 나타내는 빨간색
   },
-  repeatText: {
-    fontSize: 12,
-    color: '#999',
-  },
-  timeContent: {
+  missionContainer: {
+    paddingTop: 12,
     flexDirection: 'row',
+    gap: 16,
     alignItems: 'center',
   },
-  missionProcessContainer: {
-    backgroundColor: 'black',
-    flex: 0.5,
-    borderTopRightRadius: 10,
-    borderBottomEndRadius: 10,
-    justifyContent: 'center',
+  missionText: {
+    letterSpacing: -1,
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 24,
+    color: 'black',
   },
-  missionProcessText: {
-    color: 'white',
+  missionImg: {
+    width: 40,
+    height: 40,
+  },
+  missionDescipt: {
+    fontFamily: 'Pretendard-Regular',
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    gap: 48,
+  },
+  rightContainer: {
+    flex: 1,
+    borderRadius: 16,
+    borderWidth: 0.3,
+    borderColor: 'gray',
+    justifyContent: 'center',
+    backgroundColor: 'black',
+  },
+  takePictureText: {
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
+    color: 'white',
     fontSize: 16,
   },
 });

@@ -12,18 +12,37 @@ import {
   sendSignInDataWithUser,
 } from '../../api/SignAPI';
 import CheckBox from '@react-native-community/checkbox';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../App';
+
+type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
 
 const LoginContent = () => {
+  const navigation = useNavigation<NavigationProps>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isGurdian, setIsGurdian] = useState<boolean>(false);
 
   const handleLogin = () => {
-    if (isGurdian) {
-      sendSignInDataWithGuardian({username, password});
-      return;
+    try {
+      if (isGurdian) {
+        sendSignInDataWithGuardian({username, password});
+        return;
+      }
+      sendSignInDataWithUser({username, password});
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Bottom',
+            params: {screen: '알려줘'},
+          },
+        ],
+      });
+    } catch (err) {
+      throw err;
     }
-    sendSignInDataWithUser({username, password});
   };
 
   return (

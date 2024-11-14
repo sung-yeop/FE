@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {newAlarmSend} from '../api/AlarmAPI';
-import {sendSignUpData} from '../api/SignAPI';
+
 import {validationSend} from '../api/ValidationAPI';
 import {getMissionFromReport, reportSend} from '../api/ReportAPI';
 import {TestMockData} from '../data/TestMockData';
@@ -10,10 +10,6 @@ import {TestMockData} from '../data/TestMockData';
 const TestPage = () => {
   const handleCreateAlarmTest = async () => {
     const response = await newAlarmSend(TestMockData.alarmWithMission);
-    console.log(response);
-  };
-  const handleSignUpTest = async () => {
-    const response = await sendSignUpData(TestMockData.signUpInfo);
     console.log(response);
   };
 
@@ -34,11 +30,6 @@ const TestPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={handleSignUpTest}
-        style={styles.createAlarmContainer}>
-        <Text style={styles.textStyle}>회원가입 테스트</Text>
-      </TouchableOpacity>
       <TouchableOpacity
         onPress={handleCreateAlarmTest}
         style={styles.createAlarmContainer}>

@@ -4,13 +4,15 @@ import RenderStep from '../components/SignUpPageComponents/RenderStep';
 import {SignUpInfo, Step} from '../types';
 import SignUpHeader from '../components/SignUpPageComponents/SignUpHeader';
 import SignUpButton from '../components/SignUpPageComponents/SignUpButton';
-import {
-  sendSignInDataWithGuardian,
-  sendSignUpWithGuardian,
-  sendSignUpWithUser,
-} from '../api/SignAPI';
+import {sendSignUpWithGuardian, sendSignUpWithUser} from '../api/SignAPI';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
 
 const SignUpPage = () => {
+  const navigation = useNavigation<NavigationProp>();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<SignUpInfo>({
     username: '', // 사용할 아이디
@@ -75,6 +77,15 @@ const SignUpPage = () => {
       password: formData.password,
       phoneNumber: formData.phoneNumber,
       name: formData.name,
+    });
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Bottom',
+          params: {screen: '알려줘'}, // 특정 탭으로 이동
+        },
+      ],
     });
   };
 

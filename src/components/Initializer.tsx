@@ -15,14 +15,21 @@ const Initializer = () => {
     const checkLoginStatus = async () => {
       try {
         //for test toekn create
-        await AsyncStorage.setItem('token', '123');
+        // await AsyncStorage.setItem('token', '123');
 
         const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          navigation.navigate('SignIn');
+        if (token) {
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Bottom',
+                params: {screen: '알려줘'},
+              },
+            ],
+          });
           return;
         }
-        // alarmManager.loadAlarms();
       } catch (error) {
         console.error('Error checking login status:', error);
         navigation.navigate('SignIn');

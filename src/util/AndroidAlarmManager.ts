@@ -2,8 +2,6 @@ import {NativeModules, Platform} from 'react-native';
 
 const {AndroidAlarmModule} = NativeModules;
 
-console.log('AndroidAlarmModule:', AndroidAlarmModule);
-
 const requestAlarmPermission = async () => {
   if (Platform.OS === 'android' && Platform.Version >= 31) {
     const hasPermission = await AndroidAlarmModule.requestAlarmPermission();

@@ -5,9 +5,19 @@ import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
 import {Alarm} from '../../types';
 import {theme} from '../../style/Theme';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../App';
 
-const AlarmScreenAction = () => {
-  const navigate = useNavigation();
+type Props = {
+  alarmId: string;
+};
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'CustomCameraPage'
+>;
+
+const AlarmScreenAction = ({alarmId}: Props) => {
+  const navigate = useNavigation<NavigationProp>();
   const alarmManager = useAlarmManager();
   const {current} = useCurrentAlarm();
 
@@ -28,9 +38,16 @@ const AlarmScreenAction = () => {
   return (
     <View style={styles.contentContainer}>
       <View style={styles.selectContainer}>
-        <View style={styles.takePictureContainer}>
+        <TouchableOpacity
+          style={styles.takePictureContainer}
+          onPress={() =>
+            navigate.navigate('CustomCameraPage', {
+              alarmId: alarmId,
+              username: 'qwer',
+            })
+          }>
           <Text style={theme.buttonTextStyle}>사진찍기</Text>
-        </View>
+        </TouchableOpacity>
         <View>
           {current.setting.alarmInterval !== '반복 없음' ? (
             <TouchableOpacity

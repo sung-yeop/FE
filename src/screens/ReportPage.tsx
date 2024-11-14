@@ -6,11 +6,12 @@ import ReportSelector from '../components/ReportPageComponents/ReportSelector';
 import ReportChart from '../components/ReportPageComponents/ReportChart';
 import ReportDetailAnalyisis from '../components/ReportPageComponents/ReportDetailAnalyisis';
 import ReportSelectMission from '../components/ReportPageComponents/ReportSelectMission';
+import {AlarmImg} from '../../asset/images';
 
 const ReportPage = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <PageHeader text={'리포트'}></PageHeader>
+      <PageHeader text={'간단 분석'} img={AlarmImg}></PageHeader>
       <ScrollView style={styles.content}>
         <View style={styles.ViewContent}>
           <ReportSelectMission />
@@ -28,6 +29,7 @@ export default ReportPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   content: {
     flex: 1,

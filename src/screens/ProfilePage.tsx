@@ -5,8 +5,14 @@ import PageHeader from '../components/PageHeader';
 import MyProfile from '../components/ProfilePageComponenets/MyProfile';
 import ProfileSetting from '../components/ProfilePageComponenets/ProfileSetting';
 import UpdatePrimium from '../components/ProfilePageComponenets/UpdatePrimium';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../../App';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'TestPage'>;
 
 const ProfilePage = () => {
+  const navigation = useNavigation<NavigationProp>();
   return (
     <SafeAreaView style={styles.container}>
       <MyProfile />
@@ -15,6 +21,9 @@ const ProfilePage = () => {
           <UpdatePrimium />
           <ProfileSetting />
         </View>
+        <Text onPress={() => navigation.navigate('TestPage')}>
+          Test 페이지 이동
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );

@@ -10,6 +10,8 @@ import {AlarmImg} from '../../asset/images';
 import HeaderSelector from '../components/AllyojoPageComponents/HeaderSelector';
 import AllyojoHeader from '../components/AllyojoPageComponents/AllyojoHeader';
 import TodoList from '../components/AllyojoPageComponents/TodoList';
+import MissionSelector from '../components/AllyojoPageComponents/MissionSelector';
+import MissionBundleList from '../components/AllyojoPageComponents/MissionBundleList';
 
 const AllyojoPage = () => {
   const [pageNav, setPageNav] = useState<'Todo' | 'Mission' | 'Delay'>('Todo');
@@ -18,7 +20,8 @@ const AllyojoPage = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <AllyojoHeader />
+      {/* <AllyojoHeader /> */}
+      <PageHeader text={'모아보기'} img={AlarmImg} />
       <HeaderSelector handleComp={handleComp} select={pageNav} />
       <ScrollView
         style={styles.contentContainer}
@@ -26,10 +29,7 @@ const AllyojoPage = () => {
         {pageNav === 'Todo' ? (
           <TodoList />
         ) : pageNav === 'Mission' ? (
-          <View>
-            <MissionListEveryDay />
-            <MissionList />
-          </View>
+          <MissionBundleList />
         ) : (
           <DelayedMissionList />
         )}

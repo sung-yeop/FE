@@ -42,7 +42,7 @@ export const allAlarmsSelector = selector({
 
 export const currentReportState = atom<Report>({
   key: 'currentReportState',
-  default: {mission: undefined, duration: 'Today'},
+  default: {mission: undefined, duration: undefined},
 });
 
 export const currentReportSelector = selector({
@@ -64,7 +64,6 @@ export const allTodoState = atom<Todo[]>({
     ({setSelf, onSet}) => {
       const loadInitialValue = async () => {
         try {
-          AsyncStorage.clear();
           const savedValue = await AsyncStorage.getItem(STORAGE_TODO_KEY);
           if (savedValue != null) {
             setSelf(Parser.parseForm(savedValue) as Todo[]);

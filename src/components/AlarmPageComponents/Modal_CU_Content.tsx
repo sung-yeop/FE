@@ -11,7 +11,6 @@ const Modal_CU_Content = () => {
   const {current, updateAlarm} = useCurrentAlarm();
   return (
     <View>
-      {/* <TimePicker current={current} updateAlarm={updateAlarm} /> */}
       <CustomTimePicker target={current} updateFun={updateAlarm} />
       <Modal_CU_RepeatPicker />
       <Modal_CU_CreateMission />

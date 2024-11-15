@@ -35,22 +35,23 @@ export const reportSend = async ({mission, startDate, endDate}: ReportAPI) => {
 export const getMissionFromReport = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await fetch(
-      'http://10.0.2.2:8080/verification/report/asdf',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    // const response = await fetch(
+    //   'http://10.0.2.2:8080/verification/report/asdf',
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   },
+    // );
 
-    if (!response.ok) {
-      throw new Error('[GET] 리포트를 제대로 불러오지 못했습니다.');
-    }
+    // if (!response.ok) {
+    //   throw new Error('[GET] 리포트를 제대로 불러오지 못했습니다.');
+    // }
 
-    return await response.json();
+    // return await response.json();
+    return JSON.parse((await AsyncStorage.getItem('missions')) as string);
   } catch (err) {
     console.error('리포트 GET 에러 : ', err);
     throw err;

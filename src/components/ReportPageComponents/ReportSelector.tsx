@@ -8,6 +8,9 @@ const ReportSelector = () => {
   const [isVisibleCalendar, setisVisibleCalendar] = useState<boolean>(false);
   return (
     <View style={styles.Container}>
+      <View style={{marginBottom: 10}}>
+        <Text style={styles.headerText}>다음으로 기간을 선택해주세요!</Text>
+      </View>
       <View
         style={[
           styles.SelectContainer,
@@ -57,6 +60,11 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   text: {
+    color: 'black',
+  },
+  headerText: {
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 24,
     color: 'black',
   },
 });

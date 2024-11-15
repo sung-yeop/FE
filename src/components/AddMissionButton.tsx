@@ -1,6 +1,9 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useReportManager} from '../hooks/useReportManager';
+import ReportMissionItem from './ReportPageComponents/ReportMissionItem';
+import Modal_SelectMission from './ReportPageComponents/Modal_SelectMission';
 
 type Props = {
   onPressButton: () => void;
@@ -8,17 +11,27 @@ type Props = {
 
 // This Component is using in AlarmAddModal and ReportPage to Add Mission
 const AddMissionButton = ({onPressButton}: Props) => {
+  const {current} = useReportManager();
   return (
-    <TouchableOpacity
-      style={styles.AddMissionContainer}
-      onPress={onPressButton}>
-      <Entypo
-        name="plus"
-        style={styles.AddMissionText}
-        size={24}
-        color={'gray'}
-      />
-    </TouchableOpacity>
+    <View>
+      {current.mission ? (
+        <ReportMissionItem
+          missionId={current.mission}
+          onPress={onPressButton}
+        />
+      ) : (
+        <TouchableOpacity
+          style={styles.AddMissionContainer}
+          onPress={onPressButton}>
+          <Entypo
+            name="plus"
+            style={styles.AddMissionText}
+            size={24}
+            color={'gray'}
+          />
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 

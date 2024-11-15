@@ -78,7 +78,7 @@ export type ReportDuration = 'Today' | 'Week' | 'Month' | ReportCustomDuration;
 
 export type Report = {
   mission: MissionCareType;
-  duration: ReportDuration;
+  duration: ReportDuration | undefined;
 };
 
 export interface Todo {

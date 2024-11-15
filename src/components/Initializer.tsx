@@ -16,8 +16,16 @@ const Initializer = () => {
       try {
         //for test toekn create
         // await AsyncStorage.setItem('token', '123');
+        await AsyncStorage.setItem(
+          'missions',
+          JSON.stringify([
+            {missionId: 'Manage blood pressure'},
+            {missionId: 'Eat Medician'},
+          ]),
+        );
 
         const token = await AsyncStorage.getItem('token');
+        console.log(token);
         if (token) {
           navigation.reset({
             index: 0,

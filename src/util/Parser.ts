@@ -1,4 +1,4 @@
-import {Alarm, Todo} from '../types';
+import {Alarm, MissionCareType, Todo} from '../types';
 
 export class Parser {
   static parseForm(savedValue: string): Alarm[] | Todo[] {

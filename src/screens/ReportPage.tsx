@@ -100,29 +100,41 @@ const ReportPage = () => {
 
   const handleReset = () => {
     // 현재 컴포넌트들 위로 사라지는 애니메이션
-    Animated.timing(slideAnim, {
-      toValue: -100,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-
-    setTimeout(() => {
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: -100,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(resetAnim, {
+        toValue: -100,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // 첫 번째 애니메이션이 완료된 후
+      // 상태 초기화
       setIsClickReportBtn(false);
       setIsSelectMission(false);
       setIsSelectPeriods(false);
 
+      // 애니메이션 값 초기화
       slideAnim.setValue(50);
       slideUpAnim.setValue(0);
       fadeAnim1.setValue(0);
       fadeAnim2.setValue(0);
       fadeAnim3.setValue(0);
+      resetAnim.setValue(50);
 
-      Animated.timing(fadeAnim1, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      }).start();
-    }, 800);
+      // 첫 번째 컴포넌트 페이드인 시작
+      setTimeout(() => {
+        Animated.timing(fadeAnim1, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }).start();
+      }, 100); // 약간의 딜레이 추가
+    });
   };
 
   return (
@@ -163,23 +175,26 @@ const ReportPage = () => {
           {isSelectPeriods && isClickReportBtn && !isLoading && (
             <Animated.View
               style={{
-                transform: [{translateY: slideAnim}],
+                transform: [
+                  {
+                    translateY: Animated.add(
+                      slideAnim,
+                      resetAnim.interpolate({
+                        inputRange: [-100, 50],
+                        outputRange: [-50, 0],
+                      }),
+                    ),
+                  },
+                ],
                 opacity: slideAnim.interpolate({
-                  inputRange: [0, 50],
-                  outputRange: [1, 0],
+                  inputRange: [-100, 0, 50],
+                  outputRange: [0, 1, 0],
+                  extrapolate: 'clamp',
                 }),
               }}>
               <View style={styles.ViewContent}>
                 <ReportDetailAnalyisis />
                 <ReportChart />
-                <Animated.View
-                  style={{
-                    transform: [{translateY: resetAnim}],
-                    opacity: resetAnim.interpolate({
-                      inputRange: [0, 50],
-                      outputRange: [1, 0],
-                    }),
-                  }}></Animated.View>
               </View>
               <TouchableOpacity
                 style={theme.buttonContainerStyle}

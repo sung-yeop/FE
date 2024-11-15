@@ -1,12 +1,13 @@
 import {
   Animated,
   Dimensions,
+  LayoutChangeEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {theme} from '../../style/Theme';
 
 type Props = {
@@ -14,10 +15,17 @@ type Props = {
   setMissionSelect: React.Dispatch<React.SetStateAction<'Every' | 'Week'>>;
 };
 
-const {width} = Dimensions.get('window');
-
 const MissionSelector = ({missionSelect, setMissionSelect}: Props) => {
   const slideAnimation = useRef(new Animated.Value(0)).current;
+
+  const containerRef = useRef<View>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  // 컨테이너 너비 측정
+  const onLayout = (event: LayoutChangeEvent) => {
+    const {width} = event.nativeEvent.layout;
+    setContainerWidth(width);
+  };
 
   useEffect(() => {
     Animated.spring(slideAnimation, {
@@ -28,18 +36,25 @@ const MissionSelector = ({missionSelect, setMissionSelect}: Props) => {
     }).start();
   }, [missionSelect]);
 
+  const sliderWidth = containerWidth ? (containerWidth - 4) / 2 : 0;
+  const slideDistance = containerWidth ? sliderWidth + 2 : 0;
+
   return (
     <View style={styles.container}>
-      <View style={styles.selectorContainer}>
+      <View
+        ref={containerRef}
+        onLayout={onLayout}
+        style={styles.selectorContainer}>
         <Animated.View
           style={[
             styles.slider,
             {
+              width: sliderWidth,
               transform: [
                 {
                   translateX: slideAnimation.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, 169],
+                    outputRange: [2, slideDistance], // 왼쪽 padding 2px 고려
                   }),
                 },
               ],
@@ -94,8 +109,7 @@ const styles = StyleSheet.create({
   },
   slider: {
     position: 'absolute',
-    left: 1,
-    width: '50%',
+    top: 2,
     height: 46,
     backgroundColor: theme.colors.primary.main,
     borderRadius: 30,

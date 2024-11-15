@@ -15,7 +15,8 @@ const Initializer = () => {
     const checkLoginStatus = async () => {
       try {
         //for test toekn create
-        // await AsyncStorage.setItem('token', '123');
+        await AsyncStorage.setItem('token', '123');
+
         await AsyncStorage.setItem(
           'missions',
           JSON.stringify([

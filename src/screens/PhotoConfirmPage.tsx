@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ConfirmButton from '../components/PhotoConfirmPageComponents/ConfirmButton';
 import {theme} from '../style/Theme';
 import {Alarm} from '../types';
+import {Verification} from '../api/VerificationAPI';
 
 type PhotoConfirmParams = {
   imageUri: string;
@@ -16,6 +17,19 @@ type PhotoConfirmParams = {
 const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
   const {imageUri, username, alarmId, type} = route.params;
   const navigation = useNavigation();
+
+  const handleConfirm = async () => {
+    try {
+      // 로딩 상태 추가 가능
+      // result = {guess : 1}이면 다시 인증이 필요하다는 페이지로 navigate
+      // guess가 0이면 인증이 완료되었다는 페이지로 navigate
+      const result = await Verification.verificationSend(imageUri);
+      console.log('Verification result:', result);
+    } catch (error) {
+      console.error('Verification error:', error);
+      // 에러 처리
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,7 +61,7 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
 
         <TouchableOpacity
           style={[styles.button, styles.confirmButton]}
-          onPress={() => {}}>
+          onPress={handleConfirm}>
           <Icon
             name="checkmark-outline"
             size={20}

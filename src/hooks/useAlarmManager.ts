@@ -4,6 +4,7 @@ import {Alarm} from '../types';
 import {useRecoilState} from 'recoil';
 import AndroidAlarmModule from '../util/AndroidAlarmManager';
 import {Platform} from 'react-native';
+import {newAlarmSend, updateAlarmAPI} from '../api/AlarmAPI';
 
 export const useAlarmManager = () => {
   const [alarms, setAlarms] = useRecoilState(allAlarmsSelector);
@@ -34,13 +35,15 @@ export const useAlarmManager = () => {
         );
       }
       const updatedAlarms = [...alarms, alarm];
+
+      // 전역 상태 업데이트
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),
       );
+      newAlarmSend(alarm); // API를 통해서 저장
       setAlarms(updatedAlarms);
       console.log('Alarm saved successfully:', updatedAlarms);
-      // newAlarmSend(alarm);
     } catch (err) {
       console.error('SAVE ALARM ERROR : ', err);
     }
@@ -79,6 +82,7 @@ export const useAlarmManager = () => {
         JSON.stringify(updatedAlarms),
       );
       setAlarms(updatedAlarms);
+      updateAlarmAPI(alarm);
       console.log('Alarm updated successfully:', alarm);
       //TODO : 백엔드 업데이트 로직 필요
     } catch (err) {

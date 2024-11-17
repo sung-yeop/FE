@@ -45,8 +45,6 @@ const AlarmContext = ({children, initial}: Props) => {
 
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);
 
-  console.log(defaultAlarm.alarmid);
-
   const updateAlarm = (updates: Partial<Alarm>) => {
     setCurrentAlarm(prev => ({...prev, ...updates}));
   };

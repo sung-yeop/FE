@@ -18,10 +18,12 @@ import ModuleTestPage from './src/screens/ModuleTestPage';
 import {checkCameraPermission} from './src/module/RequestPermission';
 import PhotoConfirmPage from './src/screens/PhotoConfirmPage';
 import CustomCameraPage from './src/screens/CustomCameraPage';
+import BottomTabGuardian from './src/components/BottomTabGuardian';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
   Bottom: undefined;
+  BottomTabGuardian: undefined;
   AlarmScreen: {alarmId: string};
   SignIn: undefined;
   SignUp: undefined;
@@ -69,6 +71,10 @@ function App(): React.JSX.Element {
           initialRouteName="SignIn"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Bottom" component={BottomTab} />
+          <Stack.Screen
+            name="BottomTabGuardian"
+            component={BottomTabGuardian}
+          />
           <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
           <Stack.Screen name="Welcome" component={WelcomePage} />
           <Stack.Screen name="SignIn" component={SignInPage} />

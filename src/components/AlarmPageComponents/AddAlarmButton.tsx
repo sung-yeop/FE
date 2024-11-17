@@ -1,16 +1,19 @@
 import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import Modal_CU_Alarm from './Modal_CU_Alarm';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 import {AlarmButtonImg} from '../../../asset/images';
 
 const {height} = Dimensions.get('window');
 
-const AddAlarmButton = () => {
+type Props = {
+  children?: ReactNode;
+};
+
+const AddAlarmButton = ({children}: Props) => {
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
-  const [isPressed, setIsPressed] = useState<boolean>(false);
+
   return (
     <SafeAreaView>
       <TouchableOpacity
@@ -31,8 +34,9 @@ const AddAlarmButton = () => {
         isVisibleModal={isVisibleModal}
         closeModal={() => {
           setIsVisibleModal(false);
-        }}
-      />
+        }}>
+        {children && children}
+      </Modal_CU_Alarm>
     </SafeAreaView>
   );
 };

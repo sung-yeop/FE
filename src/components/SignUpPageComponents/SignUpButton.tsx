@@ -9,6 +9,7 @@ type Props = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   setClickFlag: React.Dispatch<React.SetStateAction<boolean>>;
   handleSignUpButton: () => void;
+  updateFormData: (key: string, value: string | boolean) => void;
 };
 
 const SignUpButton = ({
@@ -17,6 +18,7 @@ const SignUpButton = ({
   setStep,
   setClickFlag,
   handleSignUpButton,
+  updateFormData,
 }: Props) => {
   const key = StepToStepKey(step) as StepKey;
 
@@ -44,7 +46,12 @@ const SignUpButton = ({
         </TouchableOpacity>
       ) : step === 4 ? (
         <View style={styles.guardianContainer}>
-          <TouchableOpacity style={styles.yesGuardianButton} onPress={nextStep}>
+          <TouchableOpacity
+            style={styles.yesGuardianButton}
+            onPress={() => {
+              updateFormData('isGuardian', true);
+              nextStep();
+            }}>
             <Text style={styles.yesGuardianButtonText}>네</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.noGuardianButton} onPress={nextStep}>

@@ -8,7 +8,6 @@ import {
 import React, {useState, useRef, useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 
@@ -50,14 +49,6 @@ const CustomCameraPage = ({route, navigation}: Props) => {
       alarmId: alarmId,
       username: username,
     });
-
-    // const unsubscribe = navigation.addListener('blur', () => {
-    //   setIsActive(false);
-    // });
-
-    // return () => {
-    //   unsubscribe();
-    // };
   }, [imageUri, navigation]);
 
   return (

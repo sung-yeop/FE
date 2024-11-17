@@ -16,7 +16,11 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 
-type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
+type NavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'Bottom',
+  'BottomTabGuardian'
+>;
 
 const LoginContent = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -24,13 +28,22 @@ const LoginContent = () => {
   const [password, setPassword] = useState('');
   const [isGurdian, setIsGurdian] = useState<boolean>(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     try {
       if (isGurdian) {
-        sendSignInDataWithGuardian({username, password});
+        await sendSignInDataWithGuardian({username, password});
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'BottomTabGuardian',
+              params: {screen: '알람'},
+            },
+          ],
+        });
         return;
       }
-      sendSignInDataWithUser({username, password});
+      await sendSignInDataWithUser({username, password});
       navigation.reset({
         index: 0,
         routes: [

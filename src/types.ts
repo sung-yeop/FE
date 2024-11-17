@@ -45,6 +45,7 @@ export interface Alarm {
   alarmDays: number;
   delay: boolean;
   delayTimes: number;
+  username?: SeniorInfo; // Guardian이 생성했을 경우 사용자의 username을 제공해야함
   mission: {
     mode: MissionMode;
     id: MissionCareType;
@@ -93,4 +94,8 @@ export type ReportAPI = {
   mission: MissionCareType;
   startDate: string;
   endDate: string;
+};
+
+export type SeniorInfo = {
+  username: string;
 };

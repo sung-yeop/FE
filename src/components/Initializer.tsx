@@ -16,7 +16,9 @@ const Initializer = () => {
       try {
         //for test toekn create
         await AsyncStorage.setItem('token', '123');
+        await AsyncStorage.setItem('isGuardian', 'Yes');
 
+        // For Test report
         await AsyncStorage.setItem(
           'missions',
           JSON.stringify([
@@ -26,8 +28,20 @@ const Initializer = () => {
         );
 
         const token = await AsyncStorage.getItem('token');
-        console.log(token);
-        if (token) {
+        const isGuardian = await AsyncStorage.getItem('isGuardian');
+
+        if (token && isGuardian === 'Yes') {
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'BottomTabGuardian',
+                params: {screen: '알람'},
+              },
+            ],
+          });
+          return;
+        } else if (token && isGuardian === 'No') {
           navigation.reset({
             index: 0,
             routes: [
@@ -39,6 +53,9 @@ const Initializer = () => {
           });
           return;
         }
+        throw new Error(
+          'Initializer.tsx -> 토큰 혹은 유저 권한에 대한 정보가 저장되어있지 않으니 다시 로그인해주세요!',
+        );
       } catch (error) {
         console.error('Error checking login status:', error);
         navigation.navigate('SignIn');

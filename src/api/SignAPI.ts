@@ -30,7 +30,8 @@ export const sendSignUpWithUser = async ({
     }
 
     const data = await response.json();
-    AsyncStorage.setItem('username', data.username);
+    await AsyncStorage.setItem('username', data.username);
+    await AsyncStorage.setItem('isGuardian', 'No');
     return data;
   } catch (error) {
     console.error('회원가입 에러:', error);
@@ -56,9 +57,9 @@ export const sendSignUpWithGuardian = async ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: username,
-        name: name,
+        guardianName: username,
         password: password,
+        name: name,
         phoneNumber: phoneNumber,
       }),
     });
@@ -68,7 +69,10 @@ export const sendSignUpWithGuardian = async ({
     }
 
     const data = await response.json();
-    AsyncStorage.setItem('username', data.username);
+    await AsyncStorage.setItem('username', data.guardianName);
+    await AsyncStorage.setItem('name', data.name);
+    await AsyncStorage.setItem('phoneNumber', data.phoneNumber);
+    await AsyncStorage.setItem('isGuardian', 'Yes');
     return data;
   } catch (error) {
     console.error('회원가입 에러:', error);
@@ -104,6 +108,7 @@ export const sendSignInDataWithUser = async ({
     if (token) {
       const actualToken = token.replace('Bearer ', '');
       await AsyncStorage.setItem('token', actualToken);
+      await AsyncStorage.setItem('isGuardian', 'No');
       return actualToken;
     }
 
@@ -122,7 +127,7 @@ export const sendSignInDataWithGuardian = async ({
   password: string;
 }) => {
   try {
-    const response = await fetch('http://10.0.2.2:8080/login/user', {
+    const response = await fetch('http://10.0.2.2:8080/login/guardian', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -138,10 +143,14 @@ export const sendSignInDataWithGuardian = async ({
     }
 
     const token = response.headers.get('Authorization');
+    // 로그인시점에 사용한 아이디를 로컬 스토리지에 저장
+    // 각 API 호출시 username을 사용해서 통신 예정
+    await AsyncStorage.setItem('username', username);
 
     if (token) {
       const actualToken = token.replace('Bearer ', '');
       await AsyncStorage.setItem('token', actualToken);
+      await AsyncStorage.setItem('isGuardian', 'Yes');
       return actualToken;
     }
 

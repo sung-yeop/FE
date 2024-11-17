@@ -9,7 +9,11 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Bottom',
+  'BottomTabGuardian'
+>;
 
 const SignUpPage = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -70,6 +74,15 @@ const SignUpPage = () => {
         phoneNumber: formData.phoneNumber,
         name: formData.name,
       });
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'BottomTabGuardian',
+            params: {screen: '알람'},
+          },
+        ],
+      });
       return;
     }
     sendSignUpWithUser({
@@ -83,7 +96,7 @@ const SignUpPage = () => {
       routes: [
         {
           name: 'Bottom',
-          params: {screen: '알려줘'}, // 특정 탭으로 이동
+          params: {screen: '알려줘'},
         },
       ],
     });
@@ -111,6 +124,7 @@ const SignUpPage = () => {
         setStep={setStep}
         setClickFlag={setClickFlag}
         handleSignUpButton={handleSignUpButton}
+        updateFormData={updateFormData}
       />
     </View>
   );

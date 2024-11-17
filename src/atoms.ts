@@ -1,10 +1,19 @@
 import {atom, DefaultValue, selector} from 'recoil';
-import {Alarm, Report, ReportDuration, Todo, User} from './types';
+import {
+  Alarm,
+  Report,
+  ReportDuration,
+  SeniorInfo,
+  SignUpInfo,
+  Todo,
+  User,
+} from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Parser} from './util/Parser';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
+export const STORAGE_MANAGE_KEY = 'seniors';
 
 export const allAlarmsState = atom<Alarm[]>({
   key: 'allAlarmsState',
@@ -89,4 +98,52 @@ export const allTodoSelector = selector({
   get: ({get}) => get(allTodoState),
   set: ({set}, newValue: DefaultValue | Todo[] | []) =>
     set(allTodoState, newValue),
+});
+
+export const allManagingSeniorsState = atom<SeniorInfo[]>({
+  key: 'allManagingSeniorsState',
+  default: [],
+  effects: [
+    ({setSelf, onSet}) => {
+      const loadInitialValue = async () => {
+        try {
+          // const savedValue = await AsyncStorage.getItem(STORAGE_MANAGE_KEY);
+          // if (savedValue != null) {
+          //   setSelf(JSON.parse(savedValue));
+          // }
+          setSelf([{username: 'qwer'}]);
+        } catch (error) {
+          console.error('Error Seniors:', error);
+        }
+      };
+
+      loadInitialValue();
+
+      onSet((newValue, _) => {
+        AsyncStorage.setItem(
+          STORAGE_MANAGE_KEY,
+          JSON.stringify(newValue),
+        ).catch(error => console.error('Error saving Seniors:', error));
+      });
+    },
+  ],
+});
+
+export const allManagingSeniorsSelector = selector({
+  key: 'allManagingSeniorsSelector',
+  get: ({get}) => get(allManagingSeniorsState),
+  set: ({set}, newValue: DefaultValue | SeniorInfo[] | []) =>
+    set(allManagingSeniorsState, newValue),
+});
+
+export const selectSeniorState = atom<SeniorInfo | undefined>({
+  key: 'selectSeniorState',
+  default: undefined,
+});
+
+export const selectSeniorSelector = selector({
+  key: 'selectSeniorSelector',
+  get: ({get}) => get(selectSeniorState),
+  set: ({set}, newValue: DefaultValue | SeniorInfo | undefined) =>
+    set(selectSeniorState, newValue),
 });

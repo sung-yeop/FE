@@ -2,10 +2,10 @@ import {useNavigation} from '@react-navigation/native';
 import {Image, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ConfirmButton from '../components/PhotoConfirmPageComponents/ConfirmButton';
 import {theme} from '../style/Theme';
-import {Alarm} from '../types';
 import {Verification} from '../api/VerificationAPI';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
 
 type PhotoConfirmParams = {
   imageUri: string;
@@ -14,9 +14,15 @@ type PhotoConfirmParams = {
   type?: string;
 };
 
+type NavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'Success',
+  'Fail'
+>;
+
 const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
   const {imageUri, username, alarmId, type} = route.params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
 
   const handleConfirm = async () => {
     try {
@@ -24,7 +30,14 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
       // result = {guess : 1}이면 다시 인증이 필요하다는 페이지로 navigate
       // guess가 0이면 인증이 완료되었다는 페이지로 navigate
       const result = await Verification.verificationSend(imageUri);
+      if (result.guess === 1) {
+        // 알려줘 페이지에서 다시 인증을 진행해달라고 안내
+        navigation.navigate('Fail');
+        return;
+      }
       console.log('Verification result:', result);
+      navigation.navigate('Success');
+      return;
     } catch (error) {
       console.error('Verification error:', error);
       // 에러 처리

@@ -19,6 +19,8 @@ import {checkCameraPermission} from './src/module/RequestPermission';
 import PhotoConfirmPage from './src/screens/PhotoConfirmPage';
 import CustomCameraPage from './src/screens/CustomCameraPage';
 import BottomTabGuardian from './src/components/BottomTabGuardian';
+import Success from './src/screens/ConfirmScreen/Success';
+import Fail from './src/screens/ConfirmScreen/Fail';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -41,6 +43,8 @@ export type RootStackParamList = {
     alarmId: string;
     username: string;
   };
+  Success: undefined;
+  Fail: undefined;
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -59,7 +63,17 @@ function App(): React.JSX.Element {
         }
       },
     );
-    checkCameraPermission();
+
+    const requestPermissions = async () => {
+      try {
+        const hasPermission = await checkCameraPermission();
+        console.log('Camera permission:', hasPermission);
+      } catch (error) {
+        console.error('Error checking camera permission:', error);
+      }
+    };
+
+    requestPermissions();
     return () => subscription.remove();
   }, []);
 
@@ -84,6 +98,8 @@ function App(): React.JSX.Element {
           <Stack.Screen name="ModuleTestPage" component={ModuleTestPage} />
           <Stack.Screen name="PhotoConfirmPage" component={PhotoConfirmPage} />
           <Stack.Screen name="CustomCameraPage" component={CustomCameraPage} />
+          <Stack.Screen name="Success" component={Success} />
+          <Stack.Screen name="Fail" component={Fail} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

@@ -18,6 +18,8 @@ const Initializer = () => {
         await AsyncStorage.setItem('token', '123');
         await AsyncStorage.setItem('isGuardian', 'Yes');
 
+        // await AsyncStorage.clear();
+
         // For Test report
         await AsyncStorage.setItem(
           'missions',

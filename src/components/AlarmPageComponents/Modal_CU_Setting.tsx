@@ -10,8 +10,7 @@ const Modal_CU_Setting = () => {
   const {current, updateAlarm} = useCurrentAlarm();
   const [isVibration, setIsVibration] = useState(false);
   const [volume, setVolume] = useState(50);
-  const [alarmInterval, setAlarmInterval] =
-    useState<SettingTimeInterval>('반복 없음');
+  const [alarmInterval, setAlarmInterval] = useState<SettingTimeInterval>(0);
   const [isVisibleSettingIntervalModal, setIsVisibleSettingIntervalModal] =
     useState<boolean>(false);
 
@@ -67,7 +66,11 @@ const Modal_CU_Setting = () => {
         <Text style={styles.settingLabel}>반복 간격</Text>
         <TouchableOpacity
           onPress={() => setIsVisibleSettingIntervalModal(true)}>
-          <Text>{`${current.setting.alarmInterval}` || alarmInterval}</Text>
+          <Text>
+            {current.setting.alarmInterval === 0
+              ? '반복 없음'
+              : `${current.setting.alarmInterval}분`}
+          </Text>
         </TouchableOpacity>
       </View>
       <Modal_CU_Setting_Interval

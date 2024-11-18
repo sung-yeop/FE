@@ -49,7 +49,7 @@ const AlarmScreenAction = ({alarmId}: Props) => {
           <Text style={theme.buttonTextStyle}>사진찍기</Text>
         </TouchableOpacity>
         <View>
-          {current.setting.alarmInterval !== '반복 없음' ? (
+          {current.setting.alarmInterval !== 0 ? (
             <TouchableOpacity
               style={styles.takeLaterContainer}
               onPress={onClickDelayMission}>
@@ -72,7 +72,7 @@ const AlarmScreenAction = ({alarmId}: Props) => {
         </View>
         {current.delayTimes > 1 && (
           <View style={styles.exitCurrnetAlarmContainer}>
-            {current.setting.alarmInterval !== '반복 없음' && (
+            {current.setting.alarmInterval !== 0 && (
               <Text style={styles.exitCurrentAlarmDisText}>
                 인증이 어려운 상황인가요?
               </Text>

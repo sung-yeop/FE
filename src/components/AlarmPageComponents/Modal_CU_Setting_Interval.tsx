@@ -32,7 +32,7 @@ const Modal_CU_Setting_Interval = ({
   currentInterval,
   updateSettings,
 }: Props) => {
-  const intervals: SettingTimeInterval[] = ['반복 없음', 1, 10, 15, 30];
+  const intervals: SettingTimeInterval[] = [0, 1, 10, 15, 30];
   const onClickSaveButton = () => {
     updateSettings({alarmInterval: currentInterval});
     onCloseModal();
@@ -64,9 +64,7 @@ const Modal_CU_Setting_Interval = ({
                           boxType={'circle'}
                         />
                         <Text style={styles.ContentText}>
-                          {interval !== '반복 없음'
-                            ? `${interval} 분`
-                            : `${interval}`}
+                          {interval === 0 ? '반복 없음' : `${interval} 분`}
                         </Text>
                       </View>
                     );

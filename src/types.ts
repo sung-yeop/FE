@@ -61,7 +61,7 @@ export type MissionMode = 'Strict' | 'Free';
 
 export type SelectList = 'Alarm' | 'Mission';
 
-export type SettingTimeInterval = '반복 없음' | 1 | 10 | 15 | 30;
+export type SettingTimeInterval = 0 | 1 | 10 | 15 | 30;
 
 export type MissionCareType =
   | 'Manage blood sugar'
@@ -97,5 +97,7 @@ export type ReportAPI = {
 };
 
 export type SeniorInfo = {
+  name: string;
+  phoneNumber: number;
   username: string;
 };

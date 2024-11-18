@@ -6,10 +6,7 @@ import {validationSend} from '../api/ValidationAPI';
 import {getMissionFromReport, reportSend} from '../api/ReportAPI';
 import {TestMockData} from '../data/TestMockData';
 import {RootStackParamList} from '../../App';
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 
 type NavigationProp = NativeStackNavigationProp<

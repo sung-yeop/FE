@@ -32,7 +32,8 @@ const AlarmContext = ({children, initial}: Props) => {
     alarmid: uuid
       .v4()
       .toString()
-      .replace(/[^\d]+/g, ''),
+      .replace(/[^\d]+/g, '')
+      .slice(0, 10),
     // alarmid: '1',
     timer: new Date(),
     active: false,
@@ -40,7 +41,7 @@ const AlarmContext = ({children, initial}: Props) => {
     mission: defaultMission,
     delay: false,
     delayTimes: 0,
-    setting: {isVibration: false, volume: 50, alarmInterval: '반복 없음'},
+    setting: {isVibration: false, volume: 50, alarmInterval: 0},
   };
 
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);
@@ -48,6 +49,8 @@ const AlarmContext = ({children, initial}: Props) => {
   const updateAlarm = (updates: Partial<Alarm>) => {
     setCurrentAlarm(prev => ({...prev, ...updates}));
   };
+
+  console.log('알람 아이디 : ', current.alarmid);
 
   const updateMission = (
     newSetting: Partial<{

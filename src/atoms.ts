@@ -10,6 +10,7 @@ import {
 } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Parser} from './util/Parser';
+import {GuardianAPI} from './api/GuardianAPI';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
@@ -107,11 +108,8 @@ export const allManagingSeniorsState = atom<SeniorInfo[]>({
     ({setSelf, onSet}) => {
       const loadInitialValue = async () => {
         try {
-          // const savedValue = await AsyncStorage.getItem(STORAGE_MANAGE_KEY);
-          // if (savedValue != null) {
-          //   setSelf(JSON.parse(savedValue));
-          // }
-          setSelf([{username: 'qwer'}]);
+          const response = await GuardianAPI.getSeniors();
+          setSelf(response);
         } catch (error) {
           console.error('Error Seniors:', error);
         }

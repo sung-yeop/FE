@@ -15,7 +15,7 @@ const SaveAlarmButton = ({id, closeModal}: Props) => {
   const onClickSaveButton = () => {
     if (
       current.mission.mode === 'Strict' &&
-      current.setting.alarmInterval === '반복 없음'
+      current.setting.alarmInterval === 0
     ) {
       Alert.alert(
         '주의',

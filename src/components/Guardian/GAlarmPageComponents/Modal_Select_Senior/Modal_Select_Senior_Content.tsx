@@ -1,10 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useRecoilState, useSetRecoilState} from 'recoil';
-import {
-  allManagingSeniorsSelector,
-  selectSeniorSelector,
-} from '../../../../atoms';
+import {allManagingSeniorsSelector} from '../../../../atoms';
 import {SeniorInfo} from '../../../../types';
 
 type Props = {
@@ -22,6 +19,8 @@ const Modal_Select_Senior_Content = ({setSelectedUser}: Props) => {
           style={styles.btnContainer}
           onPress={() => setSelectedUser(senior)}>
           <Text style={styles.textStyle}>{senior.username}</Text>
+          <Text style={styles.textStyle}>{senior.name}</Text>
+          <Text style={styles.textStyle}>{senior.phoneNumber}</Text>
         </TouchableOpacity>
       ))}
     </View>

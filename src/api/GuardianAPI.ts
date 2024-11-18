@@ -1,34 +1,59 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alarm} from '../types';
-import AlarmListHeader from '../components/AlarmPageComponents/AlarmListHeader';
 
 export class GuardianAPI {
+  static async getSeniors() {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const guardianName = await AsyncStorage.getItem('username');
+      const response = await fetch(
+        `http://10.0.2.2:8080/guardian/${guardianName}/users`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log(response.status);
+
+      if (!response.ok) {
+        throw new Error('[GET] 유저를 정상적으로 불러오지 못했습니다.');
+      }
+      return response.json();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
   /**
    *
    * @returns 보호자가 관리하고자하는 시니어를 추가하는 API
    */
-  static async addSenior() {
+  static async addSenior(phoneNumber: string) {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
-
-      //url 수정 필요
-      const response = await fetch('http://10.0.2.2:8080/verification/report', {
-        method: 'POST',
+      const response = await fetch('http://10.0.2.2:8080/guardian/addUser', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          guardianName: guardianName,
+          userPhoneNumber: phoneNumber,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error('[POST] 리포트를 제대로 불러오지 못했습니다.');
-      }
-      const jsonData = JSON.parse(await response.text());
-      console.log('Parsed JSON data:', jsonData);
+      console.log(response.status);
 
-      return jsonData;
+      if (!response.ok) {
+        throw new Error('[POST] 유저를 정상적으로 추가하지 못했습니다.');
+      }
+      return response.json();
     } catch (err) {
       console.error('리포트 POST 에러 : ', err);
       throw err;
@@ -39,15 +64,12 @@ export class GuardianAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
-      const username = alarm.username;
+      const username = alarm.username?.username;
       if (!username) {
         throw new Error(
           '시니어의 아이디가 API로 전달되지 않았습니다. 알람 세팅(alarm.username)을 다시 확인해주세요!',
         );
       }
-
-      console.log('USERNAME : ', username);
-      console.log('GuardianName : ', guardianName);
 
       const response = await fetch(
         `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/add`,
@@ -59,7 +81,7 @@ export class GuardianAPI {
           },
           body: JSON.stringify({
             alarmId: alarm.alarmid,
-            username: username,
+            username: guardianName,
             missionName: alarm.mission.id,
             alarmTime: alarm.timer,
             active: alarm.active,
@@ -72,6 +94,8 @@ export class GuardianAPI {
           }),
         },
       );
+
+      console.log('Response : ', response);
 
       if (!response.ok) {
         throw new Error('[POST] 알람이 정상적으로 저장되지 않았습니다!');

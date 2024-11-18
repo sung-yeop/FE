@@ -1,14 +1,13 @@
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-
-const {height} = Dimensions.get('window');
+import GAddUser from './GAddUser/GAddUser';
 
 const ProfileSetting = () => {
   return (
     <View style={styles.Container}>
       <View style={styles.ContentContainer}>
         <Text>이미지</Text>
-        <Text>보호자 연락처 관리</Text>
+        <GAddUser />
       </View>
     </View>
   );

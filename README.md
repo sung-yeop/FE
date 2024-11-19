@@ -1,79 +1,88 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## "알려줘" 어플리케이션 테스트 목록
 
-# Getting Started
+### 0. 공통
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+#### 0-1. 로그인 페이지
 
-## Step 1: Start the Metro Server
+- [x] 사용자의 아이디와 비밀번호를 입력받는 기능
+- [x] 사용자의 유저 타입을 체크 기능
+- [x] 사용자의 입력을 기반으로 로그인 & 백엔드 API 통신 & JWT 토큰 로컬 스토리지 저장 기능
+- [x] 회원 가입 버튼 클릭시 Sign Up 페이지 Navigation
+- [] 적절하지 않은 인풋이 입력될 경우, Alert 표시
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+#### 0-2. 회원가입 페이지
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- [x] 사용자의 아이디와 비밀번호를 입력받는 기능
+- [x] 비밀번호가 적절한지 판별하는 기능
+- [] 사용가능한 아이디인지 판별하는 기능
+- [x] 사용자 연락처 입력 기능
+- [] 문자메세지로 인증번호 발급 기능
+- [x] 닉네임 입력 기능
+- [] 닉네임 중복 판별 기능
+- [x] 회원가입 & 백엔드 API 통신
+- [x] 발급받은 JWT 토큰, username, name, phoneNumber 로컬 스토리지 저장 기능
 
-```bash
-# using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
-```
+### 1. 일반 사용자
 
-## Step 2: Start your Application
+#### 1-1. 알림 페이지
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- [x] 알람 정보 생성 & API 통신 & DB 저장 & 로컬 스토리지 저장(Create)
+- [x] 알람 정보 수정 & API 통신 & DB 저장 & 로컬 스토리지 업데이트 (Update)
+- [x] Android - 알람 기능
+- [] Ios - 알람 기능
+- [] 보호자가 생성해준 알람 표시
 
-### For Android
+#### 1-2. 알려줘 페이지
 
-```bash
-# using npm
-npm run android
+- [x] Todo 정보 생성 & 로컬 스토리지 저장 (Create)
+- [x] Todo 정보 수정 & 로컬 스토리지 수정 (Update)
+- [] Todo 저장 API, DB 저장
+- [] Todo 수정 API, DB 업데이트
+- [x] 미션 모아보기 - 매일 기능 (알람 페이지에서 생성한 알람 확인)
+- [x] 미션 모아보기 - 매주 기능 (알람 페이지에서 생성한 알람 확인)
+- [x] 미룬 알람 확인 & 재인증 기능 (Camera Navigation)
 
-# OR using Yarn
-yarn android
-```
+#### 1-3. 리포트 페이지
 
-### For iOS
+- [] 수행 완료된 미션 호출 API & 테스트
+- [x] 미션 선택 기능 - Mock Data Test
+- [x] 날짜 선택 기능
+- [] 완료된 미션 호출 API
+- [] 차트 UI
 
-```bash
-# using npm
-npm run ios
+#### 1-4. 프로필 페이지
 
-# OR using Yarn
-yarn ios
-```
+- [x] 로그아웃 기능
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+#### 1-5. 알람 Alert 페이지
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+- [x] 알람 모드에 맞춰서 알람 미루기 UI 구성
+- [x] 인증하기 버튼 클릭시 Camera Navigation
+- [x] 나중에 인증하기 클릭시 알려줘 - 미션 확인하기 탭에서 재인증 기능
+- [x] Custom Camera UI
+- [x] PhotoConfilmPage 구성 & Retry & 인증하기 버튼 클릭시 AI Server 호출
+- [] 미션에 맞춰서 AI Server 호출하도록 수정
 
-## Step 3: Modifying your App
+---
 
-Now that you have successfully run the app, let's modify it.
+### 2. 보호자
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+#### 2-1. 알림 관리 페이지
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- [x] 보호자 -> 시니어 알람 생성 기능
+- [] 보호자가 관리하는 시니어 알람 UI (BE API 수정중)
+- [] 보호자가 관리하는 시니어 알람 수정
 
-## Congratulations! :tada:
+#### 2-2. 리포트 페이지
 
-You've successfully run and modified your React Native App. :partying_face:
+- [] 보호자 선택 기능
+- [] 미션 선택 기능
+- [] API 호출
+- [] Response를 UI로 표현
 
-### Now what?
+#### 2-3. 프로필 페이지
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- [x] 로그아웃 기능
+- [x] 사용자 추가 기능 & API 호출 & DB 저장

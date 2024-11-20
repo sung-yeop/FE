@@ -55,6 +55,7 @@ export interface Alarm {
     volume: number;
     alarmInterval: SettingTimeInterval;
   };
+  createdByGuardian: boolean;
 }
 
 export type MissionMode = 'Strict' | 'Free';

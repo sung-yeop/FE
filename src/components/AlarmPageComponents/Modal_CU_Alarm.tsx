@@ -23,11 +23,6 @@ const Modal_CU_Alarm = ({
   alarm,
   children,
 }: Props) => {
-  // 11월 16일 TODO : -> children이 전달될경우 Guardian의 알람 생성임
-  // 그렇다면 알람 저장은 어떻게 할것인지를 처리해야함
-  // Guardian에서 알람 생성 -> 본인 휴대폰에서 알람이 울리는 것이 아니라, 시니어에게 알람을 생성해주는 것
-  // SaveAlarmButton에서 useAlarmManager가 아닌, 다른 형식으로 알람을 처리해야함 (특정 사용자에게 알람을 생성하도록 전달하는등)
-  // 즉, 내일은 SaveAlarmGuardianButton을 정의해야함
   return (
     <Modal
       visible={isVisibleModal}
@@ -41,13 +36,12 @@ const Modal_CU_Alarm = ({
             <ScrollView>
               {children}
               <Modal_CU_Content />
-              {children && (
+              {children !== undefined ? (
                 <SaveAlarmGuardianButton
                   id={alarm?.alarmid}
                   closeModal={closeModal}
                 />
-              )}
-              {!children && (
+              ) : (
                 <SaveAlarmButton id={alarm?.alarmid} closeModal={closeModal} />
               )}
             </ScrollView>

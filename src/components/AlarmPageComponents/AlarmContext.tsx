@@ -42,6 +42,7 @@ const AlarmContext = ({children, initial}: Props) => {
     delay: false,
     delayTimes: 0,
     setting: {isVibration: false, volume: 50, alarmInterval: 0},
+    createdByGuardian: false,
   };
 
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);

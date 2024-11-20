@@ -17,8 +17,6 @@ export class GuardianAPI {
         },
       );
 
-      console.log(response.status);
-
       if (!response.ok) {
         throw new Error('[GET] 유저를 정상적으로 불러오지 못했습니다.');
       }
@@ -36,6 +34,7 @@ export class GuardianAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
+      console.log(guardianName);
       const response = await fetch('http://10.0.2.2:8080/guardian/addUser', {
         method: 'PUT',
         headers: {
@@ -48,12 +47,9 @@ export class GuardianAPI {
         }),
       });
 
-      console.log(response.status);
-
       if (!response.ok) {
         throw new Error('[POST] 유저를 정상적으로 추가하지 못했습니다.');
       }
-      return response.json();
     } catch (err) {
       console.error('리포트 POST 에러 : ', err);
       throw err;
@@ -65,6 +61,7 @@ export class GuardianAPI {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
       const username = alarm.username?.username;
+
       if (!username) {
         throw new Error(
           '시니어의 아이디가 API로 전달되지 않았습니다. 알람 세팅(alarm.username)을 다시 확인해주세요!',
@@ -111,7 +108,7 @@ export class GuardianAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
-      const username = alarm.username;
+      const username = alarm.username?.username;
       if (!username) {
         throw new Error(
           '시니어의 아이디가 API로 전달되지 않았습니다. 알람 세팅(alarm.username)을 다시 확인해주세요!',
@@ -121,14 +118,13 @@ export class GuardianAPI {
       const response = await fetch(
         `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/alarms/update`,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             alarmId: alarm.alarmid,
-            username: username,
             missionName: alarm.mission.id,
             alarmTime: alarm.timer,
             active: alarm.active,
@@ -142,11 +138,43 @@ export class GuardianAPI {
         },
       );
 
+      console.log('GuardianAPI - UpdateAlarm Log : ', response.status);
+
       if (!response.ok) {
         throw new Error('[POST] 알람이 정상적으로 업데이트되지 않았습니다!');
       }
 
       return await response.json();
+    } catch (err) {
+      console.error('가디언 -> 시니어 알람 설정 오류', err);
+      throw err;
+    }
+  }
+
+  static async getAlarms(username: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const guardianName = await AsyncStorage.getItem('username');
+
+      const response = await fetch(
+        `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/alarms`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log('GuardianAPI - GetAlarms Log : ', response.status);
+
+      if (!response.ok) {
+        throw new Error('[POST] 알람이 정상적으로 업데이트되지 않았습니다!');
+      }
+      const result = await response.text();
+
+      return await JSON.parse(result);
     } catch (err) {
       console.error('가디언 -> 시니어 알람 설정 오류', err);
       throw err;

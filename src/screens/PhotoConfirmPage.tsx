@@ -30,6 +30,8 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
       // result = {guess : 1}이면 다시 인증이 필요하다는 페이지로 navigate
       // guess가 0이면 인증이 완료되었다는 페이지로 navigate
       const result = await Verification.verificationSend(imageUri);
+
+      console.log(result);
       if (result.guess === 1) {
         // 알려줘 페이지에서 다시 인증을 진행해달라고 안내
         navigation.navigate('Fail');

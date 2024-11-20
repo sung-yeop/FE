@@ -9,11 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 
-type NavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Bottom',
-  'BottomTabGuardian'
->;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 const SignUpPage = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -74,29 +70,20 @@ const SignUpPage = () => {
         phoneNumber: formData.phoneNumber,
         name: formData.name,
       });
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'BottomTabGuardian',
-            params: {screen: '알람'},
-          },
-        ],
+    } else {
+      sendSignUpWithUser({
+        username: formData.username,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        name: formData.name,
       });
-      return;
     }
-    sendSignUpWithUser({
-      username: formData.username,
-      password: formData.password,
-      phoneNumber: formData.phoneNumber,
-      name: formData.name,
-    });
+
     navigation.reset({
       index: 0,
       routes: [
         {
-          name: 'Bottom',
-          params: {screen: '알려줘'},
+          name: 'SignIn',
         },
       ],
     });

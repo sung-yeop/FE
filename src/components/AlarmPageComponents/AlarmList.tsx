@@ -6,7 +6,11 @@ import {Alarm} from '../../types';
 import Modal_CU_Alarm from './Modal_CU_Alarm';
 import AlarmItem from './AlarmItem';
 
-const AlarmList = () => {
+type Props = {
+  isGuardian?: boolean;
+};
+
+const AlarmList = ({isGuardian}: Props) => {
   const alarms = useRecoilValue(allAlarmsSelector);
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
   const [selectAlarm, setSelectAlarm] = useState<Alarm>();
@@ -16,26 +20,42 @@ const AlarmList = () => {
     setSelectAlarm(alarm);
   };
 
+  useEffect(() => {
+    console.log('전체 알람 : ', alarms);
+    alarms.forEach(alarm => {
+      console.log('Alarm timer type:', typeof alarm.timer);
+      console.log('Is Date instance:', alarm.timer instanceof Date);
+      console.log('Alarm data:', alarm);
+    });
+  }, [alarms]);
+
   return (
     <View style={styles.AlarmListContainer}>
-      {alarms.map(
-        (alarm: Alarm) =>
-          alarm.timer instanceof Date && (
-            <AlarmItem
-              key={alarm.alarmid}
-              onPress={() => onClickItem(alarm)}
-              alarm={alarm}
-            />
-          ),
-        // {
-        // if (alarm && alarm.timer && alarm.timer instanceof Date) {
-        //   return (
-
-        //   );
-        // }
-        // return null;
-        // }
-      )}
+      {isGuardian
+        ? alarms.map((alarm: Alarm) => {
+            if (alarm.createdByGuardian) {
+              return (
+                <AlarmItem
+                  key={alarm.alarmid}
+                  onPress={() => onClickItem(alarm)}
+                  alarm={alarm}
+                />
+              );
+            }
+            return null;
+          })
+        : alarms.map((alarm: Alarm) => {
+            if (!alarm.createdByGuardian) {
+              return (
+                <AlarmItem
+                  key={alarm.alarmid}
+                  onPress={() => onClickItem(alarm)}
+                  alarm={alarm}
+                />
+              );
+            }
+            return null;
+          })}
       <Modal_CU_Alarm
         isVisibleModal={isVisibleModal}
         closeModal={() => setIsVisibleModal(false)}

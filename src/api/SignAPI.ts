@@ -29,10 +29,15 @@ export const sendSignUpWithUser = async ({
       throw new Error('회원가입에 실패했습니다.');
     }
 
-    const data = await response.json();
-    await AsyncStorage.setItem('username', data.username);
-    await AsyncStorage.setItem('isGuardian', 'No');
-    return data;
+    // const token = response.headers.get('Authorization');
+
+    // if (token) {
+    //   const actualToken = token.replace('Bearer ', '');
+    //   await AsyncStorage.setItem('token', actualToken);
+    //   await AsyncStorage.setItem('isGuardian', 'No');
+    //   await AsyncStorage.setItem('username', username);
+    //   return actualToken;
+    // }
   } catch (error) {
     console.error('회원가입 에러:', error);
     throw error;
@@ -68,12 +73,17 @@ export const sendSignUpWithGuardian = async ({
       throw new Error('회원가입에 실패했습니다.');
     }
 
-    const data = await response.json();
-    await AsyncStorage.setItem('username', data.guardianName);
-    await AsyncStorage.setItem('name', data.name);
-    await AsyncStorage.setItem('phoneNumber', data.phoneNumber);
-    await AsyncStorage.setItem('isGuardian', 'Yes');
-    return data;
+    const token = response.headers.get('Authorization');
+
+    // if (token) {
+    //   const actualToken = token.replace('Bearer ', '');
+    //   await AsyncStorage.setItem('token', actualToken);
+    //   await AsyncStorage.setItem('isGuardian', 'Yes');
+    //   await AsyncStorage.setItem('username', username);
+    //   await AsyncStorage.setItem('name', name);
+    //   await AsyncStorage.setItem('phoneNumber', phoneNumber);
+    //   return actualToken;
+    // }
   } catch (error) {
     console.error('회원가입 에러:', error);
     throw error;
@@ -109,6 +119,7 @@ export const sendSignInDataWithUser = async ({
       const actualToken = token.replace('Bearer ', '');
       await AsyncStorage.setItem('token', actualToken);
       await AsyncStorage.setItem('isGuardian', 'No');
+      await AsyncStorage.setItem('username', username);
       return actualToken;
     }
 
@@ -145,12 +156,12 @@ export const sendSignInDataWithGuardian = async ({
     const token = response.headers.get('Authorization');
     // 로그인시점에 사용한 아이디를 로컬 스토리지에 저장
     // 각 API 호출시 username을 사용해서 통신 예정
-    await AsyncStorage.setItem('username', username);
 
     if (token) {
       const actualToken = token.replace('Bearer ', '');
       await AsyncStorage.setItem('token', actualToken);
       await AsyncStorage.setItem('isGuardian', 'Yes');
+      await AsyncStorage.setItem('username', username);
       return actualToken;
     }
 

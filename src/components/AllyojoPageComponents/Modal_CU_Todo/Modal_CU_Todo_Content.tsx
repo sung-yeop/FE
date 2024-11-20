@@ -1,11 +1,15 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import CustomCalendar from '../../CustomCalendar';
 import {useCurrentTodo} from '../../../hooks/useCurrentTodo';
 import CustomTimePicker from '../../../module/CustomTimePicker';
 
 const Modal_CU_Todo_Content = () => {
   const {currentTodo, updateTodo} = useCurrentTodo();
+
+  useEffect(() => {
+    console.log('Current Todo : ', currentTodo);
+  }, [currentTodo]);
 
   return (
     <View style={styles.container}>

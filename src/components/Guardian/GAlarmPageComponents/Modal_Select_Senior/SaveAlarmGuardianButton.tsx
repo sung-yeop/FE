@@ -51,8 +51,7 @@ const SaveAlarmGuardianButton = ({id, closeModal}: Props) => {
       return null;
     }
 
-    GuardianAPI.addAlarm({alarm: current});
-    const updatedAlarm = {...current, active: true};
+    const updatedAlarm = {...current, active: true, createdByGuardian: true};
 
     if (id) {
       console.log('SaveAlarmGuardianButton / 알람 아이디 있음');

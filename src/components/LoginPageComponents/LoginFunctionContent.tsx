@@ -6,7 +6,6 @@ import {RootStackParamList} from '../../../App';
 
 type AlarmScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'SignUp',
   'FindPassWord'
 >;
 
@@ -15,11 +14,8 @@ const LoginFunctionContent = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigator.navigate('SignUp')}>
-        <Text>회원가입</Text>
-      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigator.navigate('FindPassWord')}>
-        <Text>비밀번호 찾기</Text>
+        <Text>아이디/비밀번호 찾기</Text>
       </TouchableOpacity>
     </View>
   );
@@ -30,7 +26,7 @@ export default LoginFunctionContent;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     marginVertical: 10,
   },
 });

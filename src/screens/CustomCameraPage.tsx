@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CustomCameraPage'>;
 
@@ -52,7 +53,7 @@ const CustomCameraPage = ({route, navigation}: Props) => {
   }, [imageUri, navigation]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.cameraContainer}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -84,7 +85,7 @@ const CustomCameraPage = ({route, navigation}: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

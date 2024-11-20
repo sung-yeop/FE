@@ -4,6 +4,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import {useNavigation} from '@react-navigation/native';
 import {theme} from '../../style/Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
 
@@ -22,13 +23,13 @@ const Fail = () => {
     });
   };
   return (
-    <View>
+    <SafeAreaView style={{justifyContent: 'center'}}>
       <Text>인증이 실패했습니다!</Text>
       <Text>알려줘 페이지에서 다시 진행해주세요!</Text>
       <TouchableOpacity style={theme.buttonContainerStyle} onPress={onClickBtn}>
         <Text style={theme.buttonTextStyle}>확인</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

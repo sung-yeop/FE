@@ -11,6 +11,8 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GuardianAPI} from '../../../api/GuardianAPI';
+import {useRecoilState} from 'recoil';
+import {allManagingSeniorsSelector} from '../../../atoms';
 
 type Props = {
   isVisibleModal: boolean;
@@ -20,8 +22,9 @@ type Props = {
 const GModal_AddUser = ({isVisibleModal, onCloseModal}: Props) => {
   const [userPhoneNumber, setUserPhoneNumber] = useState('');
   const isValid = useRef<boolean>(false);
+  const [seniors, setSeniors] = useRecoilState(allManagingSeniorsSelector);
 
-  const onClickSaveButton = () => {
+  const onClickSaveButton = async () => {
     if (!isValid.current) {
       Alert.alert('주의', '휴대폰 번호는 11자리 입니다.', [
         {
@@ -29,10 +32,24 @@ const GModal_AddUser = ({isVisibleModal, onCloseModal}: Props) => {
           style: 'cancel',
         },
       ]);
-      return null;
+      return;
     }
-    GuardianAPI.addSenior(userPhoneNumber);
-    onCloseModal();
+
+    try {
+      await GuardianAPI.addSenior(userPhoneNumber);
+      console.log('Senior added successfully');
+
+      const response = await GuardianAPI.getSeniors();
+      console.log('Fetched seniors:', response);
+
+      if (response) {
+        setSeniors(response);
+        onCloseModal();
+      }
+    } catch (error) {
+      console.error('Error in onClickSaveButton:', error);
+      Alert.alert('오류', '처리 중 문제가 발생했습니다.');
+    }
   };
 
   useEffect(() => {
@@ -42,6 +59,10 @@ const GModal_AddUser = ({isVisibleModal, onCloseModal}: Props) => {
     }
     isValid.current = false;
   }, [userPhoneNumber]);
+
+  useEffect(() => {
+    console.log('Recoil Seniors : ', seniors);
+  }, [seniors]);
 
   return (
     <Modal

@@ -1,16 +1,9 @@
 import {atom, DefaultValue, selector} from 'recoil';
-import {
-  Alarm,
-  Report,
-  ReportDuration,
-  SeniorInfo,
-  SignUpInfo,
-  Todo,
-  User,
-} from './types';
+import {Alarm, Report, SeniorInfo, Todo, User} from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Parser} from './util/Parser';
 import {GuardianAPI} from './api/GuardianAPI';
+import {getAlarms} from './api/AlarmAPI';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
@@ -23,9 +16,25 @@ export const allAlarmsState = atom<Alarm[]>({
     ({setSelf, onSet}) => {
       const loadInitialValue = async () => {
         try {
-          const savedValue = await AsyncStorage.getItem(STORAGE_ALARM_KEY);
+          const isGuardian = await AsyncStorage.getItem('isGuardian');
+
+          let savedValue = null;
+          if (isGuardian === 'Yes') {
+            const seniorsInfo = await GuardianAPI.getSeniors();
+            if (seniorsInfo) {
+              console.log('SeniorInfo : ', seniorsInfo);
+              savedValue = seniorsInfo.map(async (senior: SeniorInfo) => {
+                const result = await GuardianAPI.getAlarms(senior.username);
+                console.log(result);
+                return result;
+              });
+            }
+          } else if (isGuardian === 'No') {
+            savedValue = await getAlarms();
+          }
+
           if (savedValue != null) {
-            setSelf(Parser.parseForm(savedValue) as Alarm[]);
+            setSelf(Parser.parseAlarmForm(savedValue) as Alarm[]);
           }
         } catch (error) {
           console.error('Error loading alarms:', error);
@@ -76,7 +85,7 @@ export const allTodoState = atom<Todo[]>({
         try {
           const savedValue = await AsyncStorage.getItem(STORAGE_TODO_KEY);
           if (savedValue != null) {
-            setSelf(Parser.parseForm(savedValue) as Todo[]);
+            setSelf(Parser.parseTodoForm(savedValue) as Todo[]);
           }
         } catch (error) {
           console.error('Error loading alarms:', error);
@@ -109,7 +118,9 @@ export const allManagingSeniorsState = atom<SeniorInfo[]>({
       const loadInitialValue = async () => {
         try {
           const response = await GuardianAPI.getSeniors();
-          setSelf(response);
+          if (response !== null) {
+            setSelf(response);
+          }
         } catch (error) {
           console.error('Error Seniors:', error);
         }

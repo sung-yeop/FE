@@ -5,16 +5,19 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import {
   sendSignInDataWithGuardian,
   sendSignInDataWithUser,
 } from '../../api/SignAPI';
+import MailSVG from '../../../asset/images/Mail Icon.svg';
+import LockSVG from '../../../asset/images/Lock Fill Icon.svg';
 import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
+import LoginFunctionContent from './LoginFunctionContent';
+import {theme} from '../../style/Theme';
 
 type NavigationProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -60,26 +63,29 @@ const LoginContent = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContent}>
-        <Text style={styles.inputTitleText}>아이디</Text>
+      <Text style={styles.inputTitleText}>이메일</Text>
+      <View style={styles.inputContainer}>
+        <MailSVG width={20} height={20} style={styles.inputIcon} />
         <TextInput
-          style={styles.inputText}
+          style={[styles.inputText, {paddingLeft: 40}]}
           value={username}
           onChangeText={setUsername}
+          placeholder="이메일을 입력해 주세요"
+          placeholderTextColor={'gray'}
         />
       </View>
-      <View style={styles.inputContent}>
-        <Text style={styles.inputTitleText}>비밀번호</Text>
+      <Text style={styles.inputTitleText}>비밀번호</Text>
+      <View style={styles.inputContainer}>
+        <LockSVG width={20} height={20} style={styles.inputIcon} />
         <TextInput
           style={styles.inputText}
           value={password}
           onChangeText={setPassword}
+          placeholder="비밀번호를 입력해 주세요"
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
-        <Text style={styles.buttonText}>로그인</Text>
-      </TouchableOpacity>
+      <LoginFunctionContent />
       <View style={styles.checkboxContainer}>
         <CheckBox
           value={isGurdian}
@@ -88,6 +94,13 @@ const LoginContent = () => {
         />
         <Text style={styles.checkboxText}>보호자 회원인가요?</Text>
       </View>
+      <TouchableOpacity
+        style={theme.buttonContainerStyle}
+        onPress={handleLogin}>
+        <Text style={[theme.buttonTextStyle, {paddingVertical: 4}]}>
+          로그인
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -96,9 +109,6 @@ export default LoginContent;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
     gap: 8,
   },
   inputContent: {
@@ -108,14 +118,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   inputTitleText: {
-    marginLeft: 8,
     paddingTop: 5,
-    fontSize: 12,
-  },
-  inputText: {
-    fontSize: 16,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
+    fontSize: 14,
+    marginLeft: 2,
+    fontFamily: 'Pretendard-Bold',
+    color: 'black',
   },
   buttonContainer: {
     width: '100%',
@@ -134,10 +141,34 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
   },
   checkboxText: {
     color: 'black',
     fontFamily: 'Pretendard-Bold',
     marginLeft: 8,
+    fontSize: 16,
+  },
+  inputContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F4FF',
+    borderRadius: 16,
+    paddingLeft: 4,
+  },
+  inputIcon: {
+    position: 'absolute',
+    left: 16,
+    color: 'gray',
+  },
+  inputText: {
+    flex: 1,
+    fontSize: 14,
+    paddingVertical: 16,
+    paddingLeft: 40, // 아이콘 공간
+    paddingRight: 20,
+    fontFamily: 'Pretendard-Regular',
   },
 });

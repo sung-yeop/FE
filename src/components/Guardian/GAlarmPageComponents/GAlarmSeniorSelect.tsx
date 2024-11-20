@@ -14,38 +14,36 @@ const GAlarmSeniorSelect = () => {
   return (
     <View style={styles.container}>
       {seniors.length === 0 && (
-        <View>
-          <Text>관리하고 계신 보호자가 없습니다!</Text>
+        <View style={styles.seniorContainer}>
+          <Text style={styles.selectText}>
+            관리하고 계신 보호자가 없습니다!
+          </Text>
+          <Text style={styles.selectDesText}>
+            설정 페이지에서 유저를 추가해주세요!
+          </Text>
         </View>
       )}
 
-      {seniors.length > 0 &&
-        (current ? (
-          <TouchableOpacity onPress={() => setIsVisible(true)}>
-            <View style={styles.seniorContainer}>
-              <Text
-                style={[
-                  theme.typography.h2,
-                  {textAlign: 'center', color: 'white'},
-                ]}>
-                사용자 변경하기
-              </Text>
-              <Text
-                style={[
-                  theme.typography.h3,
-                  {textAlign: 'center', color: 'white'},
-                ]}>
-                {current.username?.username}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={[theme.buttonContainerStyle, {backgroundColor: 'gray'}]}
-            onPress={() => setIsVisible(true)}>
-            <Text style={theme.buttonTextStyle}>사용자 선택하기</Text>
-          </TouchableOpacity>
-        ))}
+      {seniors.length > 0 && (
+        <TouchableOpacity onPress={() => setIsVisible(true)}>
+          <View style={styles.seniorContainer}>
+            <Text
+              style={[
+                theme.typography.h2,
+                {textAlign: 'center', color: 'white'},
+              ]}>
+              사용자 선택하기
+            </Text>
+            <Text
+              style={[
+                theme.typography.h3,
+                {textAlign: 'center', color: 'white'},
+              ]}>
+              {current.username?.username}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
 
       <Modal_Select_Senior
         isVisible={isVisible}
@@ -67,5 +65,17 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     gap: 12,
     paddingVertical: 12,
+  },
+  selectText: {
+    fontFamily: 'Pretendard-Bold',
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  selectDesText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 16,
+    color: 'white',
+    textAlign: 'center',
   },
 });

@@ -10,6 +10,7 @@ type Props = {
 
 const Modal_Select_Senior_Content = ({setSelectedUser}: Props) => {
   const [seniors, setSeniors] = useRecoilState(allManagingSeniorsSelector);
+  console.log('등록된 Seniors : ', seniors);
 
   return (
     <View style={styles.container}>

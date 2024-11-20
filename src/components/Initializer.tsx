@@ -15,10 +15,10 @@ const Initializer = () => {
     const checkLoginStatus = async () => {
       try {
         //for test toekn create
-        await AsyncStorage.setItem('token', '123');
-        await AsyncStorage.setItem('isGuardian', 'Yes');
+        // await AsyncStorage.setItem('token', '123');
+        // await AsyncStorage.setItem('isGuardian', 'Yes');
 
-        // await AsyncStorage.clear();
+        await AsyncStorage.clear();
 
         // For Test report
         await AsyncStorage.setItem(
@@ -55,9 +55,6 @@ const Initializer = () => {
           });
           return;
         }
-        throw new Error(
-          'Initializer.tsx -> 토큰 혹은 유저 권한에 대한 정보가 저장되어있지 않으니 다시 로그인해주세요!',
-        );
       } catch (error) {
         console.error('Error checking login status:', error);
         navigation.navigate('SignIn');

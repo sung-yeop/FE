@@ -7,6 +7,7 @@ import {
 import {RootStackParamList} from '../../../App';
 import {useNavigation} from '@react-navigation/native';
 import {theme} from '../../style/Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
 
@@ -25,12 +26,12 @@ const Success = () => {
     });
   };
   return (
-    <View>
+    <SafeAreaView style={{justifyContent: 'center'}}>
       <Text>인증이 완료되었습니다!</Text>
       <TouchableOpacity style={theme.buttonContainerStyle} onPress={onClickBtn}>
         <Text style={theme.buttonTextStyle}>확인</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

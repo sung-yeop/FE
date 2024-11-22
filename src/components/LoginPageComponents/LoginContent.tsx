@@ -30,11 +30,17 @@ const LoginContent = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isGurdian, setIsGurdian] = useState<boolean>(false);
+  const [emailFocus, setEmailFocus] = useState<boolean>(false);
+  const [passwordFocus, setPasswordFocus] = useState<boolean>(false);
+  const [inValidInput, setInValidInput] = useState<boolean>(false);
 
   const handleLogin = async () => {
-    try {
-      if (isGurdian) {
-        await sendSignInDataWithGuardian({username, password});
+    if (isGurdian) {
+      const {result, msg} = await sendSignInDataWithGuardian({
+        username,
+        password,
+      });
+      if (result) {
         navigation.reset({
           index: 0,
           routes: [
@@ -46,25 +52,37 @@ const LoginContent = () => {
         });
         return;
       }
-      await sendSignInDataWithUser({username, password});
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Bottom',
-            params: {screen: '알려줘'},
-          },
-        ],
-      });
-    } catch (err) {
-      throw err;
+      setInValidInput(true);
+      setUsername('');
+      setPassword('');
+    } else {
+      const {result, msg} = await sendSignInDataWithUser({username, password});
+      if (result) {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Bottom',
+              params: {screen: '알려줘'},
+            },
+          ],
+        });
+        return;
+      }
+      setInValidInput(true);
+      setUsername('');
+      setPassword('');
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.inputTitleText}>이메일</Text>
-      <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputContainer,
+          emailFocus && {borderWidth: 0.5, borderColor: 'blue'},
+        ]}>
         <MailSVG width={20} height={20} style={styles.inputIcon} />
         <TextInput
           style={[styles.inputText, {paddingLeft: 40}]}
@@ -72,10 +90,19 @@ const LoginContent = () => {
           onChangeText={setUsername}
           placeholder="이메일을 입력해 주세요"
           placeholderTextColor={'gray'}
+          onFocus={() => setEmailFocus(true)}
+          onBlur={() => {
+            setEmailFocus(false);
+            setInValidInput(false);
+          }}
         />
       </View>
       <Text style={styles.inputTitleText}>비밀번호</Text>
-      <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputContainer,
+          passwordFocus && {borderWidth: 0.5, borderColor: 'blue'},
+        ]}>
         <LockSVG width={20} height={20} style={styles.inputIcon} />
         <TextInput
           style={styles.inputText}
@@ -83,6 +110,11 @@ const LoginContent = () => {
           onChangeText={setPassword}
           placeholder="비밀번호를 입력해 주세요"
           secureTextEntry
+          onFocus={() => setPasswordFocus(true)}
+          onBlur={() => {
+            setPasswordFocus(false);
+            setInValidInput(false);
+          }}
         />
       </View>
       <LoginFunctionContent />
@@ -101,6 +133,11 @@ const LoginContent = () => {
           로그인
         </Text>
       </TouchableOpacity>
+      {inValidInput && (
+        <Text style={styles.alertText}>
+          아이디와 비밀번호를 다시 확인해주세요!
+        </Text>
+      )}
     </View>
   );
 };
@@ -170,5 +207,10 @@ const styles = StyleSheet.create({
     paddingLeft: 40, // 아이콘 공간
     paddingRight: 20,
     fontFamily: 'Pretendard-Regular',
+  },
+  alertText: {
+    fontFamily: 'Pretendard-Regular',
+    color: '#CC0000',
+    textAlign: 'center',
   },
 });

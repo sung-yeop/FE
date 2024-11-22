@@ -7,7 +7,7 @@ import Modal_CU_Alarm from './Modal_CU_Alarm';
 import AlarmItem from './AlarmItem';
 
 type Props = {
-  isGuardian?: boolean;
+  isGuardian: boolean;
 };
 
 const AlarmList = ({isGuardian}: Props) => {
@@ -20,42 +20,21 @@ const AlarmList = ({isGuardian}: Props) => {
     setSelectAlarm(alarm);
   };
 
-  useEffect(() => {
-    console.log('전체 알람 : ', alarms);
-    alarms.forEach(alarm => {
-      console.log('Alarm timer type:', typeof alarm.timer);
-      console.log('Is Date instance:', alarm.timer instanceof Date);
-      console.log('Alarm data:', alarm);
-    });
-  }, [alarms]);
+  const filteredAlarms = alarms.filter((alarm: Alarm) =>
+    isGuardian ? alarm.createdByGuardian : !alarm.createdByGuardian,
+  );
 
   return (
     <View style={styles.AlarmListContainer}>
-      {isGuardian
-        ? alarms.map((alarm: Alarm) => {
-            if (alarm.createdByGuardian) {
-              return (
-                <AlarmItem
-                  key={alarm.alarmid}
-                  onPress={() => onClickItem(alarm)}
-                  alarm={alarm}
-                />
-              );
-            }
-            return null;
-          })
-        : alarms.map((alarm: Alarm) => {
-            if (!alarm.createdByGuardian) {
-              return (
-                <AlarmItem
-                  key={alarm.alarmid}
-                  onPress={() => onClickItem(alarm)}
-                  alarm={alarm}
-                />
-              );
-            }
-            return null;
-          })}
+      {filteredAlarms.map((alarm: Alarm) => {
+        return (
+          <AlarmItem
+            key={alarm.alarmid}
+            onPress={() => onClickItem(alarm)}
+            alarm={alarm}
+          />
+        );
+      })}
       <Modal_CU_Alarm
         isVisibleModal={isVisibleModal}
         closeModal={() => setIsVisibleModal(false)}

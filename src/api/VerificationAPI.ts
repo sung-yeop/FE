@@ -1,13 +1,13 @@
-export class Verification {
-  static async verificationSend(imageUri: string) {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export class VerificationAPI {
+  static async sendAIServer(imageUri: string) {
     try {
-      // FormData 생성
       const formData = new FormData();
 
-      // 이미지 파일 추가
       formData.append('file', {
         uri: imageUri,
-        type: 'image/jpeg', // 또는 'image/png'
+        type: 'image/jpeg',
         name: 'photo.jpg',
       } as any);
 
@@ -31,6 +31,77 @@ export class Verification {
     } catch (err) {
       console.error('인증 POST 에러 : ', err);
       throw err;
+    }
+  }
+
+  // {
+  //   "alarmId": 0,
+  //   "username": "string",
+  //   "verificationDateTime": "2024-11-21T12:49:36.097Z",
+  //   "value": 0,
+  //   "result": true
+  // }
+
+  static async sendFirstAlert(alarmId: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch('http://10.0.2.2:8080/verification/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          alarmId: alarmId,
+          username: username,
+          verificationDateTime: new Date(),
+          value: 0,
+          result: false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Verification | sendFirstAlert Error : ${response.status}`,
+        );
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // For Test
+  static async sendAlert(alarmId: string, value: number, result: boolean) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch('http://10.0.2.2:8080/verification/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          alarmId: alarmId,
+          username: username,
+          verificationDateTime: new Date(),
+          value: value,
+          result: result,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Verification | sendFirstAlert Error : ${response.status}`,
+        );
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
     }
   }
 }

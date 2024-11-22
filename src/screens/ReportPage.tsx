@@ -17,20 +17,50 @@ import {AlarmImg} from '../../asset/images';
 import {useReportManager} from '../hooks/useReportManager';
 import ReportBtn from '../components/ReportPageComponents/ReportBtn';
 import {theme} from '../style/Theme';
+import {ReportAPI} from '../api/ReportAPI';
+import {Parser} from '../util/Parser';
 // import LoadingSpinner from '../components/LoadingSpinner'; // 로딩 컴포넌트 필요
+
+type Verification = {
+  alarmId: number;
+  result: boolean;
+  userId: number;
+  value: number;
+  verificationDateTime: string;
+  verificationId: number;
+};
+
+type Props = {
+  averageValue: number;
+  successRatio: number;
+  verifications: Verification[];
+};
 
 const ReportPage = () => {
   const [isSelectMission, setIsSelectMission] = useState<boolean>(false);
   const [isSelectPeriods, setIsSelectPeriods] = useState<boolean>(false);
   const [isClickReportBtn, setIsClickReportBtn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<{
+    labels: string[];
+    datasets: {data: number[]; color: any; strokeWidth: number}[];
+    legen: string[];
+  }>();
   const {current} = useReportManager();
+  const [duration, setDuration] = useState({
+    startDate: '',
+    endDate: '',
+  });
+  let responseFromAPI: any;
 
-  // 애니메이션 값들
+  useEffect(() => {
+    console.log('ReportPage | current.duration : ', current.duration);
+  }, [current]);
+
   const fadeAnim1 = useRef(new Animated.Value(0)).current;
   const fadeAnim2 = useRef(new Animated.Value(0)).current;
   const fadeAnim3 = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current; // 아래에서 위로 올라오는 효과
+  const slideAnim = useRef(new Animated.Value(50)).current;
   const slideUpAnim = useRef(new Animated.Value(0)).current;
   const resetAnim = useRef(new Animated.Value(50)).current;
 
@@ -85,6 +115,106 @@ const ReportPage = () => {
       setIsLoading(true);
     });
 
+    if (duration.startDate && duration.endDate && current.mission) {
+      responseFromAPI = await ReportAPI.getReport({
+        missionName: current.mission,
+        startDate: duration.startDate,
+        endDate: duration.endDate,
+      });
+
+      console.log('API 호출 결과 : ', responseFromAPI);
+
+      // 날짜 추출 (중복 X)
+      const dates: string[] = Array.from(
+        new Set(
+          responseFromAPI.verifications.map((item: Verification) =>
+            Parser.parseDateToYMD(new Date(item.verificationDateTime)),
+          ),
+        ),
+      );
+
+      type DateValueMap = {[key: string]: number};
+
+      const filteredDataTable = dates.reduce<DateValueMap>((acc, date) => {
+        acc[date] = 0;
+        return acc;
+      }, {});
+
+      const parsedData = responseFromAPI.verifications.map(
+        (item: Verification) => {
+          return {
+            ...item,
+            verificationDateTime: Parser.parseDateToYMD(
+              new Date(item.verificationDateTime + 'Z'),
+            ),
+          };
+        },
+      );
+
+      // parsedData.forEach((element: any) => {
+      //   filteredDataTable[element.verificationDateTime] =
+      //     (filteredDataTable[element.verificationDateTime] + element.value) / 2;
+      //   console.log('로그  :', filteredDataTable[element.verificationDateTime]);
+      // });
+
+      const valueSums: {[key: string]: {sum: number; count: number}} = {};
+
+      parsedData.forEach((element: any) => {
+        if (!valueSums[element.verificationDateTime]) {
+          valueSums[element.verificationDateTime] = {sum: 0, count: 0};
+        }
+        valueSums[element.verificationDateTime].sum += element.value;
+        valueSums[element.verificationDateTime].count += 1;
+      });
+
+      // 평균 계산
+      for (const date in filteredDataTable) {
+        if (valueSums[date]) {
+          filteredDataTable[date] = valueSums[date].sum / valueSums[date].count;
+        }
+      }
+
+      const labels = Object.keys(filteredDataTable);
+      const datas = Object.values(filteredDataTable);
+
+      console.log('평균값 : ', responseFromAPI.averageValue);
+      console.log('평균값 : ', responseFromAPI.successRatio);
+
+      setData({
+        labels: labels,
+        datasets: [
+          {
+            data: datas,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            strokeWidth: 2,
+          },
+          responseFromAPI.averageValue && {
+            data: responseFromAPI.averageValue,
+            color: (opacity = 1) => `rgba(255, 99, 99, ${opacity * 0.8})`, // 연한 빨간색
+            strokeWidth: 1,
+            withDots: false,
+          },
+        ],
+        legen: ['Rainy Days'],
+      });
+    } else {
+      console.log(
+        'ReportPage | 분석하기 버튼 클릭 - missionName : ',
+        current.mission,
+      );
+      console.log(
+        'ReportPage | 분석하기 버튼 클릭 - startDate : ',
+        duration.startDate,
+      );
+      console.log(
+        'ReportPage | 분석하기 버튼 클릭 - startDate : ',
+        duration.endDate,
+      );
+      throw new Error(
+        "ReportPage | 분석하기 버튼 클릭 : '미션' 또는 '기간'이 선택되지 않았습니다.",
+      );
+    }
+
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -136,6 +266,18 @@ const ReportPage = () => {
       }, 100); // 약간의 딜레이 추가
     });
   };
+
+  useEffect(() => {
+    if (current.duration) {
+      const {startDate, endDate} = Parser.parseReportDurationForm(
+        current.duration,
+      );
+      setDuration({
+        startDate: startDate,
+        endDate: endDate,
+      });
+    }
+  }, [current]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,8 +335,8 @@ const ReportPage = () => {
                 }),
               }}>
               <View style={styles.ViewContent}>
+                <ReportChart data={data} />
                 <ReportDetailAnalyisis />
-                <ReportChart />
               </View>
               <TouchableOpacity
                 style={theme.buttonContainerStyle}

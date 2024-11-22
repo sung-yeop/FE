@@ -20,21 +20,14 @@ export const allAlarmsState = atom<Alarm[]>({
 
           let savedValue = null;
           if (isGuardian === 'Yes') {
-            const seniorsInfo = await GuardianAPI.getSeniors();
-            if (seniorsInfo) {
-              console.log('SeniorInfo : ', seniorsInfo);
-              savedValue = seniorsInfo.map(async (senior: SeniorInfo) => {
-                const result = await GuardianAPI.getAlarms(senior.username);
-                console.log(result);
-                return result;
-              });
-            }
+            const result = await GuardianAPI.getAlarms();
+            savedValue = Parser.parseAlarmFormGuardian(result) as Alarm[];
           } else if (isGuardian === 'No') {
-            savedValue = await getAlarms();
+            savedValue = Parser.parseAlarmForm(await getAlarms()) as Alarm[];
           }
 
           if (savedValue != null) {
-            setSelf(Parser.parseAlarmForm(savedValue) as Alarm[]);
+            setSelf(savedValue);
           }
         } catch (error) {
           console.error('Error loading alarms:', error);

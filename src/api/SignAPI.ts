@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Success from '../screens/ConfirmScreen/Success';
 
 export const sendSignUpWithUser = async ({
   username,
@@ -110,7 +111,7 @@ export const sendSignInDataWithUser = async ({
     });
 
     if (!response.ok) {
-      throw new Error('로그인에 실패했습니다.');
+      return {result: false, msg: '로그인 실패'};
     }
 
     const token = response.headers.get('Authorization');
@@ -120,13 +121,12 @@ export const sendSignInDataWithUser = async ({
       await AsyncStorage.setItem('token', actualToken);
       await AsyncStorage.setItem('isGuardian', 'No');
       await AsyncStorage.setItem('username', username);
-      return actualToken;
+      return {result: true, msg: '로그인 성공 / 토큰 발급 완료'};
     }
-
-    throw new Error('토큰이 없습니다.');
+    return {result: false, msg: '토큰 없음'};
   } catch (error) {
     console.error('로그인 에러:', error);
-    throw error;
+    return {result: false, msg: '에러 발생'};
   }
 };
 
@@ -150,7 +150,7 @@ export const sendSignInDataWithGuardian = async ({
     });
 
     if (!response.ok) {
-      throw new Error('로그인에 실패했습니다.');
+      return {result: false, msg: '로그인 실패!'};
     }
 
     const token = response.headers.get('Authorization');
@@ -162,12 +162,12 @@ export const sendSignInDataWithGuardian = async ({
       await AsyncStorage.setItem('token', actualToken);
       await AsyncStorage.setItem('isGuardian', 'Yes');
       await AsyncStorage.setItem('username', username);
-      return actualToken;
+      return {result: true, msg: '로그인 성공 / 토큰 발급 완료'};
     }
 
-    throw new Error('토큰이 없습니다.');
+    return {result: false, msg: '토큰 없음'};
   } catch (error) {
     console.error('로그인 에러:', error);
-    throw error;
+    return {result: false, msg: '에러 발생'};
   }
 };

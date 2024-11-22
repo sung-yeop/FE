@@ -3,9 +3,9 @@ import {Image, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {theme} from '../style/Theme';
-import {Verification} from '../api/VerificationAPI';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
+import {VerificationAPI} from '../api/VerificationAPI';
 
 type PhotoConfirmParams = {
   imageUri: string;
@@ -29,7 +29,7 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
       // 로딩 상태 추가 가능
       // result = {guess : 1}이면 다시 인증이 필요하다는 페이지로 navigate
       // guess가 0이면 인증이 완료되었다는 페이지로 navigate
-      const result = await Verification.verificationSend(imageUri);
+      const result = await VerificationAPI.sendAIServer(imageUri);
 
       console.log(result);
       if (result.guess === 1) {

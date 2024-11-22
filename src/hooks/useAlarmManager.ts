@@ -27,7 +27,7 @@ export const useAlarmManager = () => {
       if (Platform.OS === 'android') {
         await AndroidAlarmModule.setAlarm(
           alarm.alarmid,
-          alarm.timer.getTime(),
+          Number(alarm.timer.getTime()),
           alarm.setting.isVibration,
           alarm.setting.volume,
           'null',
@@ -41,7 +41,7 @@ export const useAlarmManager = () => {
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),
       );
-      newAlarmSend(alarm); // API를 통해서 저장
+      newAlarmSend(alarm);
       setAlarms(updatedAlarms);
       console.log('Alarm saved successfully:', updatedAlarms);
     } catch (err) {
@@ -63,7 +63,7 @@ export const useAlarmManager = () => {
       if (Platform.OS === 'android') {
         await AndroidAlarmModule.updateAlarm(
           alarm.alarmid,
-          alarm.timer.getTime(),
+          Number(alarm.timer.getTime()),
           alarm.active,
           alarmInterval,
           alarm.delayTimes,
@@ -84,7 +84,6 @@ export const useAlarmManager = () => {
       setAlarms(updatedAlarms);
       updateAlarmAPI(alarm);
       console.log('Alarm updated successfully:', alarm);
-      //TODO : 백엔드 업데이트 로직 필요
     } catch (err) {
       console.error('UPDATE ALARM ERROR : ', err);
     }

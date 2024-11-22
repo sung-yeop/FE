@@ -7,7 +7,11 @@ import Modal_CU_Alarm from '../../AlarmPageComponents/Modal_CU_Alarm';
 import {Alarm} from '../../../types';
 import GAlarmSeniorSelect from './GAlarmSeniorSelect';
 
-const GAlarmList = () => {
+type Props = {
+  selectSenior: string;
+};
+
+const GAlarmList = ({selectSenior}: Props) => {
   const {allAlarms} = useGuardianManager();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [selectAlarm, setSelectAlarm] = useState<Alarm>();
@@ -17,9 +21,16 @@ const GAlarmList = () => {
     setSelectAlarm(alarm);
   };
 
+  const filteredAlarmList = allAlarms.filter(
+    alarm => alarm.username!.name === selectSenior,
+  );
+
+  console.log('select Senior : ', selectSenior);
+  console.log('FILTEREDALARMLIST : ', filteredAlarmList);
+
   return (
     <SafeAreaView style={styles.container}>
-      {allAlarms.map(alarm => (
+      {filteredAlarmList.map(alarm => (
         <AlarmItem
           key={alarm.alarmid}
           alarm={alarm}

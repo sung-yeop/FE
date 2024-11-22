@@ -1,7 +1,6 @@
-import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {StyleSheet, Switch, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Modal_Mission_CreateMission from './Modal_Mission_CreateMission';
 import AddMissionButton from '../AddMissionButton';
 import MissionItem from './MissionItem';

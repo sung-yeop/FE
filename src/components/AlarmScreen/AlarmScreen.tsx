@@ -1,13 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useHandleAlldAlarm} from '../../hooks/useHandleAllAlarm';
 import AlarmContext from '../AlarmPageComponents/AlarmContext';
 import AlarmScreenMissionItem from './AlarmScreenMissionItem';
 import AlarmScreenAction from './AlarmScreenAction';
+import {VerificationAPI} from '../../api/VerificationAPI';
 
 type RootStackParamList = {
   Bottom: undefined;
@@ -23,6 +21,14 @@ const AlarmScreen = ({route}: AlarmScreenProps) => {
   const {alarmId} = route.params;
   const {findAlarmUsingId} = useHandleAlldAlarm();
   const current = findAlarmUsingId(alarmId);
+
+  const alertFirstTime = async () => {
+    await VerificationAPI.sendFirstAlert(alarmId);
+  };
+
+  if (current?.delayTimes === 0) {
+    alertFirstTime();
+  }
 
   return (
     <AlarmContext initial={current}>

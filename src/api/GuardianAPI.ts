@@ -151,13 +151,13 @@ export class GuardianAPI {
     }
   }
 
-  static async getAlarms(username: string) {
+  static async getAlarms() {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
 
       const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/alarms`,
+        `http://10.0.2.2:8080/guardian/${guardianName}/alarms`,
         {
           method: 'GET',
           headers: {
@@ -173,7 +173,6 @@ export class GuardianAPI {
         throw new Error('[POST] 알람이 정상적으로 업데이트되지 않았습니다!');
       }
       const result = await response.text();
-
       return await JSON.parse(result);
     } catch (err) {
       console.error('가디언 -> 시니어 알람 설정 오류', err);

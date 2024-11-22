@@ -3,8 +3,8 @@ import React, {useEffect, useState} from 'react';
 import AddMissionButton from '../AddMissionButton';
 import Modal_SelectMission from './Modal_SelectMission';
 import {MissionCareType} from '../../types';
-import {getMissionFromReport} from '../../api/ReportAPI';
 import {useReportManager} from '../../hooks/useReportManager';
+import {ReportAPI} from '../../api/ReportAPI';
 
 const ReportSelectMission = () => {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -12,12 +12,9 @@ const ReportSelectMission = () => {
   const {current} = useReportManager();
 
   const getMissionsUsingAPI = async () => {
-    const response = await getMissionFromReport();
-    if (response) {
-      for (const {missionId} of response) {
-        setMissions(prev => [...prev, missionId]);
-      }
-    }
+    const response = await ReportAPI.getMissions();
+    console.log('ReportSelectMission | GET MISSIONS : ', response);
+    setMissions(response.map((value: MissionCareType) => value));
   };
 
   const clickMissionSelectBtn = () => {
@@ -42,7 +39,6 @@ const ReportSelectMission = () => {
         isVisible={isVisibleModal}
         onCloseModal={() => {
           setIsVisibleModal(false);
-          setMissions([]);
         }}
         missions={missions.length !== 0 ? missions : undefined}
       />

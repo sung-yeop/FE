@@ -1,5 +1,4 @@
 import {
-  Animated,
   Image,
   StyleSheet,
   Switch,
@@ -23,10 +22,13 @@ const AlarmItem = ({alarm, onPress}: Props) => {
   const alarmManager = useAlarmManager();
   const {ampm, viewTime} = TimeFormatting(alarm.timer);
   const mission = GetCareMissionDataWithId(alarm.mission.id);
+  console.log('미션 데이터:', mission);
 
   if (!mission) {
-    return null;
+    return;
   }
+
+  console.log('AlarmItem / alarm 데이터 : ', alarm);
   return (
     <View style={styles.alarmContainer}>
       <TouchableOpacity onPress={onPress} style={styles.mainContent}>

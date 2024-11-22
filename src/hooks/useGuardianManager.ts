@@ -10,11 +10,6 @@ export const useGuardianManager = () => {
   const [seniors, setSeniors] = useRecoilState(allManagingSeniorsSelector);
   const [allAlarms, updateAlarms] = useRecoilState(allAlarmsSelector);
 
-  //For Log
-  useEffect(() => {
-    console.log('useGuardianManger All alarms : ', allAlarms);
-  }, [allAlarms]);
-
   const saveGuardianAlarm = async (alarm: Alarm) => {
     GuardianAPI.addAlarm({alarm: alarm});
     updateAlarms(prev => [...prev, alarm]);
@@ -27,5 +22,5 @@ export const useGuardianManager = () => {
     );
   };
 
-  return {allAlarms, saveGuardianAlarm, updateGuardianAlarm};
+  return {allAlarms, seniors, saveGuardianAlarm, updateGuardianAlarm};
 };

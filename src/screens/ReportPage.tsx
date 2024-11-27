@@ -36,6 +36,38 @@ type Props = {
   verifications: Verification[];
 };
 
+export type Food = {
+  foodName: string;
+  carbohydrates: number;
+  protein: number;
+  fat: number;
+  sodium: number;
+};
+
+type VerificationResponseDTO = {
+  verificationId: number;
+  alarmId: number;
+  userId: number;
+  verificationDateTime: string;
+  value: number;
+  result: boolean;
+};
+
+export type NutrientData = {
+  carbohydrates_percent: number;
+  fat_percent: number;
+  protein_percent: number;
+  sodium_percent: number;
+};
+
+type FoodApiResponse = {
+  foodAverages: NutrientData[];
+  nutrientVerificationResponseDTOS: {
+    foods: Food[];
+    verificationResponseDTO: VerificationResponseDTO;
+  }[];
+};
+
 const ReportPage = () => {
   const [isSelectMission, setIsSelectMission] = useState<boolean>(false);
   const [isSelectPeriods, setIsSelectPeriods] = useState<boolean>(false);
@@ -51,7 +83,10 @@ const ReportPage = () => {
     startDate: '',
     endDate: '',
   });
-  let responseFromAPI: any;
+
+  const [responseFromAPI, setResponseFromAPI] = useState<
+    Props | FoodApiResponse
+  >();
 
   useEffect(() => {
     console.log('ReportPage | current.duration : ', current.duration);
@@ -116,87 +151,93 @@ const ReportPage = () => {
     });
 
     if (duration.startDate && duration.endDate && current.mission) {
-      responseFromAPI = await ReportAPI.getReport({
-        missionName: current.mission,
-        startDate: duration.startDate,
-        endDate: duration.endDate,
-      });
+      let response;
+      if (current.mission === 'Eat food') {
+        response = await ReportAPI.getFoodReport(new Date().toISOString());
+      } else {
+        response = await ReportAPI.getReport({
+          missionName: current.mission,
+          startDate: duration.startDate,
+          endDate: duration.endDate,
+        });
+      }
 
-      console.log('API 호출 결과 : ', responseFromAPI);
+      setResponseFromAPI(response);
 
-      // 날짜 추출 (중복 X)
-      const dates: string[] = Array.from(
-        new Set(
-          responseFromAPI.verifications.map((item: Verification) =>
-            Parser.parseDateToYMD(new Date(item.verificationDateTime)),
+      console.log('API 호출 결과 : ', response);
+
+      if ('verifications' in response) {
+        // 날짜 추출 (중복 X)
+        const dates: string[] = Array.from(
+          new Set(
+            response.verifications.map((item: Verification) =>
+              Parser.parseDateToYMD(new Date(item.verificationDateTime)),
+            ),
           ),
-        ),
-      );
+        );
 
-      type DateValueMap = {[key: string]: number};
+        type DateValueMap = {[key: string]: number};
 
-      const filteredDataTable = dates.reduce<DateValueMap>((acc, date) => {
-        acc[date] = 0;
-        return acc;
-      }, {});
+        const filteredDataTable = dates.reduce<DateValueMap>((acc, date) => {
+          acc[date] = 0;
+          return acc;
+        }, {});
 
-      const parsedData = responseFromAPI.verifications.map(
-        (item: Verification) => {
+        const parsedData = response.verifications.map((item: Verification) => {
           return {
             ...item,
             verificationDateTime: Parser.parseDateToYMD(
               new Date(item.verificationDateTime + 'Z'),
             ),
           };
-        },
-      );
+        });
 
-      // parsedData.forEach((element: any) => {
-      //   filteredDataTable[element.verificationDateTime] =
-      //     (filteredDataTable[element.verificationDateTime] + element.value) / 2;
-      //   console.log('로그  :', filteredDataTable[element.verificationDateTime]);
-      // });
+        const valueSums: {[key: string]: {sum: number; count: number}} = {};
 
-      const valueSums: {[key: string]: {sum: number; count: number}} = {};
+        parsedData.forEach((element: any) => {
+          if (!valueSums[element.verificationDateTime]) {
+            valueSums[element.verificationDateTime] = {sum: 0, count: 0};
+          }
+          valueSums[element.verificationDateTime].sum += element.value;
+          valueSums[element.verificationDateTime].count += 1;
+        });
 
-      parsedData.forEach((element: any) => {
-        if (!valueSums[element.verificationDateTime]) {
-          valueSums[element.verificationDateTime] = {sum: 0, count: 0};
+        // 평균 계산
+        for (const date in filteredDataTable) {
+          if (valueSums[date]) {
+            filteredDataTable[date] =
+              valueSums[date].sum / valueSums[date].count;
+          }
         }
-        valueSums[element.verificationDateTime].sum += element.value;
-        valueSums[element.verificationDateTime].count += 1;
-      });
 
-      // 평균 계산
-      for (const date in filteredDataTable) {
-        if (valueSums[date]) {
-          filteredDataTable[date] = valueSums[date].sum / valueSums[date].count;
-        }
+        const labels = Object.keys(filteredDataTable);
+        const datas = Object.values(filteredDataTable);
+
+        console.log('평균값 : ', response.averageValue);
+        console.log('평균값 : ', response.successRatio);
+
+        setData({
+          labels: labels,
+          datasets: [
+            {
+              data: datas,
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              strokeWidth: 2,
+            },
+            ...(response.averageValue
+              ? [
+                  {
+                    data: [response.averageValue],
+                    color: (opacity = 1) =>
+                      `rgba(255, 99, 99, ${opacity * 0.8})`,
+                    strokeWidth: 1,
+                  },
+                ]
+              : []),
+          ],
+          legen: ['Rainy Days'],
+        });
       }
-
-      const labels = Object.keys(filteredDataTable);
-      const datas = Object.values(filteredDataTable);
-
-      console.log('평균값 : ', responseFromAPI.averageValue);
-      console.log('평균값 : ', responseFromAPI.successRatio);
-
-      setData({
-        labels: labels,
-        datasets: [
-          {
-            data: datas,
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            strokeWidth: 2,
-          },
-          responseFromAPI.averageValue && {
-            data: responseFromAPI.averageValue,
-            color: (opacity = 1) => `rgba(255, 99, 99, ${opacity * 0.8})`, // 연한 빨간색
-            strokeWidth: 1,
-            withDots: false,
-          },
-        ],
-        legen: ['Rainy Days'],
-      });
     } else {
       console.log(
         'ReportPage | 분석하기 버튼 클릭 - missionName : ',
@@ -335,8 +376,34 @@ const ReportPage = () => {
                 }),
               }}>
               <View style={styles.ViewContent}>
-                <ReportChart data={data} />
-                <ReportDetailAnalyisis />
+                {responseFromAPI !== undefined &&
+                  'verifications' in responseFromAPI && (
+                    <ReportChart data={data} />
+                  )}
+                <ReportDetailAnalyisis
+                  successRatio={
+                    responseFromAPI !== undefined &&
+                    'verifications' in responseFromAPI
+                      ? responseFromAPI.successRatio
+                      : responseFromAPI?.nutrientVerificationResponseDTOS[0]
+                          .verificationResponseDTO.result
+                      ? 1
+                      : undefined
+                  }
+                  foods={
+                    responseFromAPI !== undefined &&
+                    'nutrientVerificationResponseDTOS' in responseFromAPI
+                      ? responseFromAPI.nutrientVerificationResponseDTOS[0]
+                          .foods
+                      : undefined
+                  }
+                  nutrientData={
+                    responseFromAPI !== undefined &&
+                    'foodAverages' in responseFromAPI
+                      ? responseFromAPI.foodAverages[0]
+                      : undefined
+                  }
+                />
               </View>
               <TouchableOpacity
                 style={theme.buttonContainerStyle}
@@ -354,33 +421,78 @@ const ReportPage = () => {
 export default ReportPage;
 
 const styles = StyleSheet.create({
+  // 컨테이너 스타일
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FAFAFA',
   },
   content: {
     flex: 1,
-    marginHorizontal: 16,
-    paddingTop: 12,
+    padding: 16,
   },
   ViewContent: {
     flex: 1,
-    gap: 15,
+    gap: 16,
   },
-  resetButton: {
-    backgroundColor: '#f8f9fa',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
+
+  // 미션 선택 박스
+  missionBox: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  missionIcon: {
+    width: 32,
+    height: 32,
+  },
+  missionText: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-Medium',
+    color: '#333',
+  },
+  missionSubText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
+
+  // 시간 선택 버튼
+  periodButton: {
+    backgroundColor: 'white',
     borderRadius: 12,
-    alignSelf: 'center',
-    marginTop: 20,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
     borderWidth: 1,
-    borderColor: '#e9ecef',
+    borderColor: '#F0F0F0',
   },
-  resetButtonText: {
+  periodText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#495057',
-    textAlign: 'center',
+    color: '#333',
+    fontFamily: 'Pretendard-Medium',
+  },
+
+  // 분석 버튼
+  analyzeButton: {
+    backgroundColor: '#2196F3',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  analyzeText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Bold',
   },
 });

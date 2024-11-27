@@ -1,5 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+type Food = {
+  foodName: string;
+  carbohydrates: number;
+  protein: number;
+  fat: number;
+  sodium: number;
+};
+
 export class VerificationAPI {
   static async sendAIServer(imageUri: string) {
     try {
@@ -96,6 +104,38 @@ export class VerificationAPI {
       if (!response.ok) {
         throw new Error(
           `Verification | sendFirstAlert Error : ${response.status}`,
+        );
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  static async sendAlertWithFood(alarmId: string, foods: Food[]) {
+    console.log('Enter Food : ', foods);
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch('http://10.0.2.2:8080/food/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          alarmId: alarmId,
+          username: username,
+          verificationDateTime: new Date(),
+          result: true,
+          foods: foods,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Verification | sendAlertWithFood Error : ${response.status}`,
         );
       }
 

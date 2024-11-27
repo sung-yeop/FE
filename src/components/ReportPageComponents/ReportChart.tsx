@@ -2,58 +2,54 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useReportManager} from '../../hooks/useReportManager';
 import {LineChart} from 'react-native-chart-kit';
+import {Circle} from 'react-native-svg';
 
 const chartConfig = {
   backgroundColor: '#ffffff',
   backgroundGradientFrom: '#ffffff',
   backgroundGradientTo: '#ffffff',
   decimalPlaces: 0,
-  color: (opacity = 1) => `rgba(128, 128, 128, ${opacity})`, // 회색 선
-  labelColor: (opacity = 1) => `rgba(128, 128, 128, ${opacity})`, // 회색 라벨
+  color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(102, 102, 102, ${opacity})`,
+  // fillShadowGradient: '#2196F3', // 영역 색상
+  // fillShadowGradientOpacity, // 투명도
   style: {
     borderRadius: 16,
   },
   propsForDots: {
-    r: '4',
+    r: '6',
     strokeWidth: '2',
     stroke: '#ffffff',
-    fill: '#000000', // 검정색 점
+    fill: '#2196F3',
   },
   propsForBackgroundLines: {
-    strokeDasharray: '6', // 점선 효과
-    stroke: '#e3e3e3', // 연한 회색
-    strokeWidth: 1,
+    strokeDasharray: '5,5',
+    stroke: '#f0f0f0',
+    strokeWidth: 1.5,
   },
   propsForLabels: {
-    fontSize: 12,
+    fontSize: 13,
+    fontWeight: '500',
   },
 };
 
-const {height} = Dimensions.get('window');
 const ReportChart = ({data}: any) => {
+  if (data === undefined) return null;
   const {current} = useReportManager();
   console.log('DATA.Labels: ', data.labels.length);
   console.log('DATA.Data of DataSet: ', data.datasets[0].data);
-  let filteredChart;
-
-  if (data.labels.length === 1) {
-    console.log('Enter');
-    filteredChart = {
-      labels: ['', data.labels[0], ''],
-      datasets: [
-        {
-          ...data.datasets[0],
-          data: [
-            data.datasets[0].data[0],
-            data.datasets[0].data[0],
-            data.datasets[0].data[0],
+  const filteredChart =
+    data.labels.length === 1
+      ? {
+          labels: ['', data.labels[0], ''],
+          datasets: [
+            {
+              ...data.datasets[0],
+              data: Array(3).fill(Number(data.datasets[0].data[0])),
+            },
           ],
-        },
-      ],
-    };
-  } else {
-    filteredChart = data;
-  }
+        }
+      : data;
 
   if (current.duration === 'Today') return null;
 
@@ -69,13 +65,27 @@ const ReportChart = ({data}: any) => {
           marginVertical: 8,
           borderRadius: 16,
         }}
+        withInnerLines={true}
+        withOuterLines={true}
+        withVerticalLabels={true}
+        withHorizontalLabels={true}
+        segments={4}
         withVerticalLines={false}
-        segments={filteredChart.labels.length}
         yAxisLabel=""
         yAxisSuffix=""
         fromZero={true}
         withHorizontalLines={false}
         horizontalLabelRotation={0}
+        getDotColor={(dataPoint, index) => '#2196F3'}
+        renderDotContent={({x, y, index}) => (
+          <Circle
+            key={index}
+            cx={x}
+            cy={y}
+            r={8}
+            fill="rgba(33, 150, 243, 0.1)"
+          />
+        )}
       />
     </View>
   );

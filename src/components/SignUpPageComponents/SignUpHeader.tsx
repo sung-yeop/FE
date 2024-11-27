@@ -3,37 +3,31 @@ import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import {useNavigation} from '@react-navigation/native';
-
-type Props = {
-  step: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
-};
+import {useCurrentSignUpInfo} from '../../hooks/useCurrentSignUpInfo';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type AlarmScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'SignIn'
 >;
 
-const SignUpHeader = ({step, setStep}: Props) => {
+const SignUpHeader = () => {
   const navigator = useNavigation<AlarmScreenNavigationProp>();
-
-  const moveInitialStep = () => {
-    setStep(1);
-  };
+  const {step, setStep} = useCurrentSignUpInfo();
 
   return (
     <View style={styles.prevButtonContainer}>
-      {step > 1 ? (
-        <TouchableOpacity style={styles.prevButton} onPress={moveInitialStep}>
-          <Text style={styles.prevButtonText}>{'처음으로'}</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={styles.prevButton}
-          onPress={() => navigator.navigate('SignIn')}>
-          <Text style={styles.initialPrevText}>로그인 페이지로 이동</Text>
+      {step > 1 && (
+        <TouchableOpacity onPress={() => setStep(prev => prev - 1)}>
+          <Icon name="arrow-back-ios" size={20} color="#333" />
         </TouchableOpacity>
       )}
+      <TouchableOpacity
+        style={styles.prevButton}
+        onPress={() => navigator.navigate('SignIn')}>
+        <Text style={styles.initialPrevText}>로그인 페이지로 이동</Text>
+      </TouchableOpacity>
+      {/* )} */}
     </View>
   );
 };
@@ -48,11 +42,11 @@ const styles = StyleSheet.create({
   },
   prevButtonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   prevButton: {
     marginVertical: 10,
-    padding: 10,
   },
   prevButtonText: {
     color: 'gray',
@@ -63,7 +57,7 @@ const styles = StyleSheet.create({
   initialPrevText: {
     color: 'black',
     borderBottomWidth: 1,
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Pretendard-Bold',
   },
 });

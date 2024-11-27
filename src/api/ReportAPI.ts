@@ -39,6 +39,7 @@ export class ReportAPI {
     try {
       console.log('ReportAPI | startDate : ', startDate);
       console.log('ReportAPI | endDate : ', endDate);
+      console.log('Mission Name : ', missionName);
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
       const response = await fetch('http://10.0.2.2:8080/verification/report', {
@@ -49,14 +50,40 @@ export class ReportAPI {
         },
         body: JSON.stringify({
           username: username,
-          missionName,
-          startDate,
-          endDate,
+          missionName: missionName,
+          startDate: startDate,
+          endDate: endDate,
         }),
       });
 
       if (!response.ok) {
         throw new Error(`Report - getReport 에러 : ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+  static async getFoodReport(reportDate: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch('http://10.0.2.2:8080/food/report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username: username,
+          reportDate: reportDate,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Report - getFoodReport 에러 : ${response.status}`);
       }
 
       return response.json();

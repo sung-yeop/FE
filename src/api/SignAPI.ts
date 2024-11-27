@@ -6,11 +6,15 @@ export const sendSignUpWithUser = async ({
   name,
   phoneNumber,
   password,
+  age,
+  gender,
 }: {
   username: string;
   name: string;
   password: string;
   phoneNumber: string;
+  age: number;
+  gender: string;
 }) => {
   try {
     const response = await fetch('http://10.0.2.2:8080/user/join', {
@@ -23,22 +27,21 @@ export const sendSignUpWithUser = async ({
         name: name,
         password: password,
         phoneNumber: phoneNumber,
+        age: age,
+        gender: gender,
       }),
     });
 
+    console.log('username : ', username);
+    console.log('name : ', name);
+    console.log('password : ', password);
+    console.log('phoneNumber : ', phoneNumber);
+    console.log('age : ', age);
+    console.log('gender : ', gender);
+
     if (!response.ok) {
-      throw new Error('회원가입에 실패했습니다.');
+      throw new Error(`회원가입에 실패했습니다. : ${response.status}`);
     }
-
-    // const token = response.headers.get('Authorization');
-
-    // if (token) {
-    //   const actualToken = token.replace('Bearer ', '');
-    //   await AsyncStorage.setItem('token', actualToken);
-    //   await AsyncStorage.setItem('isGuardian', 'No');
-    //   await AsyncStorage.setItem('username', username);
-    //   return actualToken;
-    // }
   } catch (error) {
     console.error('회원가입 에러:', error);
     throw error;
@@ -73,18 +76,6 @@ export const sendSignUpWithGuardian = async ({
     if (!response.ok) {
       throw new Error('회원가입에 실패했습니다.');
     }
-
-    const token = response.headers.get('Authorization');
-
-    // if (token) {
-    //   const actualToken = token.replace('Bearer ', '');
-    //   await AsyncStorage.setItem('token', actualToken);
-    //   await AsyncStorage.setItem('isGuardian', 'Yes');
-    //   await AsyncStorage.setItem('username', username);
-    //   await AsyncStorage.setItem('name', name);
-    //   await AsyncStorage.setItem('phoneNumber', phoneNumber);
-    //   return actualToken;
-    // }
   } catch (error) {
     console.error('회원가입 에러:', error);
     throw error;

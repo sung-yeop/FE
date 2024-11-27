@@ -59,4 +59,24 @@ export const theme = {
     textAlign: 'center' as const,
     color: 'white',
   },
+
+  signUpTextInputContainer: {
+    height: 40,
+    borderBottomWidth: 1.5,
+    borderColor: '#CCCCCC',
+    borderRadius: 8,
+    marginTop: 8,
+    fontSize: 16,
+  },
+  signUpButtonContainer: {
+    backgroundColor: colors.primary.main,
+    padding: 12,
+    borderRadius: 12,
+    marginVertical: 12,
+  },
+  signUpAlertMessgaeStyle: {
+    fontsize: 16,
+    color: '#CC0000',
+    fontFamily: 'Pretendard-Regular',
+  },
 };

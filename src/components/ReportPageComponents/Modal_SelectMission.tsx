@@ -32,6 +32,11 @@ const Modal_SelectMission = ({isVisible, onCloseModal, missions}: Props) => {
     onCloseModal();
   };
 
+  const isThereMissions =
+    missions?.length === 0 || missions === undefined ? false : true;
+
+  console.log('IsThereMissons : ', missions);
+
   return (
     <Modal
       onRequestClose={onCloseModal}
@@ -43,26 +48,45 @@ const Modal_SelectMission = ({isVisible, onCloseModal, missions}: Props) => {
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
               <View style={styles.modalContainer}>
-                <View style={styles.HeaderContainer}>
+                {!isThereMissions && (
                   <Text style={styles.HeaderText}>
-                    완료한 미션을 선택해주세요!
+                    아직 완료된 미션이 없어요!
                   </Text>
-                </View>
-                <View style={styles.contentContainer}>
-                  {missions &&
-                    missions.map(mission => (
-                      <ReportMissionItem
-                        key={mission}
-                        missionId={mission}
-                        onPress={() => setSelectMission(mission)}
-                      />
-                    ))}
-                </View>
-                <TouchableOpacity
-                  style={theme.buttonContainerStyle}
-                  onPress={onClickSaveButton}>
-                  <Text style={theme.buttonTextStyle}>저장하기</Text>
-                </TouchableOpacity>
+                )}
+                {isThereMissions && (
+                  <View>
+                    <View style={styles.HeaderContainer}>
+                      <Text style={styles.HeaderText}>
+                        완료한 미션을 선택해주세요!
+                      </Text>
+                    </View>
+                    <View style={styles.contentContainer}>
+                      {missions &&
+                        missions.map(mission => (
+                          <ReportMissionItem
+                            key={mission}
+                            missionId={mission}
+                            onPress={() => setSelectMission(mission)}
+                            isSelected={selectMission === mission}
+                          />
+                        ))}
+                    </View>
+                  </View>
+                )}
+                {!isThereMissions && (
+                  <TouchableOpacity
+                    style={theme.buttonContainerStyle}
+                    onPress={onCloseModal}>
+                    <Text style={theme.buttonTextStyle}>돌아가기</Text>
+                  </TouchableOpacity>
+                )}
+                {isThereMissions && (
+                  <TouchableOpacity
+                    style={theme.buttonContainerStyle}
+                    onPress={onClickSaveButton}>
+                    <Text style={theme.buttonTextStyle}>저장하기</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </TouchableWithoutFeedback>
           </View>

@@ -1,11 +1,11 @@
 export interface SignUpInfo {
   username: string;
   password: string;
-  validPassword: string;
-  notificationNumber: string;
   name: string;
   phoneNumber: string;
   isGuardian: boolean;
+  age?: number;
+  gender?: string;
 }
 
 export interface User {

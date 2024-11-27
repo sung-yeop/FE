@@ -8,6 +8,7 @@ import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {VerificationAPI} from '../api/VerificationAPI';
+import EatingAnimation from '../../asset/Animations/Eating';
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,10 +24,26 @@ const TestPage = () => {
     // await VerificationAPI.sendAlert('1264745454', 100, true);
     // await VerificationAPI.sendFirstAlert('3698427497');
     // await VerificationAPI.sendAlert('3698427497', 90, true);
-    // await VerificationAPI.sendFirstAlert('7723384149');
-    // await VerificationAPI.sendAlert('7723384149', 80, true);
-    await VerificationAPI.sendFirstAlert('5317533144');
-    await VerificationAPI.sendAlert('5317533144', 80, true);
+    // await VerificationAPI.sendFirstAlert('175149908');
+    // await VerificationAPI.sendAlert('175149908', 80, true);
+    // await VerificationAPI.sendFirstAlert('1447805143');
+    // await VerificationAPI.sendAlert('1447805143', 50, true);
+    await VerificationAPI.sendAlertWithFood('1990791846', [
+      {
+        foodName: '김치찌개',
+        carbohydrates: 10,
+        protein: 10,
+        fat: 10,
+        sodium: 10,
+      },
+      {
+        foodName: '된장찌개',
+        carbohydrates: 20,
+        protein: 12,
+        fat: 15,
+        sodium: 20,
+      },
+    ]);
   };
 
   return (
@@ -44,6 +61,7 @@ const TestPage = () => {
         style={styles.createAlarmContainer}>
         <Text style={styles.textStyle2}>카메라 페이지로 이동</Text>
       </TouchableOpacity>
+      {/* <EatingAnimation /> */}
     </SafeAreaView>
   );
 };

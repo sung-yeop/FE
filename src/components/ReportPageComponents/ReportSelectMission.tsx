@@ -23,23 +23,30 @@ const ReportSelectMission = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {!current.mission ? (
-        <View style={styles.headerContainer}>
-          <Text style={styles.title}>
-            이전에 진행한 미션을 확인하고 싶나요?
-          </Text>
-          <Text style={styles.title}>우선 미션을 선택해주세요</Text>
-        </View>
-      ) : (
-        <Text style={[styles.title, {textAlign: 'left'}]}>선택된 미션</Text>
-      )}
-      <AddMissionButton onPressButton={clickMissionSelectBtn} />
+    <View style={styles.card}>
+      <View style={styles.content}>
+        {!current.mission ? (
+          <>
+            <View style={styles.textContainer}>
+              <Text style={styles.mainTitle}>이전 미션을 분석해보세요</Text>
+              <Text style={styles.subtitle}>
+                어떤 미션을 분석하고 싶으신가요?
+              </Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <AddMissionButton onPressButton={clickMissionSelectBtn} />
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={styles.selectedTitle}>선택된 미션</Text>
+            <AddMissionButton onPressButton={clickMissionSelectBtn} />
+          </>
+        )}
+      </View>
       <Modal_SelectMission
         isVisible={isVisibleModal}
-        onCloseModal={() => {
-          setIsVisibleModal(false);
-        }}
+        onCloseModal={() => setIsVisibleModal(false)}
         missions={missions.length !== 0 ? missions : undefined}
       />
     </View>
@@ -49,17 +56,42 @@ const ReportSelectMission = () => {
 export default ReportSelectMission;
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 10,
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
-  title: {
+  content: {
+    gap: 16,
+  },
+  textContainer: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  mainTitle: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 24,
-    color: 'black',
+    color: '#333',
     textAlign: 'center',
   },
-  headerContainer: {
-    gap: 6,
-    paddingVertical: 12,
+  subtitle: {
+    fontFamily: 'Pretendard-Medium',
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  selectedTitle: {
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 24,
+    color: '#333',
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    marginTop: 4,
   },
 });

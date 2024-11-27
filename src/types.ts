@@ -13,6 +13,12 @@ export interface User {
   name: string;
 }
 
+export interface UserInfo extends User {
+  phoneNumber: string;
+  age?: number;
+  gender?: string;
+}
+
 export type DayKey =
   | 'once'
   | 'mon'

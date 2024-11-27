@@ -1,9 +1,10 @@
 import {atom, DefaultValue, selector} from 'recoil';
-import {Alarm, Report, SeniorInfo, Todo, User} from './types';
+import {Alarm, Report, SeniorInfo, Todo, User, UserInfo} from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Parser} from './util/Parser';
 import {GuardianAPI} from './api/GuardianAPI';
 import {getAlarms} from './api/AlarmAPI';
+import {UserAPI} from './api/UserAPI';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
@@ -62,11 +63,6 @@ export const currentReportSelector = selector({
   get: ({get}) => get(currentReportState),
   set: ({set}, newValue: Report | DefaultValue) =>
     set(currentReportState, newValue),
-});
-
-export const userState = atom<User | null>({
-  key: 'userState',
-  default: null,
 });
 
 export const allTodoState = atom<Todo[]>({
@@ -148,4 +144,30 @@ export const selectSeniorSelector = selector({
   get: ({get}) => get(selectSeniorState),
   set: ({set}, newValue: DefaultValue | SeniorInfo | undefined) =>
     set(selectSeniorState, newValue),
+});
+
+export const userState = atom<UserInfo | undefined>({
+  key: 'userState',
+  default: {id: '', name: '', phoneNumber: ''},
+  effects: [
+    ({setSelf}) => {
+      const loadInitialValue = async () => {
+        try {
+          const response = await UserAPI.getUserInfo();
+          setSelf(response);
+        } catch (error) {
+          console.error('Error loading alarms:', error);
+        }
+      };
+
+      loadInitialValue();
+    },
+  ],
+});
+
+export const userSelector = selector({
+  key: 'userSelector',
+  get: ({get}) => get(userState),
+  set: ({set}, newValue: DefaultValue | UserInfo | undefined) =>
+    set(userState, newValue),
 });

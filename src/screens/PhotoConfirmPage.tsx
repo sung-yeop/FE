@@ -6,12 +6,14 @@ import {theme} from '../style/Theme';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {VerificationAPI} from '../api/VerificationAPI';
+import {MissionCareType} from '../types';
 
 type PhotoConfirmParams = {
   imageUri: string;
   username: string;
   alarmId: string;
   type?: string;
+  missionName: MissionCareType;
 };
 
 type NavigationProps = NativeStackNavigationProp<
@@ -21,7 +23,7 @@ type NavigationProps = NativeStackNavigationProp<
 >;
 
 const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
-  const {imageUri, username, alarmId, type} = route.params;
+  const {imageUri, username, alarmId, type, missionName} = route.params;
   const navigation = useNavigation<NavigationProps>();
 
   const handleConfirm = async () => {
@@ -34,11 +36,11 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
       console.log(result);
       if (result.guess === 1) {
         // 알려줘 페이지에서 다시 인증을 진행해달라고 안내
-        navigation.navigate('Fail');
+        navigation.navigate('Fail', {missionName: missionName});
         return;
       }
       console.log('Verification result:', result);
-      navigation.navigate('Success');
+      navigation.navigate('Success', {missionName: missionName});
       return;
     } catch (error) {
       console.error('Verification error:', error);

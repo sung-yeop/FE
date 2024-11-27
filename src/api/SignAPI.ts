@@ -32,13 +32,6 @@ export const sendSignUpWithUser = async ({
       }),
     });
 
-    console.log('username : ', username);
-    console.log('name : ', name);
-    console.log('password : ', password);
-    console.log('phoneNumber : ', phoneNumber);
-    console.log('age : ', age);
-    console.log('gender : ', gender);
-
     if (!response.ok) {
       throw new Error(`회원가입에 실패했습니다. : ${response.status}`);
     }
@@ -143,6 +136,8 @@ export const sendSignInDataWithGuardian = async ({
     if (!response.ok) {
       return {result: false, msg: '로그인 실패!'};
     }
+
+    console.log('Response : ', response);
 
     const token = response.headers.get('Authorization');
     // 로그인시점에 사용한 아이디를 로컬 스토리지에 저장

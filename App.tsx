@@ -22,6 +22,7 @@ import BottomTabGuardian from './src/components/BottomTabGuardian';
 import Success from './src/screens/ConfirmScreen/Success';
 import Fail from './src/screens/ConfirmScreen/Fail';
 import {VerificationAPI} from './src/api/VerificationAPI';
+import {MissionCareType} from './src/types';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -39,13 +40,19 @@ export type RootStackParamList = {
     alarmId: string;
     username: string;
     type?: string;
+    missionName: MissionCareType;
   };
   CustomCameraPage: {
     alarmId: string;
     username: string;
+    missionName: MissionCareType;
   };
-  Success: undefined;
-  Fail: undefined;
+  Success: {
+    missionName: MissionCareType;
+  };
+  Fail: {
+    missionName: MissionCareType;
+  };
 };
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();

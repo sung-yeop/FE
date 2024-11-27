@@ -3,3 +3,5 @@ export const EatMedicianImg = require('./Eat_Medician.png');
 export const ManageBloodSugar = require('./Manage_Blood_Sugar.png');
 export const AlarmImg = require('./Img_Alarm.png');
 export const AlarmButtonImg = require('./qwer.png');
+export const TrophyImg = require('./trophy.png');
+export const CautionImg = require('./caution.png');

@@ -3,10 +3,12 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
-import {Alarm} from '../../types';
+import {Alarm, MissionCareType} from '../../types';
 import {theme} from '../../style/Theme';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
+import {useRecoilValue} from 'recoil';
+import {userSelector} from '../../atoms';
 
 type Props = {
   alarmId: string;
@@ -18,8 +20,16 @@ type NavigationProp = NativeStackNavigationProp<
 
 const AlarmScreenAction = ({alarmId}: Props) => {
   const navigate = useNavigation<NavigationProp>();
+  const userInfo = useRecoilValue(userSelector);
   const alarmManager = useAlarmManager();
   const {current} = useCurrentAlarm();
+
+  if (!userInfo)
+    throw new Error(
+      'AlarmScreenAction.tsx | userInfo가 정의되어있지 않습니다.',
+    );
+  if (!current)
+    throw new Error('AlarmScreenAction.tsx | current가 정의되어있지 않습니다.');
 
   const onClickDelayMission = () => {
     const updated = {...current, ['delay']: true} as Alarm;
@@ -43,7 +53,8 @@ const AlarmScreenAction = ({alarmId}: Props) => {
           onPress={() =>
             navigate.navigate('CustomCameraPage', {
               alarmId: alarmId,
-              username: 'qwer',
+              username: userInfo.id,
+              missionName: current.mission.id,
             })
           }>
           <Text style={theme.buttonTextStyle}>사진찍기</Text>

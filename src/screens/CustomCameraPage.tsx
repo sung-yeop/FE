@@ -15,7 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 type Props = NativeStackScreenProps<RootStackParamList, 'CustomCameraPage'>;
 
 const CustomCameraPage = ({route, navigation}: Props) => {
-  const {alarmId, username} = route.params;
+  const {alarmId, username, missionName} = route.params;
   const [imageUri, setImageUri] = useState<string | null>(null);
   const camera = useRef<Camera>(null);
   const devices = useCameraDevices();
@@ -49,6 +49,7 @@ const CustomCameraPage = ({route, navigation}: Props) => {
       imageUri: imageUri,
       alarmId: alarmId,
       username: username,
+      missionName: missionName,
     });
   }, [imageUri, navigation]);
 

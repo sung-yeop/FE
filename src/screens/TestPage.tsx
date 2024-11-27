@@ -9,6 +9,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {VerificationAPI} from '../api/VerificationAPI';
 import EatingAnimation from '../../asset/Animations/Eating';
+import {MissionCareType} from '../types';
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -56,10 +57,29 @@ const TestPage = () => {
           navigation.navigate('CustomCameraPage', {
             alarmId: '111',
             username: '111',
+            missionName: 'Eat food' as MissionCareType,
           })
         }
         style={styles.createAlarmContainer}>
         <Text style={styles.textStyle2}>카메라 페이지로 이동</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('Success', {
+            missionName: 'Eat food' as MissionCareType,
+          })
+        }
+        style={styles.createAlarmContainer}>
+        <Text style={styles.textStyle2}>성공 페이지 이동</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('Fail', {
+            missionName: 'Eat food' as MissionCareType,
+          })
+        }
+        style={styles.createAlarmContainer}>
+        <Text style={styles.textStyle2}>실패 페이지 이동</Text>
       </TouchableOpacity>
       {/* <EatingAnimation /> */}
     </SafeAreaView>

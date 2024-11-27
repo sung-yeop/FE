@@ -20,30 +20,30 @@ const TestPage = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const addVerificationMockData = async () => {
-    // await VerificationAPI.sendFirstAlert('1264745454');
-    // await VerificationAPI.sendAlert('1264745454', 100, true);
-    // await VerificationAPI.sendFirstAlert('3698427497');
-    // await VerificationAPI.sendAlert('3698427497', 90, true);
+    await VerificationAPI.sendFirstAlert('1693047183');
+    await VerificationAPI.sendAlert('1693047183', 30, true);
+    await VerificationAPI.sendFirstAlert('8235928400');
+    await VerificationAPI.sendAlert('8235928400', 40, true);
     // await VerificationAPI.sendFirstAlert('175149908');
     // await VerificationAPI.sendAlert('175149908', 80, true);
     // await VerificationAPI.sendFirstAlert('1447805143');
     // await VerificationAPI.sendAlert('1447805143', 50, true);
-    await VerificationAPI.sendAlertWithFood('1990791846', [
-      {
-        foodName: '김치찌개',
-        carbohydrates: 10,
-        protein: 10,
-        fat: 10,
-        sodium: 10,
-      },
-      {
-        foodName: '된장찌개',
-        carbohydrates: 20,
-        protein: 12,
-        fat: 15,
-        sodium: 20,
-      },
-    ]);
+    // await VerificationAPI.sendAlertWithFood('1990791846', [
+    //   {
+    //     foodName: '김치찌개',
+    //     carbohydrates: 10,
+    //     protein: 10,
+    //     fat: 10,
+    //     sodium: 10,
+    //   },
+    //   {
+    //     foodName: '된장찌개',
+    //     carbohydrates: 20,
+    //     protein: 12,
+    //     fat: 15,
+    //     sodium: 20,
+    //   },
+    // ]);
   };
 
   return (

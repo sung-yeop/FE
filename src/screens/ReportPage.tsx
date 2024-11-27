@@ -10,7 +10,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader';
 import ReportSelector from '../components/ReportPageComponents/ReportSelector';
-import ReportChart from '../components/ReportPageComponents/ReportChart';
 import ReportDetailAnalyisis from '../components/ReportPageComponents/ReportDetailAnalyisis';
 import ReportSelectMission from '../components/ReportPageComponents/ReportSelectMission';
 import {AlarmImg} from '../../asset/images';
@@ -19,9 +18,11 @@ import ReportBtn from '../components/ReportPageComponents/ReportBtn';
 import {theme} from '../style/Theme';
 import {ReportAPI} from '../api/ReportAPI';
 import {Parser} from '../util/Parser';
+import ReportChart from './ReportChart';
+import {MissionParser} from '../util/MissionParser';
 // import LoadingSpinner from '../components/LoadingSpinner'; // 로딩 컴포넌트 필요
 
-type Verification = {
+export type Verification = {
   alarmId: number;
   result: boolean;
   userId: number;
@@ -73,11 +74,12 @@ const ReportPage = () => {
   const [isSelectPeriods, setIsSelectPeriods] = useState<boolean>(false);
   const [isClickReportBtn, setIsClickReportBtn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState<{
-    labels: string[];
-    datasets: {data: number[]; color: any; strokeWidth: number}[];
-    legen: string[];
-  }>();
+  const [data, setData] = useState<
+    {
+      label: string;
+      value: number;
+    }[]
+  >();
   const {current} = useReportManager();
   const [duration, setDuration] = useState({
     startDate: '',
@@ -167,76 +169,8 @@ const ReportPage = () => {
       console.log('API 호출 결과 : ', response);
 
       if ('verifications' in response) {
-        // 날짜 추출 (중복 X)
-        const dates: string[] = Array.from(
-          new Set(
-            response.verifications.map((item: Verification) =>
-              Parser.parseDateToYMD(new Date(item.verificationDateTime)),
-            ),
-          ),
-        );
-
-        type DateValueMap = {[key: string]: number};
-
-        const filteredDataTable = dates.reduce<DateValueMap>((acc, date) => {
-          acc[date] = 0;
-          return acc;
-        }, {});
-
-        const parsedData = response.verifications.map((item: Verification) => {
-          return {
-            ...item,
-            verificationDateTime: Parser.parseDateToYMD(
-              new Date(item.verificationDateTime + 'Z'),
-            ),
-          };
-        });
-
-        const valueSums: {[key: string]: {sum: number; count: number}} = {};
-
-        parsedData.forEach((element: any) => {
-          if (!valueSums[element.verificationDateTime]) {
-            valueSums[element.verificationDateTime] = {sum: 0, count: 0};
-          }
-          valueSums[element.verificationDateTime].sum += element.value;
-          valueSums[element.verificationDateTime].count += 1;
-        });
-
-        // 평균 계산
-        for (const date in filteredDataTable) {
-          if (valueSums[date]) {
-            filteredDataTable[date] =
-              valueSums[date].sum / valueSums[date].count;
-          }
-        }
-
-        const labels = Object.keys(filteredDataTable);
-        const datas = Object.values(filteredDataTable);
-
-        console.log('평균값 : ', response.averageValue);
-        console.log('평균값 : ', response.successRatio);
-
-        setData({
-          labels: labels,
-          datasets: [
-            {
-              data: datas,
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              strokeWidth: 2,
-            },
-            ...(response.averageValue
-              ? [
-                  {
-                    data: [response.averageValue],
-                    color: (opacity = 1) =>
-                      `rgba(255, 99, 99, ${opacity * 0.8})`,
-                    strokeWidth: 1,
-                  },
-                ]
-              : []),
-          ],
-          legen: ['Rainy Days'],
-        });
+        const result = Parser.parseChartFormFromAPI(response.verifications);
+        setData(result);
       }
     } else {
       console.log(
@@ -376,9 +310,15 @@ const ReportPage = () => {
                 }),
               }}>
               <View style={styles.ViewContent}>
+                <Text style={[theme.typography.h2, {textAlign: 'center'}]}>
+                  {MissionParser.parseMissionName(current.mission)}
+                </Text>
                 {responseFromAPI !== undefined &&
                   'verifications' in responseFromAPI && (
-                    <ReportChart data={data} />
+                    <ReportChart
+                      data={data}
+                      averageValue={responseFromAPI.averageValue}
+                    />
                   )}
                 <ReportDetailAnalyisis
                   successRatio={

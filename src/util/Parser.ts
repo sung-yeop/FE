@@ -1,3 +1,4 @@
+import {Verification} from '../screens/ReportPage';
 import {
   Alarm,
   MissionCareType,
@@ -109,17 +110,17 @@ export class Parser {
     };
   }
 
-  // export type ReportCustomDuration = {
-  //   startDay: Date;
-  //   endDay: Date;
-  // };
-
-  // export type ReportDuration = 'Today' | 'Week' | 'Month' | ReportCustomDuration;
-
   static parseDateToYMD(date: Date): string {
     return `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  }
+
+  static parseYMDtoMD(date: Date): string {
+    return `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+      .getDate()
+      .toString()
+      .padStart(2, '0')}`;
   }
 
   static parseReportDurationForm(savedValue: ReportDuration): {
@@ -154,5 +155,49 @@ export class Parser {
       startDate: Parser.parseDateToYMD(startDate),
       endDate: Parser.parseDateToYMD(endDate),
     };
+  }
+
+  static parseChartFormFromAPI(data: Verification[]) {
+    const labels = this.#extractLabels(data);
+    const averagedDatas = this.#filterDataWithLabels({
+      labels: labels,
+      data: data,
+    });
+    console.log('A : ', averagedDatas);
+    return averagedDatas;
+  }
+  static #extractLabels(data: Verification[]) {
+    const result = new Set(
+      data.map(item =>
+        Parser.parseYMDtoMD(new Date(item.verificationDateTime)),
+      ),
+    );
+    return Array.from(result);
+  }
+
+  static #filterDataWithLabels({
+    labels,
+    data,
+  }: {
+    labels: string[];
+    data: Verification[];
+  }) {
+    return labels.map(label => {
+      const matchingData = data.filter(
+        item =>
+          Parser.parseYMDtoMD(new Date(item.verificationDateTime)) === label,
+      );
+
+      const average =
+        matchingData.length > 0
+          ? matchingData.reduce((sum, item) => sum + item.value, 0) /
+            matchingData.length
+          : 0;
+
+      return {
+        label,
+        value: average,
+      };
+    });
   }
 }

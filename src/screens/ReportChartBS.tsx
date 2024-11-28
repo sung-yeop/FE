@@ -2,14 +2,16 @@ import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import React from 'react';
 import {LineChart} from 'react-native-gifted-charts';
 
-const ReportChart = ({data, averageValue}: any) => {
+const ReportChartBS = ({data, averageValue}: any) => {
   let chartData;
-
-  if (data.length === 1) {
+  if (!data || data.length === 0) {
+    // 데이터가 없는 경우 기본값 설정
+    chartData = [{value: 0, label: ''}];
+  } else if (data.length === 1) {
+    // 데이터가 하나일 때는 시작과 끝에 같은 값을 추가
     chartData = [
       {value: data[0].value, label: ''},
       {value: data[0].value, label: data[0].label},
-      {value: data[0].value, label: ''},
     ];
   } else {
     chartData = data;
@@ -39,7 +41,7 @@ const ReportChart = ({data, averageValue}: any) => {
         data={chartData}
         width={Dimensions.get('window').width - 40}
         height={260}
-        spacing={300 / (data.length - 1)}
+        spacing={data.length > 1 ? 300 / (data.length - 1) : 300}
         xAxisLabelTextStyle={{color: 'rgba(150, 150, 150, 0.8)'}}
         initialSpacing={20}
         thickness={2}
@@ -77,7 +79,7 @@ const ReportChart = ({data, averageValue}: any) => {
   );
 };
 
-export default ReportChart;
+export default ReportChartBS;
 
 const styles = StyleSheet.create({
   container: {

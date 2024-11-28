@@ -18,6 +18,7 @@ import {userSelector} from '../../atoms';
 import {TrophyImg} from '../../../asset/images';
 import {MissionCareType} from '../../types';
 import {MissionParser} from '../../util/MissionParser';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, 'Bottom'>;
 
@@ -93,7 +94,18 @@ const Success = ({route}: {route: {params: SuccessPageProps}}) => {
     <SafeAreaView style={styles.container}>
       <Animated.View style={[styles.subContainer, {opacity: fadeAnim}]}>
         <View style={styles.textContainer}>
-          <Text>{MissionParser.parseMissionName(missionName)}</Text>
+          <View style={styles.headerContainer}>
+            <Icon
+              name="check-circle"
+              size={60}
+              color="#4CAF50" // 초록색
+              style={styles.icon}
+            />
+            <Text style={theme.typography.h2}>
+              {MissionParser.parseMissionName(missionName)}
+            </Text>
+          </View>
+
           <Text style={[theme.typography.h1, styles.title]}>
             {value.name}님{'\n'}인증이 완료되었습니다!
           </Text>
@@ -141,38 +153,72 @@ const styles = StyleSheet.create({
   subContainer: {
     flex: 1,
     justifyContent: 'center',
+    paddingBottom: 40, // 하단 여백 추가
   },
   textContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 50, // 여백 증가
   },
-  title: {
-    textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 36,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-  },
-  imageContainer: {
+  headerContainer: {
+    backgroundColor: '#F8F9FA', // 밝은 배경색 추가
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E9ECEF',
+    padding: 24,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  img: {
-    width: width * 0.6,
-    height: width * 0.6,
-  },
-  button: {
-    marginBottom: 40,
-    elevation: 3, // Android 그림자
-    shadowColor: '#000', // iOS 그림자
+    gap: 20,
+    marginBottom: 32, // 하단 여백 추가
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 36,
+    letterSpacing: -0.5, // 자간 조정
+  },
+  subtitle: {
+    fontSize: 17,
+    color: '#495057', // 색상 조정
+    textAlign: 'center',
+    letterSpacing: -0.3,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20, // 상단 여백 추가
+  },
+  img: {
+    width: width * 0.55, // 크기 약간 조정
+    height: width * 0.55,
+  },
+  button: {
+    marginBottom: 40,
+    borderRadius: 14, // 더 부드러운 모서리
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4.5,
+  },
+  icon: {
+    shadowColor: '#4CAF50',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.5,
+    elevation: 6,
   },
 });

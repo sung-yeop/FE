@@ -16,10 +16,11 @@ import {AlarmImg} from '../../asset/images';
 import {useReportManager} from '../hooks/useReportManager';
 import ReportBtn from '../components/ReportPageComponents/ReportBtn';
 import {theme} from '../style/Theme';
-import {ReportAPI} from '../api/ReportAPI';
 import {Parser} from '../util/Parser';
-import ReportChart from './ReportChart';
 import {MissionParser} from '../util/MissionParser';
+import {ReportUtil} from '../util/ReportUtils';
+import ReportChartBS from './ReportChartBS';
+
 // import LoadingSpinner from '../components/LoadingSpinner'; // 로딩 컴포넌트 필요
 
 export type Verification = {
@@ -90,10 +91,6 @@ const ReportPage = () => {
     Props | FoodApiResponse
   >();
 
-  useEffect(() => {
-    console.log('ReportPage | current.duration : ', current.duration);
-  }, [current]);
-
   const fadeAnim1 = useRef(new Animated.Value(0)).current;
   const fadeAnim2 = useRef(new Animated.Value(0)).current;
   const fadeAnim3 = useRef(new Animated.Value(0)).current;
@@ -153,38 +150,27 @@ const ReportPage = () => {
     });
 
     if (duration.startDate && duration.endDate && current.mission) {
-      let response;
-      if (current.mission === 'Eat food') {
-        response = await ReportAPI.getFoodReport(new Date().toISOString());
-      } else {
-        response = await ReportAPI.getReport({
-          missionName: current.mission,
-          startDate: duration.startDate,
-          endDate: duration.endDate,
-        });
-      }
+      const response = await ReportUtil.getReport(current);
+      // if (current.mission === 'Eat food') {
+      //   response = await ReportAPI.getFoodReport(new Date().toISOString());
+      // } else {
+      //   response = await ReportAPI.getReport({
+      //     missionName: current.mission,
+      //     startDate: duration.startDate,
+      //     endDate: duration.endDate,
+      //   });
+      // }
 
       setResponseFromAPI(response);
 
       console.log('API 호출 결과 : ', response);
 
       if ('verifications' in response) {
+        console.log('enter');
         const result = Parser.parseChartFormFromAPI(response.verifications);
         setData(result);
       }
     } else {
-      console.log(
-        'ReportPage | 분석하기 버튼 클릭 - missionName : ',
-        current.mission,
-      );
-      console.log(
-        'ReportPage | 분석하기 버튼 클릭 - startDate : ',
-        duration.startDate,
-      );
-      console.log(
-        'ReportPage | 분석하기 버튼 클릭 - startDate : ',
-        duration.endDate,
-      );
       throw new Error(
         "ReportPage | 분석하기 버튼 클릭 : '미션' 또는 '기간'이 선택되지 않았습니다.",
       );
@@ -254,6 +240,13 @@ const ReportPage = () => {
     }
   }, [current]);
 
+  useEffect(() => {
+    console.log('data : ', data);
+    if (responseFromAPI !== undefined && 'verifications' in responseFromAPI) {
+      console.log('averageValue : ', responseFromAPI?.averageValue);
+    }
+  }, [responseFromAPI]);
+
   return (
     <SafeAreaView style={styles.container}>
       <PageHeader text={'간단 분석'} img={AlarmImg} />
@@ -314,8 +307,10 @@ const ReportPage = () => {
                   {MissionParser.parseMissionName(current.mission)}
                 </Text>
                 {responseFromAPI !== undefined &&
-                  'verifications' in responseFromAPI && (
-                    <ReportChart
+                  'verifications' in responseFromAPI &&
+                  (current.mission === 'Manage blood sugar' ||
+                    'Manage blood  pressure') && (
+                    <ReportChartBS
                       data={data}
                       averageValue={responseFromAPI.averageValue}
                     />

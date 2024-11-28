@@ -82,11 +82,14 @@ export type ReportCustomDuration = {
   endDay: Date;
 };
 
-export type ReportDuration = 'Today' | 'Week' | 'Month' | ReportCustomDuration;
+export type ReportDuration = {
+  startDate: Date;
+  endDate: Date;
+};
 
 export type Report = {
   mission: MissionCareType;
-  duration: ReportDuration | undefined;
+  duration: ReportDuration;
 };
 
 export interface Todo {

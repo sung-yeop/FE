@@ -60,13 +60,24 @@ const CustomCalendar = ({isPeriod}: Props) => {
   const updateTodo = !isPeriod ? useCurrentTodo().updateTodo : null;
 
   const date = new Date();
-  const minDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0',
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-  const maxDate = `${date.getFullYear() + 1}-${String(
-    date.getMonth() + 1,
-  ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  const minDate = isPeriod
+    ? `${date.getFullYear()}-${String(date.getMonth()).padStart(
+        2,
+        '0',
+      )}-${String(date.getDate()).padStart(2, '0')}`
+    : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        '0',
+      )}-${String(date.getDate()).padStart(2, '0')}`;
+  const maxDate = isPeriod
+    ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        '0',
+      )}-${String(date.getDate()).padStart(2, '0')}`
+    : `${date.getFullYear() + 1}-${String(date.getMonth() + 1).padStart(
+        2,
+        '0',
+      )}-${String(date.getDate()).padStart(2, '0')}`;
 
   const onDayPress = (day: {dateString: string}) => {
     const current = day.dateString;

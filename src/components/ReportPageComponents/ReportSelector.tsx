@@ -24,11 +24,10 @@ const DurationButton = ({label, onPress, isSelected}: any) => (
 const ReportSelector = () => {
   const {updateCurrentDuration} = useReportManager();
   const [isVisibleCalendar, setisVisibleCalendar] = useState<boolean>(false);
-  const [selectedDuration, setSelectedDuration] = useState(null);
   const [isCalendarSelected, setIsCalendarSelected] = useState(false);
+  const [activeBtn, setActiveBtn] = useState<number>(-1);
 
   const handleDurationSelect = (duration: any) => {
-    setSelectedDuration(duration);
     updateCurrentDuration(duration);
     setisVisibleCalendar(false);
     setIsCalendarSelected(false);
@@ -37,7 +36,7 @@ const ReportSelector = () => {
   const toggleCalendar = () => {
     setisVisibleCalendar(!isVisibleCalendar);
     setIsCalendarSelected(!isCalendarSelected);
-    setSelectedDuration(null);
+    setActiveBtn(-1);
   };
 
   return (
@@ -46,18 +45,42 @@ const ReportSelector = () => {
       <View style={styles.selectPeriodContainer}>
         <DurationButton
           label="오늘"
-          onPress={() => handleDurationSelect('Today')}
-          isSelected={selectedDuration === 'Today'}
+          onPress={() => {
+            setActiveBtn(0);
+            handleDurationSelect({startDate: new Date(), endDate: new Date()});
+          }}
+          isSelected={activeBtn === 0}
         />
         <DurationButton
           label="이번주"
-          onPress={() => handleDurationSelect('Week')}
-          isSelected={selectedDuration === 'Week'}
+          onPress={() => {
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            setActiveBtn(1);
+            handleDurationSelect({
+              startDate: startOfWeek,
+              endDate: new Date(),
+            });
+          }}
+          isSelected={activeBtn === 1}
         />
         <DurationButton
           label="이번달"
-          onPress={() => handleDurationSelect('Month')}
-          isSelected={selectedDuration === 'Month'}
+          onPress={() => {
+            const today = new Date();
+            const startOfMonth = new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              1,
+            );
+            handleDurationSelect({
+              startDate: startOfMonth,
+              endDate: new Date(),
+            });
+            setActiveBtn(2);
+          }}
+          isSelected={activeBtn === 2}
         />
       </View>
       <TouchableOpacity

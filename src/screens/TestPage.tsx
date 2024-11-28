@@ -1,14 +1,10 @@
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {newAlarmSend} from '../api/AlarmAPI';
-import {validationSend} from '../api/ValidationAPI';
-import {TestMockData} from '../data/TestMockData';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {VerificationAPI} from '../api/VerificationAPI';
-import EatingAnimation from '../../asset/Animations/Eating';
 import {MissionCareType} from '../types';
 
 type NavigationProp = NativeStackNavigationProp<
@@ -21,10 +17,10 @@ const TestPage = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const addVerificationMockData = async () => {
-    await VerificationAPI.sendFirstAlert('1693047183');
-    await VerificationAPI.sendAlert('1693047183', 30, true);
-    await VerificationAPI.sendFirstAlert('8235928400');
-    await VerificationAPI.sendAlert('8235928400', 40, true);
+    await VerificationAPI.sendFirstAlert('6442045720');
+    await VerificationAPI.sendAlert('6442045720', 30, true);
+    await VerificationAPI.sendFirstAlert('7560950418');
+    await VerificationAPI.sendAlert('7560950418', 100, true);
     // await VerificationAPI.sendFirstAlert('175149908');
     // await VerificationAPI.sendAlert('175149908', 80, true);
     // await VerificationAPI.sendFirstAlert('1447805143');

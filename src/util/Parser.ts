@@ -123,34 +123,13 @@ export class Parser {
       .padStart(2, '0')}`;
   }
 
-  static parseReportDurationForm(savedValue: ReportDuration): {
-    startDate: string;
-    endDate: string;
-  } {
-    const today = new Date();
-    let startDate: Date;
-    let endDate: Date = today;
-
-    switch (savedValue) {
-      case 'Today':
-        startDate = today;
-        break;
-      case 'Week':
-        startDate = new Date(today);
-        startDate.setDate(today.getDate() - today.getDay() + 1);
-        break;
-      case 'Month':
-        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-        break;
-      default:
-        if (typeof savedValue === 'object') {
-          startDate = savedValue.startDay;
-          endDate = savedValue.endDay;
-        } else {
-          throw new Error('Invalid ReportDuration value');
-        }
-    }
-
+  static parseReportDurationForm({
+    startDate,
+    endDate,
+  }: {
+    startDate: Date;
+    endDate: Date;
+  }) {
     return {
       startDate: Parser.parseDateToYMD(startDate),
       endDate: Parser.parseDateToYMD(endDate),

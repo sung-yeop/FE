@@ -21,8 +21,10 @@ const GAlarmList = ({selectSenior}: Props) => {
     setSelectAlarm(alarm);
   };
 
+  if (allAlarms.length === 0) return null;
+
   const filteredAlarmList = allAlarms.filter(
-    alarm => alarm.username!.name === selectSenior,
+    alarm => alarm.username?.name === selectSenior,
   );
 
   console.log('select Senior : ', selectSenior);

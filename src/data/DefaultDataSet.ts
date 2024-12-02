@@ -1,11 +1,16 @@
 import {MissionCareType, StepKey} from '../types';
-import {EatFoodImg, ManageBloodSugar, EatMedicianImg} from '../../asset/images';
+import {
+  EatFoodImg,
+  ManageBloodSugar,
+  EatMedicianImg,
+  ManageBloodPressure,
+} from '../../asset/images';
 
 export const CareMissionData = [
   {
     id: 'Manage blood sugar' as MissionCareType,
     title: '혈당 관리하기',
-    img: ManageBloodSugar,
+    img: ManageBloodPressure,
     description: '기기의 사진을 찍어주세요',
   },
   {

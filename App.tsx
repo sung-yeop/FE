@@ -21,8 +21,8 @@ import CustomCameraPage from './src/screens/CustomCameraPage';
 import BottomTabGuardian from './src/components/BottomTabGuardian';
 import Success from './src/screens/ConfirmScreen/Success';
 import Fail from './src/screens/ConfirmScreen/Fail';
-import {VerificationAPI} from './src/api/VerificationAPI';
 import {MissionCareType} from './src/types';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 // RootStackParamList 타입 정의
 export type RootStackParamList = {
@@ -60,14 +60,27 @@ export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // 타입을 명확하게 정의
+    type AlarmEvent = {
+      alarmId: string | number; // 둘 다 받을 수 있도록
+    };
+
     const subscription = DeviceEventEmitter.addListener(
       'showAlarmScreen',
-      (event: {alarmId: string}) => {
+      (event: AlarmEvent) => {
+        console.log('Received alarm event:', event); // 디버깅을 위한 로그 추가
+
         if (navigationRef.isReady()) {
+          // alarmId가 어떤 타입으로 오든 string으로 변환
+          const alarmId = String(event.alarmId);
+          console.log('Navigation with alarmId:', alarmId); // 디버깅을 위한 로그 추가
+
           navigationRef.navigate('AlarmScreen', {
-            alarmId: event.alarmId,
+            alarmId: alarmId,
           });
+        } else {
+          console.log('Navigation not ready'); // 디버깅을 위한 로그 추가
         }
       },
     );

@@ -1,7 +1,11 @@
-export const EatFoodImg = require('./Eat_Food.png');
-export const EatMedicianImg = require('./Eat_Medician.png');
-export const ManageBloodSugar = require('./Manage_Blood_Sugar.png');
+export const EatFoodImg = require('./Food.png');
+export const EatMedicianImg = require('./Medician.png');
+export const ManageBloodSugar = require('./Heart1.png');
+export const ManageBloodPressure = require('./Heart2.png');
 export const AlarmImg = require('./Img_Alarm.png');
 export const AlarmButtonImg = require('./qwer.png');
 export const TrophyImg = require('./trophy.png');
 export const CautionImg = require('./caution.png');
+export const CalenderImg = require('./Calender.png');
+export const FireImg = require('./Fire.png');
+export const ThumbUpImg = require('./ThumbUp.png');

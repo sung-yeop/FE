@@ -5,6 +5,7 @@ import {Parser} from './util/Parser';
 import {GuardianAPI} from './api/GuardianAPI';
 import {getAlarms} from './api/AlarmAPI';
 import {UserAPI} from './api/UserAPI';
+import {TodoAPI} from './api/TodoAPI';
 
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
@@ -22,6 +23,7 @@ export const allAlarmsState = atom<Alarm[]>({
           let savedValue = null;
           if (isGuardian === 'Yes') {
             const result = await GuardianAPI.getAlarms();
+            console.log('Atoms | API 호출 결과 알람 : ', result);
             savedValue = Parser.parseAlarmFormGuardian(result) as Alarm[];
           } else if (isGuardian === 'No') {
             savedValue = Parser.parseAlarmForm(await getAlarms()) as Alarm[];
@@ -55,7 +57,10 @@ export const allAlarmsSelector = selector({
 
 export const currentReportState = atom<Report>({
   key: 'currentReportState',
-  default: {mission: undefined, duration: undefined},
+  default: {
+    mission: undefined,
+    duration: {startDate: new Date(), endDate: new Date()},
+  },
 });
 
 export const currentReportSelector = selector({
@@ -72,9 +77,13 @@ export const allTodoState = atom<Todo[]>({
     ({setSelf, onSet}) => {
       const loadInitialValue = async () => {
         try {
-          const savedValue = await AsyncStorage.getItem(STORAGE_TODO_KEY);
-          if (savedValue != null) {
-            setSelf(Parser.parseTodoForm(savedValue) as Todo[]);
+          const isGuardian = await AsyncStorage.getItem('isGuardian');
+          if (isGuardian === 'No') {
+            const savedValue = await TodoAPI.getTodos();
+            console.log('API 호출 결과 Todos : ', savedValue);
+            if (savedValue != null) {
+              setSelf(Parser.parseTodoForm(savedValue) as Todo[]);
+            }
           }
         } catch (error) {
           console.error('Error loading alarms:', error);
@@ -148,13 +157,41 @@ export const selectSeniorSelector = selector({
 
 export const userState = atom<UserInfo | undefined>({
   key: 'userState',
-  default: {id: '', name: '', phoneNumber: ''},
+  default: {id: '', name: '', phoneNumber: '', isGuardian: false},
   effects: [
     ({setSelf}) => {
       const loadInitialValue = async () => {
         try {
-          const response = await UserAPI.getUserInfo();
-          setSelf(response);
+          const isGuardian = await AsyncStorage.getItem('isGuardian');
+          let response;
+          console.log('isGuardian : ', isGuardian);
+
+          if (!isGuardian) {
+            setSelf({id: '', name: '', phoneNumber: '', isGuardian: false});
+            return;
+          }
+
+          if (isGuardian === 'Yes') {
+            response = await GuardianAPI.getGuardianInfo();
+            setSelf({
+              ...response,
+              id: response.guardianName,
+              isGuardian: true,
+            });
+            return;
+          } else if (isGuardian === 'No') {
+            response = await UserAPI.getUserInfo();
+            setSelf({
+              ...response,
+              id: response.username,
+              isGuardian: false,
+            });
+            return;
+          } else {
+            throw new Error(
+              "atoms | userState | isGuardian 값이 'Yes'도 'No'도 아닙니다.",
+            );
+          }
         } catch (error) {
           console.error('Error loading alarms:', error);
         }

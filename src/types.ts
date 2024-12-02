@@ -17,6 +17,7 @@ export interface UserInfo extends User {
   phoneNumber: string;
   age?: number;
   gender?: string;
+  isGuardian: boolean;
 }
 
 export type DayKey =
@@ -56,6 +57,7 @@ export interface Alarm {
     mode: MissionMode;
     id: MissionCareType;
   };
+  disabled: boolean;
   setting: {
     isVibration: boolean;
     volume: number;

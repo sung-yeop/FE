@@ -1,5 +1,4 @@
 import {useEffect} from 'react';
-import {useAlarmManager} from '../hooks/useAlarmManager';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {useNavigation} from '@react-navigation/native';
@@ -18,16 +17,7 @@ const Initializer = () => {
         // await AsyncStorage.setItem('token', '123');
         // await AsyncStorage.setItem('isGuardian', 'Yes');
 
-        await AsyncStorage.clear();
-
-        // For Test report
-        await AsyncStorage.setItem(
-          'missions',
-          JSON.stringify([
-            {missionId: 'Manage blood pressure'},
-            {missionId: 'Eat Medician'},
-          ]),
-        );
+        // await AsyncStorage.clear();
 
         const token = await AsyncStorage.getItem('token');
         const isGuardian = await AsyncStorage.getItem('isGuardian');

@@ -23,7 +23,7 @@ export default {
     if (hasPermission) {
       try {
         await AndroidAlarmModule.setAlarm(
-          alarmId,
+          Number(alarmId),
           timestamp,
           isVibrate,
           soundVolume,
@@ -55,7 +55,7 @@ export default {
     if (hasPermission) {
       try {
         await AndroidAlarmModule.updateAlarm(
-          alarmId,
+          Number(alarmId),
           newTimestamp,
           active,
           alarmInterval,
@@ -75,6 +75,6 @@ export default {
     }
   },
   cancelAlarm: (alarmId: string) => {
-    AndroidAlarmModule.cancelAlarm(alarmId);
+    AndroidAlarmModule.cancelAlarm(Number(alarmId));
   },
 };

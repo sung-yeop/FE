@@ -18,8 +18,14 @@ export class ReportUtil {
 
     if (report.mission === 'Eat food') {
       response = await ReportAPI.getFoodReport(new Date().toISOString());
-    } else {
-      response = await ReportAPI.getReport({
+    } else if (report.mission === 'Manage blood sugar') {
+      response = await ReportAPI.getReportBS({
+        missionName: mission,
+        startDate: filterdStartDate,
+        endDate: filteredEndDate,
+      });
+    } else if (report.mission === 'Manage blood pressure') {
+      response = await ReportAPI.getReportBP({
         missionName: mission,
         startDate: filterdStartDate,
         endDate: filteredEndDate,

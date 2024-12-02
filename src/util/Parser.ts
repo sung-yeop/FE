@@ -21,6 +21,7 @@ interface BaseAlarmResponse {
   volume: number;
   alarmInterval: number;
   createdByGuardian: boolean;
+  disabled: boolean;
 }
 
 interface ResponseAlarmTypeGuardian extends BaseAlarmResponse {
@@ -33,16 +34,19 @@ interface ResponseAlarmTypeGuardian extends BaseAlarmResponse {
 export class Parser {
   static parseTodoForm(savedValue: string): Todo[] | Alarm[] {
     try {
-      const parsedData = JSON.parse(savedValue);
-
-      if (!Array.isArray(parsedData)) {
+      if (!Array.isArray(savedValue)) {
         return [];
       }
 
-      return parsedData.map(data => ({
-        ...data,
-        timer: new Date(data.timer),
-      }));
+      return savedValue.map(data => {
+        return {
+          id: data.todoId,
+          title: data.taskName,
+          description: data.taskDescription || '',
+          timer: new Date(data.taskDateTime),
+          day: data.taskDate,
+        };
+      });
     } catch (error) {
       console.error('Error parsing alarms:', error);
       return [];
@@ -57,7 +61,7 @@ export class Parser {
     const filteredTimeString = target.alarmTime + 'Z';
 
     return {
-      alarmid: target.alarmId,
+      alarmid: String(target.alarmId),
       timer: new Date(filteredTimeString),
       active: target.active,
       alarmDays: target.alarmDays,
@@ -73,6 +77,7 @@ export class Parser {
         alarmInterval: target.alarmInterval as SettingTimeInterval,
       },
       createdByGuardian: target.createdByGuardian,
+      disabled: target.disabled,
     };
   }
 
@@ -106,6 +111,7 @@ export class Parser {
         volume: target.volume,
         alarmInterval: target.alarmInterval as SettingTimeInterval,
       },
+      disabled: target.disabled,
       createdByGuardian: target.createdByGuardian,
     };
   }
@@ -141,9 +147,17 @@ export class Parser {
     const averagedDatas = this.#filterDataWithLabels({
       labels: labels,
       data: data,
+      targetLabel: 'value',
     });
-    console.log('A : ', averagedDatas);
-    return averagedDatas;
+    if (data[0].value2 !== 0) {
+      const averageDatas2 = this.#filterDataWithLabels({
+        labels: labels,
+        data: data,
+        targetLabel: 'value2',
+      });
+      return {averagedDatas, averageDatas2};
+    }
+    return {averagedDatas};
   }
   static #extractLabels(data: Verification[]) {
     const result = new Set(
@@ -157,9 +171,11 @@ export class Parser {
   static #filterDataWithLabels({
     labels,
     data,
+    targetLabel,
   }: {
     labels: string[];
     data: Verification[];
+    targetLabel: 'value' | 'value2';
   }) {
     return labels.map(label => {
       const matchingData = data.filter(
@@ -169,7 +185,7 @@ export class Parser {
 
       const average =
         matchingData.length > 0
-          ? matchingData.reduce((sum, item) => sum + item.value, 0) /
+          ? matchingData.reduce((sum, item) => sum + item[targetLabel], 0) /
             matchingData.length
           : 0;
 

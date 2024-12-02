@@ -13,6 +13,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GuardianAPI} from '../../../api/GuardianAPI';
 import {useRecoilState} from 'recoil';
 import {allManagingSeniorsSelector} from '../../../atoms';
+import {theme} from '../../../style/Theme';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type Props = {
   isVisibleModal: boolean;
@@ -75,14 +77,48 @@ const GModal_AddUser = ({isVisibleModal, onCloseModal}: Props) => {
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
               <View style={styles.modalContainer}>
-                <Text>관리할 유저의 연락처를 입력해주세요</Text>
-                <TextInput
-                  style={styles.inputText}
-                  value={userPhoneNumber}
-                  onChangeText={setUserPhoneNumber}
-                />
-                <TouchableOpacity onPress={onClickSaveButton}>
-                  <Text>등록하기</Text>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>사용자 추가</Text>
+                  <TouchableOpacity
+                    onPress={onCloseModal}
+                    style={styles.closeButton}>
+                    <Icon name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.modalContent}>
+                  <Text style={styles.label}>
+                    관리할 유저의 연락처를 입력해주세요
+                  </Text>
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="phone"
+                      size={20}
+                      color={theme.colors.primary.main}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.inputText}
+                      value={userPhoneNumber}
+                      onChangeText={setUserPhoneNumber}
+                      placeholder="전화번호 입력 (-없이 11자리)"
+                      keyboardType="number-pad"
+                      maxLength={11}
+                    />
+                  </View>
+                </View>
+
+                <TouchableOpacity
+                  style={[
+                    styles.saveButton,
+                    {
+                      backgroundColor: isValid.current
+                        ? theme.colors.primary.main
+                        : theme.colors.primary.light,
+                    },
+                  ]}
+                  onPress={onClickSaveButton}>
+                  <Text style={styles.saveButtonText}>등록하기</Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
@@ -99,41 +135,76 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
   },
   modalContainer: {
-    flexDirection: 'column',
     backgroundColor: 'white',
-    borderRadius: 20,
-    marginHorizontal: 40,
-    flex: 0.2,
+    borderRadius: 16,
     padding: 20,
-    borderWidth: 1,
-    borderColor: 'gray',
-    bottom: 40,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  HeaderContainer: {
+  modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
-  ContentContainer: {
-    flexDirection: 'column',
-    gap: 10,
-    paddingVertical: 10,
-  },
-  Content: {
-    flexDirection: 'row',
-    gap: 10,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 20,
   },
-  ContentText: {
+  modalTitle: {
+    fontSize: 22,
+    fontFamily: 'Pretendard-Bold',
+    color: '#1a1a1a',
+  },
+  closeButton: {
+    padding: 4,
+  },
+  modalContent: {
+    gap: 12,
+    marginBottom: 20,
+  },
+  label: {
     fontSize: 16,
-    fontWeight: 'semibold',
+    fontFamily: 'Pretendard-Medium',
+    color: '#333',
+    marginBottom: 8,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 12,
+    backgroundColor: '#F8F8F8',
+    paddingHorizontal: 12,
+    height: 48,
+  },
+  inputIcon: {
+    marginRight: 8,
   },
   inputText: {
+    flex: 1,
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
+    color: '#1a1a1a',
+    padding: 0,
+  },
+  saveButton: {
+    height: 48,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  saveButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
   },
 });

@@ -32,12 +32,28 @@ const AlarmScreen = ({route}: AlarmScreenProps) => {
 
   return (
     <AlarmContext initial={current}>
-      <AlarmScreenMissionItem missionId={current?.mission.id} />
-      <AlarmScreenAction alarmId={alarmId} />
+      <View style={styles.container}>
+        <View style={styles.contentWrapper}>
+          <AlarmScreenMissionItem
+            missionId={current?.mission.id}
+            timer={current?.timer}
+          />
+          <AlarmScreenAction alarmId={alarmId} />
+        </View>
+      </View>
     </AlarmContext>
   );
 };
 
 export default AlarmScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  contentWrapper: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+});

@@ -36,14 +36,16 @@ export const useAlarmManager = () => {
       }
       const updatedAlarms = [...alarms, alarm];
 
-      // 전역 상태 업데이트
+      console.log('UPDATEDALARM : ', updatedAlarms);
+      newAlarmSend(alarm);
+
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),
       );
-      newAlarmSend(alarm);
+
       setAlarms(updatedAlarms);
-      console.log('Alarm saved successfully:', updatedAlarms);
+      console.log('Alarm saved successfully:', alarm);
     } catch (err) {
       console.error('SAVE ALARM ERROR : ', err);
     }
@@ -89,15 +91,22 @@ export const useAlarmManager = () => {
     }
   };
 
-  const deleteAlarm = async (alarmId: string) => {
+  const deleteAlarm = async (alarm: Alarm) => {
+    console.log('Delete Alarm', alarm);
     try {
-      const updatedAlarms = alarms.filter(alarm => alarm.alarmid !== alarmId);
+      const updatedAlarms = alarms.filter(a => a.alarmid !== alarm.alarmid);
       await AsyncStorage.setItem(
         STORAGE_ALARM_KEY,
         JSON.stringify(updatedAlarms),
       );
       setAlarms(updatedAlarms);
-      console.log('Alarm deleted successfully:', alarmId);
+
+      if (Platform.OS === 'android') {
+        AndroidAlarmModule.cancelAlarm(alarm.alarmid);
+      }
+      updateAlarmAPI(alarm);
+
+      console.log('Alarm deleted successfully:', alarm.alarmid);
       // 백엔드 삭제 로직 추가
     } catch (error) {
       console.error('Failed to delete alarm:', error);

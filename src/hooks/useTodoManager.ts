@@ -2,6 +2,7 @@ import {useRecoilState} from 'recoil';
 import {Todo} from '../types';
 import {allTodoSelector, allTodoState, STORAGE_TODO_KEY} from '../atoms';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {TodoAPI} from '../api/TodoAPI';
 
 export const useTodoManager = () => {
   const [allTodo, setAllTodo] = useRecoilState(allTodoSelector);
@@ -27,8 +28,8 @@ export const useTodoManager = () => {
         JSON.stringify(updatedTodos),
       );
       setAllTodo(updatedTodos);
-
-      //TODO : 백엔드 저장 로직 필요
+      const response = await TodoAPI.addTodo(todo);
+      console.log('useTodoManager | saveTodo - response : ', response);
 
       console.log('Alarm saved successfully:', updatedTodos);
     } catch (err) {

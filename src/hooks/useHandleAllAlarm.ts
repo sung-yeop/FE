@@ -1,8 +1,10 @@
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import {allAlarmsSelector} from '../atoms';
 
 export const useHandleAlldAlarm = () => {
   const allAlarms = useRecoilValue(allAlarmsSelector);
+
+  console.log('useHandleAllAlarm | allAlarms : ', allAlarms);
 
   const findAlarmUsingId = (id: string) => {
     const find = allAlarms.find(a => a.alarmid === id);

@@ -12,6 +12,8 @@ import {ViewCurrentSelectedRepeatDays} from './Modal_CU_RepeatPicker';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';
 import {useAlarmManager} from '../../hooks/useAlarmManager';
 import {TimeFormatting} from '../../util/TimeFormatting';
+import CustomSwipeable from '../../util/CustomSwipeable';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type Props = {
   alarm: Alarm;
@@ -22,48 +24,59 @@ const AlarmItem = ({alarm, onPress}: Props) => {
   const alarmManager = useAlarmManager();
   const {ampm, viewTime} = TimeFormatting(alarm.timer);
   const mission = GetCareMissionDataWithId(alarm.mission.id);
-  console.log('미션 데이터:', mission);
 
   if (!mission) {
     return;
   }
 
-  console.log('AlarmItem / alarm 데이터 : ', alarm);
+  const rightComponent = (
+    <TouchableOpacity
+      style={styles.deleteButton}
+      onPress={() => alarmManager.deleteAlarm({...alarm, disabled: true})}>
+      <Icon name="delete" size={40} color="white" />
+      <Text style={styles.deleteText}>삭제</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.alarmContainer}>
-      <TouchableOpacity onPress={onPress} style={styles.mainContent}>
-        <View style={styles.strictModeContainer}>
-          <Text style={styles.repeatText}>
-            {ViewCurrentSelectedRepeatDays(alarm.alarmDays)}
-          </Text>
-          <Text style={styles.strictModeText}>
-            엄격모드: {alarm.mission.mode === 'Strict' ? 'ON' : 'OFF'}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.timeContainer}>
-            <Text style={styles.ampmText}>{ampm}</Text>
-            <Text style={styles.timeText}>{viewTime}</Text>
+      <CustomSwipeable rightComponent={rightComponent}>
+        <TouchableOpacity onPress={onPress} style={styles.mainContent}>
+          <View style={styles.strictModeContainer}>
+            <Text style={styles.repeatText}>
+              {ViewCurrentSelectedRepeatDays(alarm.alarmDays)}
+            </Text>
+            <Text style={styles.strictModeText}>
+              엄격모드: {alarm.mission.mode === 'Strict' ? 'ON' : 'OFF'}
+            </Text>
           </View>
-          <Switch
-            value={alarm.active}
-            onChange={() => {
-              alarmManager.updateAlarm({
-                alarm: {...alarm, active: !alarm.active},
-              });
-            }}
-            trackColor={{false: '#767577', true: '#e6e9ed'}}
-            thumbColor={alarm.active ? '#2cc295' : '#f4f3f4'}
-          />
-        </View>
-        <View style={styles.missionInfoContainer}>
-          <Image source={mission.img} style={styles.missionImage} />
-          <View style={styles.missionTextContainer}>
-            <Text style={styles.missionTitle}>{mission.title}</Text>
-            <Text style={styles.missionDescription}>{mission.description}</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.timeContainer}>
+              <Text style={styles.ampmText}>{ampm}</Text>
+              <Text style={styles.timeText}>{viewTime}</Text>
+            </View>
+            <Switch
+              value={alarm.active}
+              onChange={() => {
+                alarmManager.updateAlarm({
+                  alarm: {...alarm, active: !alarm.active},
+                });
+              }}
+              trackColor={{false: '#767577', true: '#e6e9ed'}}
+              thumbColor={alarm.active ? '#2cc295' : '#f4f3f4'}
+            />
           </View>
-        </View>
-      </TouchableOpacity>
+          <View style={styles.missionInfoContainer}>
+            <Image source={mission.img} style={styles.missionImage} />
+            <View style={styles.missionTextContainer}>
+              <Text style={styles.missionTitle}>{mission.title}</Text>
+              <Text style={styles.missionDescription}>
+                {mission.description}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </CustomSwipeable>
     </View>
   );
 };
@@ -73,13 +86,23 @@ export default AlarmItem;
 const styles = StyleSheet.create({
   alarmContainer: {
     borderRadius: 20,
-    backgroundColor: 'white',
+    overflow: 'hidden',
     borderWidth: 0.4,
     borderColor: 'gray',
   },
   mainContent: {
+    backgroundColor: 'white',
     padding: 20,
   },
+  deleteButton: {
+    backgroundColor: '#e91141',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: '100%',
+    gap: 8,
+  },
+
   strictModeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -151,5 +174,10 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
+  },
+  deleteText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

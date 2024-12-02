@@ -10,7 +10,7 @@ type Props = {
 };
 
 const SaveAlarmButton = ({id, closeModal}: Props) => {
-  const {current, updateAlarm} = useCurrentAlarm();
+  const {current} = useCurrentAlarm();
   const alarmManager = useAlarmManager();
   const onClickSaveButton = () => {
     if (

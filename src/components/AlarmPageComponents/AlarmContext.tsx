@@ -33,18 +33,19 @@ const AlarmContext = ({children, initial}: Props) => {
       .v4()
       .toString()
       .replace(/[^\d]+/g, '')
-      .slice(0, 10),
+      .slice(0, 9),
     // alarmid: '1',
     timer: new Date(),
     active: false,
     alarmDays: 0,
     mission: defaultMission,
     delay: false,
+    disabled: false,
     delayTimes: 0,
     setting: {isVibration: false, volume: 50, alarmInterval: 0},
     createdByGuardian: false,
   };
-
+  console.log('AlarmContext | initial : ', initial);
   const [current, setCurrentAlarm] = useState<Alarm>(initial || defaultAlarm);
 
   const updateAlarm = (updates: Partial<Alarm>) => {

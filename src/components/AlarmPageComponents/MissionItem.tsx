@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {useCurrentAlarm} from '../../hooks/useCurrentAlarm';
 import {GetCareMissionDataWithId} from '../../data/DefaultDataSet';
 import {MissionCareType} from '../../types';

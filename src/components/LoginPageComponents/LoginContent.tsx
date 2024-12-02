@@ -6,10 +6,6 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {
-  sendSignInDataWithGuardian,
-  sendSignInDataWithUser,
-} from '../../api/SignAPI';
 import MailSVG from '../../../asset/images/Mail Icon.svg';
 import LockSVG from '../../../asset/images/Lock Fill Icon.svg';
 import CheckBox from '@react-native-community/checkbox';
@@ -18,6 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import LoginFunctionContent from './LoginFunctionContent';
 import {theme} from '../../style/Theme';
+import {SignInAPI} from '../../api/SignInAPI';
 
 type NavigationProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,11 +33,12 @@ const LoginContent = () => {
 
   const handleLogin = async () => {
     if (isGurdian) {
-      const {result, msg} = await sendSignInDataWithGuardian({
+      const {result, msg} = await SignInAPI.sendSignInDataWithGuardian({
         username,
         password,
       });
       if (result) {
+        console.log('Login Result : ', result);
         navigation.reset({
           index: 0,
           routes: [
@@ -56,7 +54,11 @@ const LoginContent = () => {
       setUsername('');
       setPassword('');
     } else {
-      const {result, msg} = await sendSignInDataWithUser({username, password});
+      const {result, msg} = await SignInAPI.sendSignInDataWithUser({
+        username,
+        password,
+      });
+      console.log('Login Result : ', result);
       if (result) {
         navigation.reset({
           index: 0,

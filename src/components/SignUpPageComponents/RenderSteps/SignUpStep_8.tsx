@@ -10,8 +10,8 @@ import {RenderProp} from './SignUpStep_1';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../../App';
-import {sendSignUpWithGuardian, sendSignUpWithUser} from '../../../api/SignAPI';
 import {theme} from '../../../style/Theme';
+import {SignUpAPI} from '../../../api/SignUpAPI';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
@@ -37,7 +37,7 @@ const SignUpStep_8 = ({current, updateCurrent, setStep}: RenderProp) => {
 
   const onClickBtn = async () => {
     if (current?.isGuardian) {
-      await sendSignUpWithGuardian({
+      await SignUpAPI.sendSignUpWithGuardian({
         username: current.username,
         name: current.name,
         phoneNumber: current.phoneNumber,
@@ -50,7 +50,7 @@ const SignUpStep_8 = ({current, updateCurrent, setStep}: RenderProp) => {
         );
       }
 
-      await sendSignUpWithUser({
+      await SignUpAPI.sendSignUpWithUser({
         username: current.username,
         name: current.name,
         phoneNumber: current.phoneNumber,

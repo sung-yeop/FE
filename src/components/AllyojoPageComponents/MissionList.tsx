@@ -8,10 +8,12 @@ const MissionList = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {findAlarmRepeatDay &&
-        findAlarmRepeatDay.map(alarm => (
-          <MissionItemInTodoPage key={alarm.alarmid} alarm={alarm} />
-        ))}
+      <View style={styles.subContainer}>
+        {findAlarmRepeatDay &&
+          findAlarmRepeatDay.map(alarm => (
+            <MissionItemInTodoPage key={alarm.alarmid} alarm={alarm} />
+          ))}
+      </View>
     </ScrollView>
   );
 };
@@ -21,6 +23,8 @@ export default MissionList;
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
+  },
+  subContainer: {
     gap: 12,
   },
   headerContainer: {

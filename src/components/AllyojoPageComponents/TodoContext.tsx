@@ -23,7 +23,8 @@ export const TodoContext = ({children, todo}: Props) => {
     id: uuid
       .v4()
       .toString()
-      .replace(/[^\d]+/g, ''),
+      .replace(/[^\d]+/g, '')
+      .slice(0, 10),
     title: '',
     description: '',
     timer: new Date(),

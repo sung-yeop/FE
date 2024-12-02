@@ -28,14 +28,9 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
 
   const handleConfirm = async () => {
     try {
-      // 로딩 상태 추가 가능
-      // result = {guess : 1}이면 다시 인증이 필요하다는 페이지로 navigate
-      // guess가 0이면 인증이 완료되었다는 페이지로 navigate
       const result = await VerificationAPI.sendAIServer(imageUri);
 
-      console.log(result);
       if (result.guess === 1) {
-        // 알려줘 페이지에서 다시 인증을 진행해달라고 안내
         navigation.navigate('Fail', {missionName: missionName});
         return;
       }
@@ -44,7 +39,6 @@ const PhotoConfirmPage = ({route}: {route: {params: PhotoConfirmParams}}) => {
       return;
     } catch (error) {
       console.error('Verification error:', error);
-      // 에러 처리
     }
   };
 

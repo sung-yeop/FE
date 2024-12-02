@@ -20,6 +20,7 @@ import {Parser} from '../util/Parser';
 import {MissionParser} from '../util/MissionParser';
 import {ReportUtil} from '../util/ReportUtils';
 import ReportChartBS from './ReportChartBS';
+import ReportChartBP from './ReportChartBP';
 
 // import LoadingSpinner from '../components/LoadingSpinner'; // 로딩 컴포넌트 필요
 
@@ -28,12 +29,21 @@ export type Verification = {
   result: boolean;
   userId: number;
   value: number;
+  value2: number;
   verificationDateTime: string;
   verificationId: number;
 };
 
-type Props = {
+type BS = {
   averageValue: number;
+  successRatio: number;
+  verifications: Verification[];
+};
+
+type BP = {
+  lowAverageValue: number;
+  highAverageValue: number;
+  bloodPressureResult: string;
   successRatio: number;
   verifications: Verification[];
 };
@@ -70,12 +80,53 @@ type FoodApiResponse = {
   }[];
 };
 
+type BloodPressureCategory = {
+  color: string;
+  description: string;
+};
+
+const getBloodPressureStyle = (result: string): BloodPressureCategory => {
+  switch (result) {
+    case '고혈압 2기':
+    case '고혈압 1기':
+      return {
+        color: '#FF3B30',
+        description: '혈압이 높습니다. 의사와 상담이 필요합니다.',
+      };
+    case '고혈압 전단계':
+    case '주의 혈압':
+    case '수축기 단독 고혈압':
+      return {
+        color: '#FF9500',
+        description:
+          '주의가 필요한 혈압 수준입니다. \n생활 습관 개선이 도움될 수 있습니다.',
+      };
+    case '정상 혈압':
+      return {
+        color: '#34C759',
+        description:
+          '정상 혈압을 잘 유지하고 계십니다. \n현재의 건강한 생활습관을 유지해주세요.',
+      };
+    default:
+      return {
+        color: '#8E8E93',
+        description: '혈압 측정값을 확인해주세요.',
+      };
+  }
+};
+
 const ReportPage = () => {
   const [isSelectMission, setIsSelectMission] = useState<boolean>(false);
   const [isSelectPeriods, setIsSelectPeriods] = useState<boolean>(false);
   const [isClickReportBtn, setIsClickReportBtn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<
+    {
+      label: string;
+      value: number;
+    }[]
+  >();
+  const [data2, setData2] = useState<
     {
       label: string;
       value: number;
@@ -88,7 +139,7 @@ const ReportPage = () => {
   });
 
   const [responseFromAPI, setResponseFromAPI] = useState<
-    Props | FoodApiResponse
+    BS | FoodApiResponse | BP
   >();
 
   const fadeAnim1 = useRef(new Animated.Value(0)).current;
@@ -160,15 +211,29 @@ const ReportPage = () => {
       //     endDate: duration.endDate,
       //   });
       // }
-
       setResponseFromAPI(response);
 
       console.log('API 호출 결과 : ', response);
 
-      if ('verifications' in response) {
+      if (
+        'verifications' in response &&
+        current.mission === 'Manage blood sugar'
+      ) {
         console.log('enter');
-        const result = Parser.parseChartFormFromAPI(response.verifications);
-        setData(result);
+        const {averagedDatas} = Parser.parseChartFormFromAPI(
+          response.verifications,
+        );
+        setData(averagedDatas);
+      } else if (
+        'verifications' in response &&
+        current.mission === 'Manage blood pressure'
+      ) {
+        console.log('BP Inter');
+        const {averagedDatas, averageDatas2} = Parser.parseChartFormFromAPI(
+          response.verifications,
+        );
+        setData(averagedDatas);
+        setData2(averageDatas2);
       }
     } else {
       throw new Error(
@@ -240,13 +305,6 @@ const ReportPage = () => {
     }
   }, [current]);
 
-  useEffect(() => {
-    console.log('data : ', data);
-    if (responseFromAPI !== undefined && 'verifications' in responseFromAPI) {
-      console.log('averageValue : ', responseFromAPI?.averageValue);
-    }
-  }, [responseFromAPI]);
-
   return (
     <SafeAreaView style={styles.container}>
       <PageHeader text={'간단 분석'} img={AlarmImg} />
@@ -308,12 +366,52 @@ const ReportPage = () => {
                 </Text>
                 {responseFromAPI !== undefined &&
                   'verifications' in responseFromAPI &&
-                  (current.mission === 'Manage blood sugar' ||
-                    'Manage blood  pressure') && (
+                  'averageValue' in responseFromAPI &&
+                  current.mission === 'Manage blood sugar' && (
                     <ReportChartBS
                       data={data}
                       averageValue={responseFromAPI.averageValue}
                     />
+                  )}
+                {responseFromAPI !== undefined &&
+                  'verifications' in responseFromAPI &&
+                  'lowAverageValue' in responseFromAPI &&
+                  'highAverageValue' in responseFromAPI &&
+                  current.mission === 'Manage blood pressure' && (
+                    <ReportChartBP
+                      data={data}
+                      data2={data2}
+                      lowAverageValue={responseFromAPI.lowAverageValue}
+                      highAverageValue={responseFromAPI.highAverageValue}
+                    />
+                  )}
+
+                {responseFromAPI !== undefined &&
+                  current.mission === 'Manage blood pressure' &&
+                  'bloodPressureResult' in responseFromAPI && (
+                    <View style={styles.resultContainer}>
+                      <Text style={styles.resultTitle}>분석 결과</Text>
+                      <View style={styles.resultContent}>
+                        <Text
+                          style={[
+                            styles.resultText,
+                            {
+                              color: getBloodPressureStyle(
+                                responseFromAPI.bloodPressureResult,
+                              ).color,
+                            },
+                          ]}>
+                          {responseFromAPI.bloodPressureResult}
+                        </Text>
+                        <Text style={styles.descriptionText}>
+                          {
+                            getBloodPressureStyle(
+                              responseFromAPI.bloodPressureResult,
+                            ).description
+                          }
+                        </Text>
+                      </View>
+                    </View>
                   )}
                 <ReportDetailAnalyisis
                   successRatio={
@@ -429,5 +527,36 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontFamily: 'Pretendard-Bold',
+  },
+
+  resultContainer: {
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginTop: 16,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+  },
+  resultTitle: {
+    fontSize: 24,
+    fontFamily: 'Pretendard-Bold',
+    color: '#1A1A1A',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  resultContent: {
+    gap: 8,
+  },
+  resultText: {
+    fontSize: 24,
+    fontFamily: 'Pretendard-Bold',
+    textAlign: 'center',
+  },
+  descriptionText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#666666',
+    lineHeight: 20,
+    textAlign: 'center',
   },
 });

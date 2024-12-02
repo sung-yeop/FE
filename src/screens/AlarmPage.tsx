@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader';
@@ -27,9 +27,6 @@ const AlarmPage = () => {
     setIsGuardianCheck(!isGuardianCheck);
   };
 
-  const navigateToLogin = () => {
-    navigation.navigate('Welcome');
-  };
   return (
     <SafeAreaView style={styles.container}>
       <PageHeader text="오늘의 알림" img={AlarmImg} />
@@ -40,15 +37,6 @@ const AlarmPage = () => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <AlarmList isGuardian={isGuardianCheck} />
       </ScrollView>
-      {/* <TouchableOpacity onPress={navigateToLogin}>
-        <Text>Welcome 페이지로 이동</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('TestPage')}>
-        <Text>Go to Test Page</Text>
-      </TouchableOpacity>*/}
-      {/* <TouchableOpacity onPress={() => navigation.navigate('ModuleTestPage')}>
-        <Text>Go to Module Test Page</Text>
-      </TouchableOpacity> */}
       <AddAlarmButton />
     </SafeAreaView>
   );

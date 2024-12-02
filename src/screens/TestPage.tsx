@@ -6,6 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {VerificationAPI} from '../api/VerificationAPI';
 import {MissionCareType} from '../types';
+import CustomSwipeable from '../util/CustomSwipeable';
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -17,13 +18,12 @@ const TestPage = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const addVerificationMockData = async () => {
-    await VerificationAPI.sendFirstAlert('6442045720');
-    await VerificationAPI.sendAlert('6442045720', 30, true);
-    await VerificationAPI.sendFirstAlert('7560950418');
-    await VerificationAPI.sendAlert('7560950418', 100, true);
-    // await VerificationAPI.sendFirstAlert('175149908');
-    // await VerificationAPI.sendAlert('175149908', 80, true);
-    // await VerificationAPI.sendFirstAlert('1447805143');
+    await VerificationAPI.sendFirstAlert('87774435');
+    await VerificationAPI.sendAlertWithBP('87774435', 30, 50);
+    await VerificationAPI.sendFirstAlert('158943204');
+    await VerificationAPI.sendAlertWithBP('158943204', 100, 120);
+    await VerificationAPI.sendFirstAlert('547987392');
+    await VerificationAPI.sendAlertWithBP('547987392', 80, 90);
     // await VerificationAPI.sendAlert('1447805143', 50, true);
     // await VerificationAPI.sendAlertWithFood('1990791846', [
     //   {
@@ -77,7 +77,15 @@ const TestPage = () => {
         style={styles.createAlarmContainer}>
         <Text style={styles.textStyle2}>실패 페이지 이동</Text>
       </TouchableOpacity>
-      {/* <EatingAnimation /> */}
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('AlarmScreen', {
+            alarmId: '478933382',
+          })
+        }
+        style={styles.createAlarmContainer}>
+        <Text style={styles.textStyle2}>알람 Alert 페이지로 이동</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -109,5 +117,15 @@ const styles = StyleSheet.create({
     color: '#C93939',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  rightAction: {width: 50, height: 50, backgroundColor: 'purple'},
+  separator: {
+    width: '100%',
+    borderTopWidth: 1,
+  },
+  swipeable: {
+    height: 50,
+    backgroundColor: 'papayawhip',
+    alignItems: 'center',
   },
 });

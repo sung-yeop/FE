@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 type Props = {
   missionId: MissionCareType;
   onPress: () => void;
-  isSelected: boolean;
+  isSelected?: boolean;
 };
 
 const ReportMissionItem = ({missionId, onPress, isSelected}: Props) => {

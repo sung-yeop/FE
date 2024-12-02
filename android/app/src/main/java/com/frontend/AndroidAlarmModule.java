@@ -29,9 +29,17 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
         return "AndroidAlarmModule";
     }
 
+    private int generateRequestCode(int alarmId, int dayOffset) {
+        return Math.abs((alarmId % 100000) * 10 + dayOffset);
+    }
+
     @ReactMethod
-    public void setAlarm(String alarmId, double timestamp, boolean isVibrate, int soundVolume, String soundUri, Integer alarmDays) {
-        // 현재 시각 가져오기
+    public void setAlarm(int alarmId, double timestamp, boolean isVibrate, int soundVolume, String soundUri, Integer alarmDays) {
+        Log.d("AndroidAlarmModule", "Setting alarm - ID: " + alarmId + 
+        ", timestamp: " + timestamp + 
+        ", isVibrate: " + isVibrate + 
+        ", soundUri: " + soundUri);
+
         long currentTime = System.currentTimeMillis();
         long alarmTime = (long) timestamp;
 
@@ -64,7 +72,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
 
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(
                         context,
-                        (alarmId + "_" + i).hashCode(),  // 요일별로 다른 ID 사용
+                        generateRequestCode(alarmId, i),
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
                     );
@@ -92,7 +100,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                alarmId.hashCode(),
+                alarmId,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
@@ -106,7 +114,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void cancelAlarm(String alarmId) {
+    public void cancelAlarm(int alarmId) {
         Log.d("AndroidAlarmModule", "Attempting to cancel alarm with ID: " + alarmId);
         
         // 모든 요일의 알람 취소
@@ -115,7 +123,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
             intent.putExtra("alarmId", alarmId);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                (alarmId + "_" + i).hashCode(),
+                generateRequestCode(alarmId, i),
                 intent,
                 PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
             );
@@ -132,7 +140,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
         intent.putExtra("alarmId", alarmId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarmId.hashCode(),
+            alarmId,
             intent,
             PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
         );
@@ -144,7 +152,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void updateAlarm(String alarmId, double newTimestamp, boolean active, double alarmInterval, int delayTimes, boolean isVibrate, boolean repeatTrigger, int soundVolume, String soundUri, Integer alarmDays) {
+    public void updateAlarm(int alarmId, double newTimestamp, boolean active, double alarmInterval, int delayTimes, boolean isVibrate, boolean repeatTrigger, int soundVolume, String soundUri, Integer alarmDays) {
         cancelAlarm(alarmId);
 
         if(active){

@@ -36,10 +36,10 @@ class MainActivity : ReactActivity() {
 
     private fun handleAlarmIntent(intent: Intent) {
         if (intent.getBooleanExtra("showAlarmScreen", false)) {
-            val alarmId = intent.getStringExtra("alarmId")
+            val alarmId = intent.getIntExtra("alarmId", -1)
             // React Native에 이벤트 전송
             val params = Arguments.createMap().apply {
-                putString("alarmId", alarmId)
+                putInt("alarmId", alarmId)
             }
             reactInstanceManager.currentReactContext
                 ?.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)

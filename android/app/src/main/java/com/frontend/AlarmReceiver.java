@@ -20,7 +20,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String alarmId = intent.getStringExtra("alarmId");
+        int alarmId = intent.getIntExtra("alarmId", -1);
+        Log.d("AlarmReceiver", "Received alarm - ID: " + alarmId + ", all extras: " + intent.getExtras().toString());
         boolean isVibrate = intent.getBooleanExtra("isVibrate", false);
         int soundVolume = intent.getIntExtra("soundVolume", 50);
         String soundUri = intent.getStringExtra("soundUri");

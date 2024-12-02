@@ -59,6 +59,7 @@ export const updateAlarmAPI = async (alarm: Alarm) => {
         isVibration: alarm.setting.isVibration,
         volume: alarm.setting.volume,
         alarmInterval: alarm.setting.alarmInterval,
+        disabled: alarm.disabled,
       }),
     });
 

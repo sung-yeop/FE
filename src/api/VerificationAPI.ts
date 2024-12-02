@@ -81,8 +81,7 @@ export class VerificationAPI {
     }
   }
 
-  // For Test
-  static async sendAlert(alarmId: string, value: number, result: boolean) {
+  static async sendAlertWithBS(alarmId: string, value: number) {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
@@ -97,13 +96,45 @@ export class VerificationAPI {
           username: username,
           verificationDateTime: new Date(),
           value: value,
-          result: result,
+          result: true,
         }),
       });
 
       if (!response.ok) {
         throw new Error(
           `Verification | sendFirstAlert Error : ${response.status}`,
+        );
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  static async sendAlertWithBP(alarmId: string, value: number, value2: number) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch('http://10.0.2.2:8080/verification/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          alarmId: alarmId,
+          username: username,
+          verificationDateTime: new Date(),
+          value: value,
+          value2: value2,
+          result: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Verification | sendAlertWithBP Error : ${response.status}`,
         );
       }
 

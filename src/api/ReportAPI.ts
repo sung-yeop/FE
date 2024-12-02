@@ -27,7 +27,7 @@ export class ReportAPI {
     }
   }
 
-  static async getReport({
+  static async getReportBS({
     missionName,
     startDate,
     endDate,
@@ -66,6 +66,47 @@ export class ReportAPI {
       throw err;
     }
   }
+
+  static async getReportBP({
+    missionName,
+    startDate,
+    endDate,
+  }: {
+    missionName: string;
+    startDate: string;
+    endDate: string;
+  }) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch(
+        'http://10.0.2.2:8080/verification/report/bloodPressure',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            username: username,
+            missionName: missionName,
+            startDate: startDate,
+            endDate: endDate,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Report - getReport 에러 : ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
   static async getFoodReport(reportDate: string) {
     try {
       const token = await AsyncStorage.getItem('token');

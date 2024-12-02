@@ -2,6 +2,64 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alarm} from '../types';
 
 export class GuardianAPI {
+  // static async getGuardianInfo() {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     const guardianName = await AsyncStorage.getItem('username');
+  //     const response = await fetch(
+  //       `http://10.0.2.2:8080/guardian/${guardianName}`,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         `GuardianAPI | getGuardianInfo - 가디언 정보를 정상적으로 불러오지 못했습니다. ${response.status}`,
+  //       );
+  //     }
+
+  //     const text = await response.text();
+  //     return JSON.parse(text);
+  //   } catch (err) {
+  //     console.error(err);
+  //     throw err;
+  //   }
+  // }
+
+  static async getGuardianInfo() {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const username = await AsyncStorage.getItem('username');
+      const response = await fetch(
+        `http://10.0.2.2:8080/guardian/${username}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `GuardianAPI | getGuardianInfo - api 오류 ${response.status}`,
+        );
+      }
+
+      console.log('Guardian RESPONSE : ', response);
+
+      const text = await response.text();
+      return JSON.parse(text);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   static async getSeniors() {
     try {
       const token = await AsyncStorage.getItem('token');

@@ -54,6 +54,8 @@ export class VerificationAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
+      const date = new Date();
+      date.setHours(date.getHours() + 9);
       const response = await fetch('http://10.0.2.2:8080/verification/add', {
         method: 'POST',
         headers: {
@@ -63,7 +65,7 @@ export class VerificationAPI {
         body: JSON.stringify({
           alarmId: alarmId,
           username: username,
-          verificationDateTime: new Date(),
+          verificationDateTime: date,
           value: 0,
           result: false,
         }),
@@ -85,6 +87,9 @@ export class VerificationAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
+      const date = new Date();
+      date.setHours(date.getHours() + 9);
+      date.setDate(date.getDate() + 2);
       const response = await fetch('http://10.0.2.2:8080/verification/add', {
         method: 'POST',
         headers: {
@@ -94,7 +99,7 @@ export class VerificationAPI {
         body: JSON.stringify({
           alarmId: alarmId,
           username: username,
-          verificationDateTime: new Date(),
+          verificationDateTime: date,
           value: value,
           result: true,
         }),
@@ -116,6 +121,12 @@ export class VerificationAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 2);
+
+      const date = new Date();
+      date.setHours(date.getHours() + 9);
+
       const response = await fetch('http://10.0.2.2:8080/verification/add', {
         method: 'POST',
         headers: {
@@ -125,7 +136,7 @@ export class VerificationAPI {
         body: JSON.stringify({
           alarmId: alarmId,
           username: username,
-          verificationDateTime: new Date(),
+          verificationDateTime: tomorrow,
           value: value,
           value2: value2,
           result: true,
@@ -149,6 +160,8 @@ export class VerificationAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
+      const date = new Date();
+      date.setHours(date.getHours() + 9);
       const response = await fetch('http://10.0.2.2:8080/food/add', {
         method: 'POST',
         headers: {
@@ -158,7 +171,7 @@ export class VerificationAPI {
         body: JSON.stringify({
           alarmId: alarmId,
           username: username,
-          verificationDateTime: new Date(),
+          verificationDateTime: date,
           result: true,
           foods: foods,
         }),

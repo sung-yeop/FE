@@ -5,6 +5,8 @@ export class UserAPI {
     try {
       const username = await AsyncStorage.getItem('username');
       const token = await AsyncStorage.getItem('token');
+
+      console.log('Username : ', username);
       const response = await fetch(`http://10.0.2.2:8080/user/${username}`, {
         method: 'GET',
         headers: {

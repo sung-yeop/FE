@@ -15,6 +15,17 @@ import {RootStackParamList} from '../../../App';
 import LoginFunctionContent from './LoginFunctionContent';
 import {theme} from '../../style/Theme';
 import {SignInAPI} from '../../api/SignInAPI';
+import {useRecoilState} from 'recoil';
+import {
+  guardianSelector,
+  guardianState,
+  userSelector,
+  userState,
+} from '../../atoms';
+import {GuardianAPI} from '../../api/GuardianAPI';
+import {UserInfo} from '../../types';
+import {createTestScheduler} from 'jest';
+import {UserAPI} from '../../api/UserAPI';
 
 type NavigationProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,6 +41,8 @@ const LoginContent = () => {
   const [emailFocus, setEmailFocus] = useState<boolean>(false);
   const [passwordFocus, setPasswordFocus] = useState<boolean>(false);
   const [inValidInput, setInValidInput] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useRecoilState(userSelector);
+  const [guardianInfo, setGuardianInfo] = useRecoilState(guardianSelector);
 
   const handleLogin = async () => {
     if (isGurdian) {
@@ -38,7 +51,11 @@ const LoginContent = () => {
         password,
       });
       if (result) {
-        console.log('Login Result : ', result);
+        const response = await GuardianAPI.getGuardianInfo();
+        setGuardianInfo({
+          ...response,
+          id: response.guardianName,
+        });
         navigation.reset({
           index: 0,
           routes: [
@@ -58,8 +75,12 @@ const LoginContent = () => {
         username,
         password,
       });
-      console.log('Login Result : ', result);
       if (result) {
+        const response = await UserAPI.getUserInfo();
+        setUserInfo({
+          ...response,
+          id: response.username,
+        });
         navigation.reset({
           index: 0,
           routes: [

@@ -23,6 +23,7 @@ export const useAlarmManager = () => {
   };
 
   const saveAlarm = async (alarm: Alarm) => {
+    console.log('Target Alarm : ', alarm.timer);
     try {
       if (Platform.OS === 'android') {
         await AndroidAlarmModule.setAlarm(

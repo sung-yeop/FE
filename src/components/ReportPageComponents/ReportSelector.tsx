@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useReportManager} from '../../hooks/useReportManager';
 import CustomCalendar from '../CustomCalendar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -26,6 +26,8 @@ const ReportSelector = () => {
   const [isVisibleCalendar, setisVisibleCalendar] = useState<boolean>(false);
   const [isCalendarSelected, setIsCalendarSelected] = useState(false);
   const [activeBtn, setActiveBtn] = useState<number>(-1);
+  const today = new Date();
+  today.setHours(today.getHours() + 9);
 
   const handleDurationSelect = (duration: any) => {
     updateCurrentDuration(duration);
@@ -47,20 +49,19 @@ const ReportSelector = () => {
           label="오늘"
           onPress={() => {
             setActiveBtn(0);
-            handleDurationSelect({startDate: new Date(), endDate: new Date()});
+            handleDurationSelect({startDate: today, endDate: today});
           }}
           isSelected={activeBtn === 0}
         />
         <DurationButton
           label="이번주"
           onPress={() => {
-            const today = new Date();
             const startOfWeek = new Date(today);
             startOfWeek.setDate(today.getDate() - today.getDay());
             setActiveBtn(1);
             handleDurationSelect({
               startDate: startOfWeek,
-              endDate: new Date(),
+              endDate: today,
             });
           }}
           isSelected={activeBtn === 1}
@@ -68,7 +69,6 @@ const ReportSelector = () => {
         <DurationButton
           label="이번달"
           onPress={() => {
-            const today = new Date();
             const startOfMonth = new Date(
               today.getFullYear(),
               today.getMonth(),
@@ -76,7 +76,7 @@ const ReportSelector = () => {
             );
             handleDurationSelect({
               startDate: startOfMonth,
-              endDate: new Date(),
+              endDate: today,
             });
             setActiveBtn(2);
           }}

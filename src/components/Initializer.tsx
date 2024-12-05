@@ -16,8 +16,7 @@ const Initializer = () => {
         //for test toekn create
         // await AsyncStorage.setItem('token', '123');
         // await AsyncStorage.setItem('isGuardian', 'Yes');
-
-        // await AsyncStorage.clear();
+        await AsyncStorage.clear();
 
         const token = await AsyncStorage.getItem('token');
         const isGuardian = await AsyncStorage.getItem('isGuardian');

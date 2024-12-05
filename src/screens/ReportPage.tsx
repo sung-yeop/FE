@@ -5,14 +5,16 @@ import {
   ScrollView,
   Animated,
   TouchableOpacity,
+  Image,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useEffect, useState, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader';
 import ReportSelector from '../components/ReportPageComponents/ReportSelector';
 import ReportDetailAnalyisis from '../components/ReportPageComponents/ReportDetailAnalyisis';
 import ReportSelectMission from '../components/ReportPageComponents/ReportSelectMission';
-import {AlarmImg} from '../../asset/images';
+import {AlarmImg, PencilImg} from '../../asset/images';
 import {useReportManager} from '../hooks/useReportManager';
 import ReportBtn from '../components/ReportPageComponents/ReportBtn';
 import {theme} from '../style/Theme';
@@ -21,6 +23,11 @@ import {MissionParser} from '../util/MissionParser';
 import {ReportUtil} from '../util/ReportUtils';
 import ReportChartBS from './ReportChartBS';
 import ReportChartBP from './ReportChartBP';
+import {AnimatedView} from 'react-native-reanimated/lib/typescript/component/View';
+import {useUserInfoManager} from '../hooks/useUserInfoManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SelectUser from '../components/Guardian/GReportPageComponents/SelectUser';
+import ReportFoodDetailAnalysis from '../components/ReportPageComponents/ReportFoodDetailAnalysis';
 
 // import LoadingSpinner from '../components/LoadingSpinner'; // 로딩 컴포넌트 필요
 
@@ -132,7 +139,7 @@ const ReportPage = () => {
       value: number;
     }[]
   >();
-  const {current} = useReportManager();
+  const {current, updateCurrentMission} = useReportManager();
   const [duration, setDuration] = useState({
     startDate: '',
     endDate: '',
@@ -202,18 +209,9 @@ const ReportPage = () => {
 
     if (duration.startDate && duration.endDate && current.mission) {
       const response = await ReportUtil.getReport(current);
-      // if (current.mission === 'Eat food') {
-      //   response = await ReportAPI.getFoodReport(new Date().toISOString());
-      // } else {
-      //   response = await ReportAPI.getReport({
-      //     missionName: current.mission,
-      //     startDate: duration.startDate,
-      //     endDate: duration.endDate,
-      //   });
-      // }
-      setResponseFromAPI(response);
 
-      console.log('API 호출 결과 : ', response);
+      console.log('ReportPage | API 호출 결과 : ', response);
+      setResponseFromAPI(response);
 
       if (
         'verifications' in response &&
@@ -228,7 +226,6 @@ const ReportPage = () => {
         'verifications' in response &&
         current.mission === 'Manage blood pressure'
       ) {
-        console.log('BP Inter');
         const {averagedDatas, averageDatas2} = Parser.parseChartFormFromAPI(
           response.verifications,
         );
@@ -282,6 +279,8 @@ const ReportPage = () => {
       fadeAnim3.setValue(0);
       resetAnim.setValue(50);
 
+      updateCurrentMission(undefined);
+
       // 첫 번째 컴포넌트 페이드인 시작
       setTimeout(() => {
         Animated.timing(fadeAnim1, {
@@ -324,8 +323,20 @@ const ReportPage = () => {
                 <Animated.View style={{opacity: fadeAnim1}}>
                   <ReportSelectMission />
                 </Animated.View>
+                {isSelectMission && current.mission === 'Eat food' && (
+                  <View style={styles.usageContainer}>
+                    <Icon
+                      name="info-outline"
+                      size={16}
+                      color={theme.colors.primary.main}
+                    />
+                    <Text style={styles.usageText}>
+                      {`식사 미션의 경우 오늘 진행한 미션에 대해서만 \n리포트가 제공돼요!`}
+                    </Text>
+                  </View>
+                )}
 
-                {isSelectMission && (
+                {isSelectMission && current.mission !== 'Eat food' && (
                   <Animated.View style={{opacity: fadeAnim2}}>
                     <ReportSelector />
                   </Animated.View>
@@ -361,9 +372,15 @@ const ReportPage = () => {
                 }),
               }}>
               <View style={styles.ViewContent}>
-                <Text style={[theme.typography.h2, {textAlign: 'center'}]}>
-                  {MissionParser.parseMissionName(current.mission)}
-                </Text>
+                <View style={styles.titleContainer}>
+                  <View style={styles.titleWrapper}>
+                    <Image source={PencilImg} style={styles.iconStyle} />
+                    <Text style={styles.reportTitle}>
+                      {MissionParser.parseMissionName(current.mission)}
+                    </Text>
+                  </View>
+                </View>
+
                 {responseFromAPI !== undefined &&
                   'verifications' in responseFromAPI &&
                   'averageValue' in responseFromAPI &&
@@ -413,30 +430,30 @@ const ReportPage = () => {
                       </View>
                     </View>
                   )}
-                <ReportDetailAnalyisis
-                  successRatio={
-                    responseFromAPI !== undefined &&
-                    'verifications' in responseFromAPI
-                      ? responseFromAPI.successRatio
-                      : responseFromAPI?.nutrientVerificationResponseDTOS[0]
-                          .verificationResponseDTO.result
-                      ? 1
-                      : undefined
-                  }
-                  foods={
-                    responseFromAPI !== undefined &&
-                    'nutrientVerificationResponseDTOS' in responseFromAPI
-                      ? responseFromAPI.nutrientVerificationResponseDTOS[0]
-                          .foods
-                      : undefined
-                  }
-                  nutrientData={
-                    responseFromAPI !== undefined &&
-                    'foodAverages' in responseFromAPI
-                      ? responseFromAPI.foodAverages[0]
-                      : undefined
-                  }
-                />
+                {responseFromAPI !== undefined &&
+                  'verifications' in responseFromAPI && (
+                    <ReportDetailAnalyisis
+                      successRatio={responseFromAPI.successRatio}
+                    />
+                  )}
+                {responseFromAPI !== undefined &&
+                  'nutrientVerificationResponseDTOS' in responseFromAPI &&
+                  'foodAverages' in responseFromAPI && (
+                    <ReportFoodDetailAnalysis
+                      foods={
+                        responseFromAPI.nutrientVerificationResponseDTOS
+                          .length !== 0
+                          ? responseFromAPI.nutrientVerificationResponseDTOS[0]
+                              .foods
+                          : undefined
+                      }
+                      nutrientData={
+                        responseFromAPI.foodAverages.length !== 0
+                          ? responseFromAPI.foodAverages[0]
+                          : undefined
+                      }
+                    />
+                  )}
               </View>
               <TouchableOpacity
                 style={theme.buttonContainerStyle}
@@ -558,5 +575,44 @@ const styles = StyleSheet.create({
     color: '#666666',
     lineHeight: 20,
     textAlign: 'center',
+  },
+  titleContainer: {
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+  titleWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  iconStyle: {
+    width: 24,
+    height: 24,
+    tintColor: theme.colors.primary.main,
+  },
+  reportTitle: {
+    fontSize: 22,
+    fontFamily: 'Pretendard-Bold',
+    color: '#1A1A1A',
+  },
+
+  usageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: theme.colors.primary.light + '15',
+    padding: 12,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  usageText: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    color: '#666666',
+    lineHeight: 20,
+    flex: 1,
   },
 });

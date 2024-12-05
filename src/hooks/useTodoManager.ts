@@ -27,8 +27,8 @@ export const useTodoManager = () => {
         STORAGE_TODO_KEY,
         JSON.stringify(updatedTodos),
       );
-      setAllTodo(updatedTodos);
       const response = await TodoAPI.addTodo(todo);
+      setAllTodo(updatedTodos);
       console.log('useTodoManager | saveTodo - response : ', response);
 
       console.log('Alarm saved successfully:', updatedTodos);

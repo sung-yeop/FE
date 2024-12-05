@@ -34,6 +34,14 @@ export class GuardianAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
+
+      // username 값 확인
+      console.log('Stored username:', username);
+
+      if (!username) {
+        throw new Error('Username not found in AsyncStorage');
+      }
+
       const response = await fetch(
         `http://10.0.2.2:8080/guardian/${username}`,
         {
@@ -46,12 +54,16 @@ export class GuardianAPI {
       );
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+        });
         throw new Error(
-          `GuardianAPI | getGuardianInfo - api 오류 ${response.status}`,
+          `GuardianAPI | getGuardianInfo - api 오류 ${response.status} - ${errorText}`,
         );
       }
-
-      console.log('Guardian RESPONSE : ', response);
 
       const text = await response.text();
       return JSON.parse(text);

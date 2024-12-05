@@ -17,7 +17,6 @@ export interface UserInfo extends User {
   phoneNumber: string;
   age?: number;
   gender?: string;
-  isGuardian: boolean;
 }
 
 export type DayKey =
@@ -108,8 +107,10 @@ export type ReportAPI = {
   endDate: string;
 };
 
+// 수정 예정 -> 시니어가 이전에 수행했던 미션들 정보도 포함
 export type SeniorInfo = {
   name: string;
   phoneNumber: number;
   username: string;
+  missions: MissionCareType[];
 };

@@ -10,6 +10,8 @@ import {TodoAPI} from './api/TodoAPI';
 export const STORAGE_ALARM_KEY = 'alarms';
 export const STORAGE_TODO_KEY = 'todos';
 export const STORAGE_MANAGE_KEY = 'seniors';
+const today = new Date();
+today.setHours(today.getHours() + 9);
 
 export const allAlarmsState = atom<Alarm[]>({
   key: 'allAlarmsState',
@@ -59,7 +61,7 @@ export const currentReportState = atom<Report>({
   key: 'currentReportState',
   default: {
     mission: undefined,
-    duration: {startDate: new Date(), endDate: new Date()},
+    duration: {startDate: today, endDate: today},
   },
 });
 
@@ -68,6 +70,22 @@ export const currentReportSelector = selector({
   get: ({get}) => get(currentReportState),
   set: ({set}, newValue: Report | DefaultValue) =>
     set(currentReportState, newValue),
+});
+
+export const currentGuardianReportState = atom<Report & {username: string}>({
+  key: 'currentGuardianReportState',
+  default: {
+    username: '',
+    mission: undefined,
+    duration: {startDate: today, endDate: today},
+  },
+});
+
+export const currentGuardianReportSelector = selector({
+  key: 'currentGuardianReportSelector',
+  get: ({get}) => get(currentGuardianReportState),
+  set: ({set}, newValue: (Report & {username: string}) | DefaultValue) =>
+    set(currentGuardianReportState, newValue),
 });
 
 export const allTodoState = atom<Todo[]>({
@@ -155,51 +173,21 @@ export const selectSeniorSelector = selector({
     set(selectSeniorState, newValue),
 });
 
+export const guardianState = atom<UserInfo | undefined>({
+  key: 'guardianState',
+  default: {id: '', name: '', phoneNumber: ''},
+});
+
+export const guardianSelector = selector({
+  key: 'guardianSelector',
+  get: ({get}) => get(guardianState),
+  set: ({set}, newValue: DefaultValue | UserInfo | undefined) =>
+    set(guardianState, newValue),
+});
+
 export const userState = atom<UserInfo | undefined>({
   key: 'userState',
-  default: {id: '', name: '', phoneNumber: '', isGuardian: false},
-  effects: [
-    ({setSelf}) => {
-      const loadInitialValue = async () => {
-        try {
-          const isGuardian = await AsyncStorage.getItem('isGuardian');
-          let response;
-          console.log('isGuardian : ', isGuardian);
-
-          if (!isGuardian) {
-            setSelf({id: '', name: '', phoneNumber: '', isGuardian: false});
-            return;
-          }
-
-          if (isGuardian === 'Yes') {
-            response = await GuardianAPI.getGuardianInfo();
-            setSelf({
-              ...response,
-              id: response.guardianName,
-              isGuardian: true,
-            });
-            return;
-          } else if (isGuardian === 'No') {
-            response = await UserAPI.getUserInfo();
-            setSelf({
-              ...response,
-              id: response.username,
-              isGuardian: false,
-            });
-            return;
-          } else {
-            throw new Error(
-              "atoms | userState | isGuardian 값이 'Yes'도 'No'도 아닙니다.",
-            );
-          }
-        } catch (error) {
-          console.error('Error loading alarms:', error);
-        }
-      };
-
-      loadInitialValue();
-    },
-  ],
+  default: {id: '', name: '', phoneNumber: ''},
 });
 
 export const userSelector = selector({

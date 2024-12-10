@@ -1,4 +1,8 @@
+import {GetURL} from './GetUrl';
+
 export class SignUpAPI {
+  static baseUrl = GetURL.baseUrl;
+
   static async sendSignUpWithUser({
     username,
     name,
@@ -15,7 +19,7 @@ export class SignUpAPI {
     gender: string;
   }) {
     try {
-      const response = await fetch('http://10.0.2.2:8080/user/join', {
+      const response = await fetch(`${this.baseUrl}/user/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +55,7 @@ export class SignUpAPI {
     phoneNumber: string;
   }) => {
     try {
-      const response = await fetch('http://10.0.2.2:8080/guardian/join', {
+      const response = await fetch(`${this.baseUrl}/guardian/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,15 +79,12 @@ export class SignUpAPI {
 
   static async checkDuplicateUsername(username: string) {
     try {
-      const response = await fetch(
-        `http://10.0.2.2:8080/user/${username}/check`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const response = await fetch(`${this.baseUrl}/user/${username}/check`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
 
       if (!response.ok) {
         throw new Error(`오류 발생 : ${response.status}`);

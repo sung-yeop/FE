@@ -1,12 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GetURL} from './GetUrl';
 
 export class ReportAPI {
+  static baseUrl = GetURL.baseUrl;
+
   static async getMissions() {
     try {
       const username = await AsyncStorage.getItem('username');
       const token = await AsyncStorage.getItem('token');
       const response = await fetch(
-        `http://10.0.2.2:8080/verification/reports/${username}`,
+        `${this.baseUrl}/verification/reports/${username}`,
         {
           method: 'GET',
           headers: {
@@ -42,7 +45,7 @@ export class ReportAPI {
       console.log('Mission Name : ', missionName);
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
-      const response = await fetch('http://10.0.2.2:8080/verification/report', {
+      const response = await fetch(`${this.baseUrl}/verification/report`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +83,7 @@ export class ReportAPI {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
       const response = await fetch(
-        'http://10.0.2.2:8080/verification/report/bloodPressure',
+        `${this.baseUrl}/verification/report/bloodPressure`,
         {
           method: 'POST',
           headers: {
@@ -111,7 +114,7 @@ export class ReportAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
-      const response = await fetch('http://10.0.2.2:8080/food/report', {
+      const response = await fetch(`${this.baseUrl}/food/report`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +156,7 @@ export class ReportAPI {
       console.log('Mission Name : ', missionName);
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
-      const response = await fetch('http://10.0.2.2:8080/guardian/report', {
+      const response = await fetch(`${this.baseUrl}/guardian/report`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +197,7 @@ export class ReportAPI {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
       const response = await fetch(
-        'http://10.0.2.2:8080/verification/guardian/report/bloodPressure',
+        `${this.baseUrl}/guardian/report/bloodPressure`,
         {
           method: 'POST',
           headers: {
@@ -226,24 +229,25 @@ export class ReportAPI {
     try {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
-      const response = await fetch(
-        'http://10.0.2.2:8080/guardian/food/report',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            guardianName: guardianName,
-            username: username,
-            reportDate: reportDate,
-          }),
+      const response = await fetch(`${this.baseUrl}/guardian/report/food`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          guardianName: guardianName,
+          username: username,
+          reportDate: reportDate,
+        }),
+      });
+
+      console.log('ReportAPI | getGuardianFoodReport : ', response);
 
       if (!response.ok) {
-        throw new Error(`Report - getFoodReport 에러 : ${response.status}`);
+        throw new Error(
+          `Report - getGuardianFoodReport 에러 : ${response.status}`,
+        );
       }
 
       return response.json();
@@ -251,35 +255,5 @@ export class ReportAPI {
       console.error(err);
       throw err;
     }
-  }
-
-  static async getTargetUserMissions() {
-    // try {
-    //   const token = await AsyncStorage.getItem('token');
-    //   const guardianName = await AsyncStorage.getItem('username');
-    //   const response = await fetch(
-    //     'http://10.0.2.2:8080/guardian/food/report',
-    //     {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //       body: JSON.stringify({
-    //         guardianName: guardianName,
-    //         username: username,
-    //         reportDate: reportDate,
-    //       }),
-    //     },
-    //   );
-    //   if (!response.ok) {
-    //     throw new Error(`Report - getFoodReport 에러 : ${response.status}`);
-    //   }
-    //   return response.json();
-    // } catch (err) {
-    //   console.error(err);
-    //   throw err;
-    // }
-    // }
   }
 }

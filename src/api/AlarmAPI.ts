@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alarm} from '../types';
+import {GetURL} from './GetUrl';
+
+const baseUrl = GetURL.baseUrl;
 
 export const newAlarmSend = async (alarm: Alarm) => {
   try {
     const token = await AsyncStorage.getItem('token');
     const username = await AsyncStorage.getItem('username');
-    const response = await fetch('http://10.0.2.2:8080/alarm/add', {
+    const response = await fetch(`${baseUrl}/alarm/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,6 +19,7 @@ export const newAlarmSend = async (alarm: Alarm) => {
         username: username,
         alarmTime: alarm.timer,
         active: alarm.active,
+        title: alarm.title,
         alarmDays: alarm.alarmDays,
         delayTimes: alarm.delayTimes,
         restrictAlarm: alarm.mission.mode,
@@ -41,7 +45,7 @@ export const updateAlarmAPI = async (alarm: Alarm) => {
   try {
     const token = await AsyncStorage.getItem('token');
     const username = await AsyncStorage.getItem('username');
-    const response = await fetch('http://10.0.2.2:8080/alarm/update', {
+    const response = await fetch(`${baseUrl}/alarm/update`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -53,6 +57,7 @@ export const updateAlarmAPI = async (alarm: Alarm) => {
         missionName: alarm.mission.id,
         alarmTime: alarm.timer,
         active: alarm.active,
+        title: alarm.title,
         alarmDays: alarm.alarmDays,
         delayTimes: alarm.delayTimes,
         restrictAlarm: alarm.mission.mode,
@@ -78,7 +83,7 @@ export const getAlarms = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
     const username = await AsyncStorage.getItem('username');
-    const response = await fetch(`http://10.0.2.2:8080/alarm/${username}`, {
+    const response = await fetch(`${baseUrl}/alarm/${username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

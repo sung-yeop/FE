@@ -68,6 +68,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
                     intent.putExtra("isVibrate", isVibrate);
                     intent.putExtra("soundVolume", soundVolume);
                     intent.putExtra("soundUri", soundUri);
+                    intent.putExtra("timeStamp", (long) alarmTime); // 추가
                     intent.putExtra("dayOfWeek", i);  // 요일 정보 추가
 
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(
@@ -97,6 +98,7 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
             intent.putExtra("isVibrate", isVibrate);
             intent.putExtra("soundVolume", soundVolume);
             intent.putExtra("soundUri", soundUri);
+            intent.putExtra("timeStamp", (long) alarmTime); // 추가
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -174,6 +176,50 @@ public class AndroidAlarmModule extends ReactContextBaseJavaModule {
                 
             setAlarm(alarmId, (double) newAlarmTime, isVibrate, soundVolume, soundUri, alarmDays);
         }
+    }
+
+    @ReactMethod
+    public void cancelAlarmsByIds(int[] alarmIds) {
+        Log.d("AndroidAlarmModule", "Cancelling alarms for specified IDs");
+        
+        for (int i = 0; i < alarmIds.length; i++) {
+            int alarmId = alarmIds[i];
+            
+            // 단일 알람 취소
+            Intent intent = new Intent(context, AlarmReceiver.class);
+            intent.putExtra("alarmId", alarmId);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                alarmId,
+                intent,
+                PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            if (pendingIntent != null) {
+                alarmManager.cancel(pendingIntent);
+                pendingIntent.cancel();
+                Log.d("AndroidAlarmModule", "Cancelled single alarm with ID: " + alarmId);
+            }
+
+            // 요일별 알람 취소
+            for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
+                Intent repeatIntent = new Intent(context, AlarmReceiver.class);
+                repeatIntent.putExtra("alarmId", alarmId);
+                PendingIntent repeatPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    generateRequestCode(alarmId, dayOffset),
+                    repeatIntent,
+                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
+                );
+
+                if (repeatPendingIntent != null) {
+                    alarmManager.cancel(repeatPendingIntent);
+                    repeatPendingIntent.cancel();
+                    Log.d("AndroidAlarmModule", "Cancelled repeating alarm with ID: " + alarmId + " for day: " + dayOffset);
+                }
+            }
+        }
+        Log.d("AndroidAlarmModule", "Finished cancelling specified alarms");
     }
 
     @ReactMethod

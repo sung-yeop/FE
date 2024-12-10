@@ -25,7 +25,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         boolean isVibrate = intent.getBooleanExtra("isVibrate", false);
         int soundVolume = intent.getIntExtra("soundVolume", 50);
         String soundUri = intent.getStringExtra("soundUri");
+        long timeStamp = intent.getLongExtra("timeStamp", 0L);
         double repeatInterval = intent.getDoubleExtra("repeatInterval", 0);
+        long currentTime = System.currentTimeMillis();
+
+        if (Math.abs(currentTime - timeStamp) > 60000) {
+            Log.d("AlarmReceiver", "Ignoring alarm - not the right time. AlarmId: " + alarmId);
+            return;
+        }
 
         Log.d("AlarmReceiver", "Alarm triggered: " + alarmId);
 
@@ -77,6 +84,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     //         Log.e("AlarmReceiver", "Error playing alarm sound", e);
     //     }
     // }
+    
     private void playAlarmSound(Context context, String soundUri, int volume) {
         try {
             Uri sound;

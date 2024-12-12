@@ -36,11 +36,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Log.d("AlarmReceiver", "Alarm triggered: " + alarmId);
 
-        if (isVibrate) {
-            vibrate(context);
-        } else {
-            playAlarmSound(context, soundUri, soundVolume);
-        }
+        playAlarmSound(context, soundUri, soundVolume);
+
+        // if (isVibrate) {
+        //     vibrate(context);
+        // } else {
+        //     playAlarmSound(context, soundUri, soundVolume);
+        // }
 
         // React Native 앱의 특정 화면을 열기 위한 Intent 생성
         Intent launchIntent = new Intent(context, MainActivity.class);
@@ -61,10 +63,21 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
         }
     }
-
+    
     // private void playAlarmSound(Context context, String soundUri, int volume) {
     //     try {
-    //         Uri sound = Uri.parse(soundUri);
+    //         Uri sound;
+    //         if (soundUri == null || soundUri.isEmpty()) {
+    //             // 시스템 기본 알람 소리 사용
+    //             sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+    //             if (sound == null) {
+    //                 // 알람 소리가 없으면 알림 소리로 대체
+    //                 sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    //             }
+    //         } else {
+    //             sound = Uri.parse(soundUri);
+    //         }
+    
     //         mediaPlayer = new MediaPlayer();
     //         mediaPlayer.setDataSource(context, sound);
     //         final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -84,38 +97,36 @@ public class AlarmReceiver extends BroadcastReceiver {
     //         Log.e("AlarmReceiver", "Error playing alarm sound", e);
     //     }
     // }
-    
+
     private void playAlarmSound(Context context, String soundUri, int volume) {
         try {
-            Uri sound;
-            if (soundUri == null || soundUri.isEmpty()) {
-                // 시스템 기본 알람 소리 사용
-                sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                if (sound == null) {
-                    // 알람 소리가 없으면 알림 소리로 대체
-                    sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                }
-            } else {
-                sound = Uri.parse(soundUri);
+            // 기존 MediaPlayer가 있다면 해제
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
             }
-    
+            
             mediaPlayer = new MediaPlayer();
+            
+            // 오디오 스트림 타입 설정
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            
+            Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             mediaPlayer.setDataSource(context, sound);
-            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            
+            // 볼륨 설정
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager != null) {
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
+                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+                int scaledVolume = (volume * maxVolume) / 100;
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, scaledVolume, 0);
             }
-            mediaPlayer.setAudioAttributes(
-                new AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .build()
-            );
+            
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (Exception e) {
             Log.e("AlarmReceiver", "Error playing alarm sound", e);
+            e.printStackTrace();
         }
     }
 

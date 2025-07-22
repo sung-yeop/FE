@@ -47,13 +47,12 @@ const TodoItem = ({todo, onClickTodo}: Props) => {
                     {
                       flexDirection: 'row',
                       gap: 6,
-                      backgroundColor: theme.colors.primary.light,
                       padding: 10,
                       borderRadius: 30,
                     },
                   ]}>
                   <Image source={CalenderImg} style={[styles.calendarIcon]} />
-                  <Text style={[styles.dDayTextStyle, {color: 'white'}]}>
+                  <Text style={[styles.dDayTextStyle, {color: 'black'}]}>
                     {TodoUtil.calculateDday(todo.day)}
                   </Text>
                 </View>
@@ -66,6 +65,9 @@ const TodoItem = ({todo, onClickTodo}: Props) => {
                 <Text style={styles.timeText}>{formatTime(todo.timer)}</Text>
               </View>
             </View>
+          </View>
+          <View style={styles.pictureContainer}>
+            <Text>사진</Text>
           </View>
           <View style={styles.contentContainer}>
             <Text style={styles.titleText} numberOfLines={1}>
@@ -180,5 +182,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Bold',
     color: '#007AFF',
     includeFontPadding: false,
+  },
+  pictureContainer: {
+    height: 80,
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: '#666',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

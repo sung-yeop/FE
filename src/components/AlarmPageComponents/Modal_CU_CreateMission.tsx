@@ -19,6 +19,8 @@ const Modal_CU_CreateMission = () => {
     }
   };
 
+  console.log('MISSION : ', current.mission);
+
   return (
     <View style={styles.Container}>
       <View style={styles.HeaderContainer}>
@@ -31,7 +33,7 @@ const Modal_CU_CreateMission = () => {
           />
         </View>
       </View>
-      {current.mission.id !== undefined ? (
+      {current.mission !== undefined && current.mission?.id !== undefined ? (
         <MissionItem
           id={current.mission.id}
           onPress={() => setIsVisibleCreateMissionModal(true)}

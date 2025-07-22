@@ -1,37 +1,96 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {
+  getFoodRecommendation,
+  getNutrientStatus,
+  getStatusText,
+} from './FoodRecommand';
+import {Food, NutrientData} from '../../screens/ReportPage';
 
 type Props = {
-  successRatio: number;
+  foods: Food[] | undefined;
+  nutrientData: NutrientData | undefined;
 };
-
-const ReportDetailAnalyisis = ({successRatio}: Props) => {
-  const getMessage = (ratio: number) => {
-    if (ratio >= 0.8) return '놀라운 성과예요! 잘 유지하고 계시네요 💪';
-    if (ratio >= 0.5) return '꾸준히 달성하고 계시네요! 앞으로도 파이팅 💪';
-    if (ratio >= 0.3) return '점점 나아지고 있어요! 조금만 더 힘내세요 😊';
-    return '천천히 시작해보세요! 작은 실천이 큰 변화를 만들어요 ✨';
-  };
-
+const ReportFoodDetailAnalysis = ({foods, nutrientData}: Props) => {
+  if (foods === undefined || nutrientData === undefined)
+    return <Text>아직 오늘은 완료하신 미션이 없어요</Text>;
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.smallTitle}>지난 미션 성공률</Text>
-        <View style={styles.percentageContainer}>
-          <Text style={styles.percentage}>
-            {`${(successRatio * 100).toFixed(1)}%`}
-          </Text>
-          <Text style={styles.percentageLabel}>달성</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoText}>{getMessage(successRatio)}</Text>
-        </View>
+      <Text style={styles.smallTitle}>오늘의 영양 섭취 현황</Text>
+      <View style={styles.statsContainer}>
+        {Object.entries({
+          탄수화물: nutrientData?.carbohydrates_percent,
+          단백질: nutrientData?.protein_percent,
+          지방: nutrientData?.fat_percent,
+          나트륨: nutrientData?.sodium_percent,
+        }).map(([name, value]) => {
+          const percent = value || 0;
+          const status = getNutrientStatus(percent);
+
+          return (
+            <View key={name} style={styles.statBox}>
+              <Text style={styles.statName}>{name}</Text>
+              <Text style={styles.statValue}>
+                {(percent * 100).toFixed(1)}%
+              </Text>
+              <View style={styles.labelContainer}>
+                <View
+                  style={[styles.statusBadge, {backgroundColor: status.color}]}>
+                  <Text style={styles.statusText}>
+                    {getStatusText(percent)}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          );
+        })}
       </View>
+
+      {getFoodRecommendation(nutrientData)?.map((rec, index) => {
+        const currentValue =
+          nutrientData?.[
+            `${rec.nutrient.toLowerCase()}_percent` as keyof NutrientData
+          ] || 0;
+        const status = getNutrientStatus(currentValue);
+
+        return (
+          <View key={index} style={styles.recommendationCard}>
+            <View style={styles.recommendationHeader}>
+              <Icon name="restaurant" size={20} color={status.color} />
+              <Text style={styles.recommendationTitle}>
+                {`${rec.nutrient} 영양소 균형을 위한 제안`}
+              </Text>
+            </View>
+            <Text style={styles.recommendationText}>{rec.message}</Text>
+            <View style={styles.foodTagsContainer}>
+              {rec.foods.split(', ').map((food, idx) => (
+                <View
+                  key={idx}
+                  style={[
+                    styles.foodTag,
+                    {backgroundColor: `${status.color}15`},
+                  ]}>
+                  <Icon
+                    name="fiber-manual-record"
+                    size={8}
+                    color={status.color}
+                    style={styles.tagDot}
+                  />
+                  <Text style={[styles.foodTagText, {color: status.color}]}>
+                    {food}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        );
+      })}
     </View>
   );
 };
 
-export default ReportDetailAnalyisis;
+export default ReportFoodDetailAnalysis;
 
 const styles = StyleSheet.create({
   container: {

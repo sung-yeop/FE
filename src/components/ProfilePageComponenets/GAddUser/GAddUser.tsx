@@ -7,35 +7,19 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const GAddUser = () => {
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
-  const [isGuardian, setIsGuardian] = useState<boolean>(false);
-
-  useEffect(() => {
-    const guardianCheck = async () => {
-      try {
-        const response = await AsyncStorage.getItem('isGuardian');
-        setIsGuardian(response === 'Yes');
-      } catch (error) {
-        console.error('Error checking guardian status:', error);
-      }
-    };
-
-    guardianCheck();
-  }, []);
 
   return (
     <View style={styles.container}>
-      {true && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setIsVisibleModal(true)}
-          activeOpacity={0.8}>
-          <View style={styles.contentWrapper}>
-            <Icon name="person-add" size={28} color="white" />
-            <Text style={styles.text}>사용자 추가</Text>
-          </View>
-          <Icon name="arrow-forward-ios" size={20} color="white" />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setIsVisibleModal(true)}
+        activeOpacity={0.8}>
+        <View style={styles.contentWrapper}>
+          <Icon name="person-add" size={28} color="white" />
+          <Text style={styles.text}>사용자 추가</Text>
+        </View>
+        <Icon name="arrow-forward-ios" size={20} color="white" />
+      </TouchableOpacity>
       <GModal_AddUser
         isVisibleModal={isVisibleModal}
         onCloseModal={() => setIsVisibleModal(false)}

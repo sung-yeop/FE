@@ -102,17 +102,14 @@ const CustomTimePicker = ({target, updateFun}: Props) => {
     const selectedIndex = Math.round(y / ITEM_HEIGHT);
 
     if (type === 'minute') {
-      // 분이 범위를 벗어나지 않도록 보정
       const safeMinute = Math.min(Math.max(0, selectedIndex), 59);
 
       if (Platform.OS === 'android') {
-        // 안드로이드에서 정확한 위치로 스크롤
         minuteScrollRef.current?.scrollTo({
           y: safeMinute * ITEM_HEIGHT,
           animated: true,
         });
 
-        // 선택된 분 업데이트
         setSelectedMinuteIndex(safeMinute);
         setMinutes(safeMinute);
       }

@@ -9,3 +9,4 @@ export const CautionImg = require('./caution.png');
 export const CalenderImg = require('./Calender.png');
 export const FireImg = require('./Fire.png');
 export const ThumbUpImg = require('./ThumbUp.png');
+export const PencilImg = require('./Pencil.png');

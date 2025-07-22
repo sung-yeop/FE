@@ -1,57 +1,41 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alarm} from '../types';
+import {GetURL} from './GetUrl';
 
 export class GuardianAPI {
-  // static async getGuardianInfo() {
-  //   try {
-  //     const token = await AsyncStorage.getItem('token');
-  //     const guardianName = await AsyncStorage.getItem('username');
-  //     const response = await fetch(
-  //       `http://10.0.2.2:8080/guardian/${guardianName}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(
-  //         `GuardianAPI | getGuardianInfo - 가디언 정보를 정상적으로 불러오지 못했습니다. ${response.status}`,
-  //       );
-  //     }
-
-  //     const text = await response.text();
-  //     return JSON.parse(text);
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  //   }
-  // }
+  static baseUrl = GetURL.baseUrl;
 
   static async getGuardianInfo() {
     try {
       const token = await AsyncStorage.getItem('token');
       const username = await AsyncStorage.getItem('username');
-      const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${username}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
 
-      if (!response.ok) {
-        throw new Error(
-          `GuardianAPI | getGuardianInfo - api 오류 ${response.status}`,
-        );
+      // username 값 확인
+      console.log('Stored username:', username);
+
+      if (!username) {
+        throw new Error('Username not found in AsyncStorage');
       }
 
-      console.log('Guardian RESPONSE : ', response);
+      const response = await fetch(`${this.baseUrl}/guardian/${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+        });
+        throw new Error(
+          `GuardianAPI | getGuardianInfo - api 오류 ${response.status} - ${errorText}`,
+        );
+      }
 
       const text = await response.text();
       return JSON.parse(text);
@@ -65,7 +49,7 @@ export class GuardianAPI {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
       const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${guardianName}/users`,
+        `${this.baseUrl}/guardian/${guardianName}/users`,
         {
           method: 'GET',
           headers: {
@@ -93,7 +77,7 @@ export class GuardianAPI {
       const token = await AsyncStorage.getItem('token');
       const guardianName = await AsyncStorage.getItem('username');
       console.log(guardianName);
-      const response = await fetch('http://10.0.2.2:8080/guardian/addUser', {
+      const response = await fetch(`${this.baseUrl}/guardian/addUser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +111,7 @@ export class GuardianAPI {
       }
 
       const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/add`,
+        `${this.baseUrl}/guardian/${guardianName}/user/${username}/add`,
         {
           method: 'POST',
           headers: {
@@ -139,6 +123,7 @@ export class GuardianAPI {
             username: guardianName,
             missionName: alarm.mission.id,
             alarmTime: alarm.timer,
+            title: '',
             active: alarm.active,
             alarmDays: alarm.alarmDays,
             delayTimes: alarm.delayTimes,
@@ -174,7 +159,7 @@ export class GuardianAPI {
       }
 
       const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${guardianName}/user/${username}/alarms/update`,
+        `${this.baseUrl}/guardian/${guardianName}/user/${username}/alarms/update`,
         {
           method: 'PUT',
           headers: {
@@ -185,6 +170,7 @@ export class GuardianAPI {
             alarmId: alarm.alarmid,
             missionName: alarm.mission.id,
             alarmTime: alarm.timer,
+            title: alarm.title || '',
             active: alarm.active,
             alarmDays: alarm.alarmDays,
             delayTimes: alarm.delayTimes,
@@ -192,6 +178,7 @@ export class GuardianAPI {
             isVibration: alarm.setting.isVibration,
             volume: alarm.setting.volume,
             alarmInterval: alarm.setting.alarmInterval,
+            disabled: false,
           }),
         },
       );
@@ -215,7 +202,7 @@ export class GuardianAPI {
       const guardianName = await AsyncStorage.getItem('username');
 
       const response = await fetch(
-        `http://10.0.2.2:8080/guardian/${guardianName}/alarms`,
+        `${this.baseUrl}/guardian/${guardianName}/alarms`,
         {
           method: 'GET',
           headers: {

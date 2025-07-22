@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GetURL} from './GetUrl';
 
 export class SignInAPI {
+  static baseUrl = GetURL.baseUrl;
+
   static sendSignInDataWithUser = async ({
     username,
     password,
@@ -10,7 +13,7 @@ export class SignInAPI {
   }) => {
     try {
       await AsyncStorage.clear();
-      const response = await fetch('http://10.0.2.2:8080/login/user', {
+      const response = await fetch(`${this.baseUrl}/login/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +53,7 @@ export class SignInAPI {
   }) => {
     try {
       await AsyncStorage.clear();
-      const response = await fetch('http://10.0.2.2:8080/login/guardian', {
+      const response = await fetch(`${this.baseUrl}/login/guardian`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

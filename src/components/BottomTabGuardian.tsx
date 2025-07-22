@@ -4,8 +4,8 @@ import ProfilePage from '../screens/ProfilePage';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import {Dimensions, Platform, StyleSheet} from 'react-native';
 import GAlarmPage from '../screens/GuardianScreen/GAlarmPage';
+import ReportPage from '../screens/ReportPage';
 import GReportPage from '../screens/GuardianScreen/GReportPage';
-
 const getTabBarIcon = (
   route: string,
   focused: boolean,
